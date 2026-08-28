@@ -1,0 +1,10 @@
+{
+  "description": "Provides free medical consultations, educational courses, and trusted health resources in Arabic, connecting patients with verified doctors and instructors.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
