@@ -6,6 +6,7 @@ import Card from "@/components/ui/Card"
 import { MOCK_ARTICLES, ARTICLE_CATEGORIES } from "@/data/mockData"
 import WaveDivider from "@/components/decorative/WaveDivider"
 import FingerprintRidges from "@/components/decorative/FingerprintRidges"
+import DemoLabel from "@/components/DemoLabel"
 
 export default function ArticleList() {
   const [search, setSearch] = useState("")
@@ -27,13 +28,13 @@ export default function ArticleList() {
       <div className="relative isolate overflow-hidden border-b border-slate-100 bg-gradient-to-l from-primary-50/50 to-white py-10 pb-16">
         <FingerprintRidges className="-right-10 -top-12 z-0 h-[26rem] w-[26rem] opacity-70" />
         <div className="relative z-[1] mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="section-kicker mb-2">مقالات صحية موثوقة</p>
+          <p className="section-kicker mb-2">مقالات عرض خيالية غير مراجعة</p>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
-            محتوى طبي مُراجَع من متخصصين
+            نماذج شكلية للمحتوى فقط
           </h1>
           <p className="text-slate-500 text-sm max-w-2xl leading-7">
-            جميع مقالاتنا تمر بمراجعة طبية دقيقة قبل النشر. لا ادعاءات غير
-            مدعومة، فقط معلومات موثوقة مبنية على الدليل.
+            المقالات والمؤلفون والمراجعات أمثلة خيالية، ولم يراجعها مختصون. لا
+            تعتمد عليها كمعلومات طبية.
           </p>
         </div>
         <WaveDivider color="#ffffff" />
@@ -130,6 +131,7 @@ export default function ArticleList() {
 
                   {/* Content */}
                   <div className="p-4 flex flex-col flex-1">
+                    <DemoLabel>مقال ومؤلف ومراجعة خيالية</DemoLabel>
                     <h2 className="font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-primary-700 transition-colors text-sm mb-2">
                       {article.title}
                     </h2>

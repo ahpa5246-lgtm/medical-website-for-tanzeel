@@ -54,6 +54,16 @@ const EMERGENCY_PATTERNS_EN = [
   "paralysis",
 ]
 
+// Existing emergency copy and numbers are centralized here so every surface stays identical.
+export const EMERGENCY_CONTENT = {
+  title: "تبدو حالتك قد تكون طارئة — لا تنتظر ردًا من طبيب",
+  body: "بعض الأعراض التي ذكرتها قد تستدعي رعاية طارئة فورية. يرجى الاتصال بالإسعاف أو التوجه إلى أقرب طوارئ الآن. هذه المنصة لا تُعالج الحالات الطارئة.",
+  contacts: [
+    { href: "tel:911", label: "الطوارئ الموحد: 911" },
+    { href: "tel:122", label: "الإسعاف الفوري: 122" },
+  ],
+} as const
+
 export function detectEmergency(text: string): boolean {
   if (!text || text.trim().length < 3) return false
   const lower = text.toLowerCase()
