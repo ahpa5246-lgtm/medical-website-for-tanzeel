@@ -1,14 +1,10 @@
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { useSearchParams, Link } from "react-router-dom"
 import {
   MessageCircle,
-  Paperclip,
-  X,
   ChevronDown,
   AlertTriangle,
   Info,
-  Lock,
-  Shield,
   Upload,
   CheckCircle2,
   ArrowLeft,
@@ -20,23 +16,18 @@ import { SPECIALTIES } from "@/data/specialties"
 import { detectEmergency } from "@/lib/emergency"
 
 const MAX_CHARS = 2000
-const MAX_ATTACHMENTS = 3
-
 export default function SubmitConsultation() {
   const [params] = useSearchParams()
   const [form, setForm] = useState({
     title: "",
-    description: params.get("q") || "",
+    description: "",
     specialty: params.get("specialty") || "",
-    isAnonymous: false,
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [attachments, setAttachments] = useState<File[]>([])
   const [isEmergency, setIsEmergency] = useState(false)
   const [dismissedEmergency, setDismissedEmergency] = useState(false)
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const fileRef = useRef<HTMLInputElement>(null)
 
   function handleDescChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const val = e.target.value
@@ -44,22 +35,6 @@ export default function SubmitConsultation() {
     const emergency = detectEmergency(val)
     if (emergency && !dismissedEmergency) setIsEmergency(true)
     if (!emergency) setIsEmergency(false)
-  }
-
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files || [])
-    const allowed = files.filter((f) => {
-      const okType = [
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "application/pdf",
-      ].includes(f.type)
-      const okSize = f.size < 5 * 1024 * 1024 // 5 MB
-      return okType && okSize
-    })
-    setAttachments((prev) => [...prev, ...allowed].slice(0, MAX_ATTACHMENTS))
-    e.target.value = ""
   }
 
   function validate() {
@@ -104,9 +79,8 @@ export default function SubmitConsultation() {
           مسار الاستشارة جاهز للربط
         </h1>
         <p className="mx-auto mt-4 max-w-lg text-sm leading-8 text-slate-600">
-          لم تُرسل الاستشارة ولم تُحفظ المرفقات لأن هذه نسخة معاينة بلا خادم آمن.
-          بعد ربط الحسابات وقاعدة البيانات ستظهر هنا حالة التوجيه والطبيب
-          المستجيب.
+          لم تُرسل الاستشارة ولم تُحفظ أي قيمة. هذا النموذج الأولي بلا خادم؛
+          النتيجة المعروضة محاكاة واجهة فقط.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link to="/consultations">
@@ -139,8 +113,7 @@ export default function SubmitConsultation() {
           اطرح سؤالك الطبي
         </h1>
         <p className="text-slate-600 text-sm">
-          اكتب التفاصيل التي يحتاجها الطبيب، وسيُوجّه السؤال إلى التخصص الصحيح بعد
-          ربط الخدمة.
+          اختبر الواجهة ببيانات خيالية فقط. لا يوجد طبيب أو توجيه أو إرسال فعلي.
         </p>
       </div>
 
@@ -148,9 +121,8 @@ export default function SubmitConsultation() {
       <div className="mb-6 flex gap-3 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
         <Info className="w-5 h-5 shrink-0 mt-0.5 text-amber-600" />
         <p>
-          <strong>تذكير:</strong> هذه الخدمة لأغراض إرشادية فقط وليست بديلًا عن
-          الفحص المباشر. في العراق، اتصل بالطوارئ الموحد 911 أو الإسعاف الفوري
-          122.{" "}
+          <strong>تذكير:</strong> هذه ليست خدمة طبية. لا تُدخل تفاصيل حالة
+          حقيقية.{" "}
           <Link
             to="/legal/disclaimer"
             className="underline font-medium hover:text-amber-900"
@@ -253,86 +225,23 @@ export default function SubmitConsultation() {
             مرفقات (صور أو تقارير) — اختياري
           </label>
           <div
-            className="border-2 border-dashed border-slate-200 rounded-xl p-5 text-center hover:border-primary-300 hover:bg-primary-50/30 transition-colors cursor-pointer"
-            onClick={() => fileRef.current?.click()}
+            className="border-2 border-dashed border-slate-200 rounded-xl p-5 text-center"
+            aria-disabled="true"
           >
             <Upload className="w-6 h-6 text-slate-400 mx-auto mb-2" />
             <p className="text-sm text-slate-600 font-medium">
-              انقر لإرفاق صور أو تقارير
+              اختيار الملفات معطّل في النموذج الأولي
             </p>
             <p className="text-xs text-slate-400 mt-1">
-              JPG، PNG، PDF — حد أقصى 5 MB للملف — {MAX_ATTACHMENTS} ملفات
+              لا يمكن اختيار أو رفع أي ملف، ولا تُدخل تقارير أو صورًا حقيقية.
             </p>
           </div>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,application/pdf"
-            multiple
-            onChange={handleFile}
-            className="hidden"
-          />
-          {attachments.length > 0 && (
-            <ul className="mt-3 space-y-2">
-              {attachments.map((file, i) => (
-                <li
-                  key={i}
-                  className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm"
-                >
-                  <Paperclip className="w-4 h-4 text-primary-600 shrink-0" />
-                  <span className="truncate flex-1 text-slate-700">
-                    {file.name}
-                  </span>
-                  <span className="text-xs text-slate-400 shrink-0">
-                    {(file.size / 1024).toFixed(0)} KB
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setAttachments((prev) => prev.filter((_, j) => j !== i))
-                    }
-                    className="text-slate-400 hover:text-red-500 transition-colors"
-                    aria-label="حذف المرفق"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
 
-        {/* Anonymity toggle */}
-        <div className="flex items-start gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-          <label className="flex items-start gap-3 cursor-pointer w-full">
-            <input
-              type="checkbox"
-              checked={form.isAnonymous}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, isAnonymous: e.target.checked }))
-              }
-              className="mt-0.5 w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500/30"
-            />
-            <div>
-              <p className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                <Lock className="w-4 h-4 text-primary-600" />
-                إرسال الاستشارة بشكل مجهول
-              </p>
-              <p className="text-xs text-slate-500 mt-0.5">
-                يظهر اسمك للطبيب كـ «مريض #XXXX» فقط، ولن يعرف هويتك الحقيقية.
-              </p>
-            </div>
-          </label>
-        </div>
-
-        {/* Trust note */}
-        <div className="flex gap-2 text-xs text-slate-500">
-          <Shield className="w-4 h-4 shrink-0 text-emerald-500 mt-0.5" />
-          <p>
-            استشارتك مشفرة ومؤمنة. لن تُشارك مع أحد دون إذنك. يجيبك طبيب معتمد
-            ومتحقق منه فقط.
-          </p>
-        </div>
+        <p className="rounded-xl bg-slate-100 px-4 py-3 text-xs text-slate-700">
+          لا يوفر هذا النموذج تشفيرًا أو إخفاء هوية أو إرسالًا أو حفظًا أو مراجعة
+          من طبيب. استخدم نصًا خياليًا فقط.
+        </p>
 
         <Button
           type="submit"

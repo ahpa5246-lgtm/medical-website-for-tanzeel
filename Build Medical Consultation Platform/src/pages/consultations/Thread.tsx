@@ -17,6 +17,7 @@ import Button from "@/components/ui/Button"
 import Badge from "@/components/ui/Badge"
 import Card from "@/components/ui/Card"
 import { formatTimeAgo } from "@/lib/utils"
+import DemoLabel from "@/components/DemoLabel"
 
 // Mock consultation thread data
 // TODO: Replace with real Supabase consultation + messages query
@@ -147,6 +148,7 @@ export default function ConsultationThread() {
 
       {/* Header */}
       <div className="mb-6">
+        <DemoLabel>استشارة وردود وهويات وتقييمات وإحصاءات خيالية</DemoLabel>
         <div className="flex items-start justify-between gap-4 mb-3">
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
             {MOCK_THREAD.title}
@@ -167,7 +169,7 @@ export default function ConsultationThread() {
           {MOCK_THREAD.isAnonymous && (
             <span className="flex items-center gap-1">
               <Lock className="w-4 h-4 text-slate-400" />
-              مجهول الهوية
+              هوية خيالية (لا إخفاء فعلي)
             </span>
           )}
         </div>
@@ -211,7 +213,7 @@ export default function ConsultationThread() {
             </p>
             <Badge variant="primary" size="sm">
               <Shield className="w-3 h-3" />
-              معتمد
+              شخصية خيالية
             </Badge>
           </div>
           <p className="text-sm text-slate-500 mt-0.5">
@@ -285,6 +287,7 @@ export default function ConsultationThread() {
                       : "bg-white border border-slate-200 text-slate-700 rounded-se-sm"
                   }`}
                 >
+                  <DemoLabel>رسالة خيالية وليست نصيحة</DemoLabel>
                   {msg.content.replace(/\*\*/g, "")}
                 </div>
               </div>
@@ -297,7 +300,7 @@ export default function ConsultationThread() {
       {MOCK_THREAD.status === "answered" && !rated && (
         <Card className="mb-6 text-center">
           <p className="text-sm font-semibold text-slate-900 mb-1">
-            كيف تقيّم رد الطبيب؟
+            جرّب تقييم الرد الخيالي
           </p>
           <p className="text-xs text-slate-500 mb-4">
             تقييمك يساعد المرضى الآخرين

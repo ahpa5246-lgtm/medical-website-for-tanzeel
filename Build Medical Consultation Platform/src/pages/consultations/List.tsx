@@ -5,6 +5,7 @@ import Badge from "@/components/ui/Badge"
 import Card from "@/components/ui/Card"
 import { MOCK_CONSULTATIONS } from "@/data/mockData"
 import { formatTimeAgo } from "@/lib/utils"
+import DemoLabel from "@/components/DemoLabel"
 
 const STATUS_LABELS: Record<string, string> = {
   open: "قيد الانتظار",
@@ -75,6 +76,7 @@ export default function ConsultationList() {
                   <MessageCircle className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
+                  <DemoLabel>استشارة وهوية ورسائل خيالية</DemoLabel>
                   <div className="flex items-start justify-between gap-2">
                     <p className="font-semibold text-slate-900 text-sm line-clamp-1">
                       {c.title}

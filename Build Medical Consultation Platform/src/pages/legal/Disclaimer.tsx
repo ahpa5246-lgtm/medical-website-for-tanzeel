@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { AlertTriangle, Phone } from "lucide-react"
+import EmergencyBanner from "@/components/EmergencyBanner"
 
 export default function MedicalDisclaimer() {
   return (
@@ -13,38 +13,9 @@ export default function MedicalDisclaimer() {
         </Link>
       </div>
 
-      {/* Emergency callout */}
-      <div className="flex gap-3 p-4 rounded-2xl bg-red-50 border border-red-200 mb-8">
-        <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-red-600" />
-        <div>
-          <p className="font-bold text-red-800 text-sm">
-            في حالة الطوارئ — لا تتأخر
-          </p>
-          <p className="text-xs text-red-700 mt-1">
-            إذا كانت حالتك طارئة، اتصل بالإسعاف فورًا ولا تنتظر ردًا من هذه
-            المنصة.
-          </p>
-          <div className="flex gap-2 mt-2">
-            <a
-              href="tel:911"
-              className="inline-flex items-center gap-1 text-xs font-bold text-white bg-red-600 px-3 py-1.5 rounded-lg hover:bg-red-700 transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5" /> الطوارئ: 911
-            </a>
-            <a
-              href="tel:122"
-              className="inline-flex items-center gap-1 text-xs font-bold text-red-700 bg-white border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5" /> الإسعاف: 122
-            </a>
-            <a
-              href="tel:122"
-              className="inline-flex items-center gap-1 text-xs font-bold text-white bg-red-600 px-3 py-1.5 rounded-lg hover:bg-red-700 transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5" /> طوارئ: 122
-            </a>
-          </div>
-        </div>
+      {/* Emergency callout uses the single shared emergency source. */}
+      <div className="mb-8">
+        <EmergencyBanner />
       </div>
 
       <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
@@ -58,9 +29,9 @@ export default function MedicalDisclaimer() {
             ١. هذه المنصة ليست بديلًا عن الرعاية الطبية
           </h2>
           <p>
-            منصة <strong>ميدكونكت</strong> هي خدمة معلومات وإرشاد طبي عام.
-            المحتوى المقدم — سواء كان استشارات مكتوبة من الأطباء، أو مقالات، أو
-            مواد تعليمية — يهدف إلى تعزيز الوعي الصحي وتقديم إرشاد أولي فقط.
+            <strong>ميدكونكت نموذج واجهة غير تشغيلي وليس خدمة طبية.</strong> كل
+            الاستشارات والأطباء والمقالات والهويات المعروضة أمثلة خيالية لم
+            تُراجع طبيًا.
           </p>
           <p className="mt-3">
             المعلومات المقدمة لا تُعادل في أي حال من الأحوال الفحصَ الطبي المباشر،
@@ -93,10 +64,8 @@ export default function MedicalDisclaimer() {
             ٣. التحقق من هوية الأطباء
           </h2>
           <p>
-            نُحكّم على تحقق جميع الأطباء المشاركين من خلال التحقق من شهاداتهم
-            الأكاديمية وتراخيصهم المهنية وأرقام تسجيلهم في نقابات الأطباء. مع
-            ذلك، لا يمكننا ضمان دقة المعلومات التي يقدمها كل طبيب في كل استشارة،
-            إذ تُقدَّم الإجابات بحسن نية ولا تمثل موقف المؤسسة الطبية الرسمية.
+            لا يوجد أطباء مشاركون ولم تُنفذ عملية تحقق. الأسماء والصور والتراخيص
+            والإجابات المعروضة خيالية ولا تثبت هوية أو اعتماد أي شخص.
           </p>
         </section>
 

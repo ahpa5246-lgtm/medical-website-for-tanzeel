@@ -1,3 +1,4 @@
+import { EMERGENCY_CONTENT } from "@/lib/emergency"
 import { Link } from "react-router-dom"
 import { AlertTriangle, ShieldCheck, Stethoscope } from "lucide-react"
 
@@ -79,8 +80,8 @@ export default function Footer() {
         <div className="mt-10 flex items-start gap-2 rounded-2xl border border-coral-500/20 bg-coral-500/5 p-4 text-xs leading-6 text-slate-400">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-coral-500" />
           <p>
-            هذا الموقع ليس للطوارئ ولا يستبدل الفحص الطبي المباشر. في العراق
-            اتصل بالطوارئ الموحد 911 أو الإسعاف الفوري 122.
+            {EMERGENCY_CONTENT.body}{" "}
+            {EMERGENCY_CONTENT.contacts.map((item) => item.label).join("، ")}
           </p>
         </div>
         <div className="mt-8 flex flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-500 sm:flex-row">

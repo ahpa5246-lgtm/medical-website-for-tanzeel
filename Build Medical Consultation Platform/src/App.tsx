@@ -18,6 +18,7 @@ import MedicalDisclaimer from "@/pages/legal/Disclaimer"
 import Terms from "@/pages/legal/Terms"
 import Privacy from "@/pages/legal/Privacy"
 import VerificationApplication from "@/pages/verification/Application"
+import PreviewNotice from "@/components/PreviewNotice"
 
 function NotFound() {
   return (
@@ -45,6 +46,7 @@ function NotFound() {
 export default function App() {
   return (
     <BrowserRouter>
+      <PreviewNotice />
       <Routes>
         {/* Auth routes — no layout header/footer */}
         <Route path="/auth/login" element={<Login />} />

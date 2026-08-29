@@ -265,7 +265,7 @@ export default function Signup() {
                 }
                 error={errors.phone}
                 startIcon={<Phone className="w-4 h-4" />}
-                hint="سيُرسل رمز تحقق إلى هذا الرقم"
+                hint="لن يُرسل رمز؛ استخدم قيمة خيالية فقط"
                 required
               />
 
