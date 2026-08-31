@@ -51,7 +51,9 @@ function LabList() {
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-black text-primary-700">المرحلة التجريبية</p>
+            <p className="text-xs font-black text-primary-700">
+              المرحلة التجريبية
+            </p>
             <h2 className="mt-2 text-2xl font-black text-ink">وحدات المختبر</h2>
           </div>
           <p className="max-w-xl text-xs leading-6 text-slate-500">
@@ -70,20 +72,29 @@ function LabList() {
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
                   <TypeIcon type={module.type} />
                 </span>
-                <Badge variant={module.status === "pilot-shell" ? "primary" : "muted"}>
-                  {module.status === "pilot-shell" ? "قالب الطيار" : "مخطط لاحقًا"}
+                <Badge
+                  variant={
+                    module.status === "pilot-shell" ? "primary" : "muted"
+                  }
+                >
+                  {module.status === "pilot-shell"
+                    ? "قالب الطيار"
+                    : "مخطط لاحقًا"}
                 </Badge>
               </div>
               <p className="mt-5 text-xs font-bold text-primary-700">
                 {typeLabel(module.type)} · {module.specialty}
               </p>
-              <h3 className="mt-2 text-xl font-black text-ink">{module.title}</h3>
+              <h3 className="mt-2 text-xl font-black text-ink">
+                {module.title}
+              </h3>
               <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
                 {module.description}
               </p>
               <div className="mt-5 flex flex-wrap gap-2 text-xs text-slate-500">
                 <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1.5">
-                  <Clock3 className="h-3.5 w-3.5" /> {module.estimatedMinutes} دقائق
+                  <Clock3 className="h-3.5 w-3.5" /> {module.estimatedMinutes}{" "}
+                  دقائق
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1.5">
                   <Trophy className="h-3.5 w-3.5" /> {module.xpReward} XP مخطط
@@ -137,7 +148,9 @@ function LabDetail({ module }: { module: LabModule }) {
             <div className="flex items-start gap-3">
               <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
               <div>
-                <h2 className="font-black text-amber-900">تنبيه المحتوى السريري</h2>
+                <h2 className="font-black text-amber-900">
+                  تنبيه المحتوى السريري
+                </h2>
                 <p className="mt-2 text-sm leading-7 text-amber-800">
                   هذه وحدة بنيوية خيالية وغير مراجعة. لا تُستخدم للتشخيص أو
                   العلاج أو التعليم الطبي الحقيقي، ولا يمكن نشرها قبل اعتماد
@@ -175,8 +188,8 @@ function LabDetail({ module }: { module: LabModule }) {
             <span className="mb-2 flex items-center gap-2 font-black text-slate-800">
               <LockKeyhole className="h-4 w-4" /> الحارس غير موصول بعد
             </span>
-            لن نعتمد عدّادًا في المتصفح. البدء سيبقى معطّلًا حتى يفرض الخادم
-            الحصة ويمنع جلب المحتوى بعد انتهائها.
+            لن نعتمد عدّادًا في المتصفح. البدء سيبقى معطّلًا حتى يفرض الخادم الحصة
+            ويمنع جلب المحتوى بعد انتهائها.
           </div>
           <button
             type="button"
@@ -197,7 +210,10 @@ function LabDetail({ module }: { module: LabModule }) {
 
 function MissingLab() {
   return (
-    <div dir="rtl" className="mx-auto min-h-[60vh] max-w-xl px-4 py-20 text-center">
+    <div
+      dir="rtl"
+      className="mx-auto min-h-[60vh] max-w-xl px-4 py-20 text-center"
+    >
       <h1 className="text-2xl font-black text-ink">الوحدة غير موجودة</h1>
       <p className="mt-3 text-sm leading-7 text-slate-500">
         هذا الرابط لا يطابق أي وحدة في كتالوج المختبر التجريبي.
