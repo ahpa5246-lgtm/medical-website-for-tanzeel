@@ -1,0 +1,48 @@
+name: Medical Prototype CI
+
+on:
+  pull_request:
+    paths:
+      - "Build Medical Consultation Platform/**"
+      - ".github/workflows/medical-prototype-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: medical-prototype-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: "Build Medical Consultation Platform"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: "Build Medical Consultation Platform/package-lock.json"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Run prototype safety tests
+        run: npm test
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Build production bundle
+        run: npm run build
