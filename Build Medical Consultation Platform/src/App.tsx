@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Layout from "@/components/layout/Layout"
 import Home from "@/pages/Home"
@@ -19,6 +20,26 @@ import Terms from "@/pages/legal/Terms"
 import Privacy from "@/pages/legal/Privacy"
 import VerificationApplication from "@/pages/verification/Application"
 import PreviewNotice from "@/components/PreviewNotice"
+
+const LabHub = lazy(() => import("@/pages/labs/LabHub"))
+
+function LazyLabRoute() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          dir="rtl"
+          role="status"
+          className="min-h-[50vh] flex items-center justify-center px-4 text-sm font-bold text-slate-500"
+        >
+          جارٍ تحميل مختبر التعلم…
+        </div>
+      }
+    >
+      <LabHub />
+    </Suspense>
+  )
+}
 
 function NotFound() {
   return (
@@ -81,6 +102,8 @@ export default function App() {
                 <Route path="/articles/:id" element={<ArticleDetail />} />
                 <Route path="/articles/new" element={<ArticleEditor />} />
                 <Route path="/courses" element={<CourseList />} />
+                <Route path="/labs" element={<LazyLabRoute />} />
+                <Route path="/labs/:moduleId" element={<LazyLabRoute />} />
                 <Route path="/library" element={<LibraryList />} />
 
                 {/* Legal */}
