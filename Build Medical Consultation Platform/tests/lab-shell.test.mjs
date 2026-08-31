@@ -12,6 +12,7 @@ test("lab code is lazy loaded only from lab routes", () => {
   assert.match(app, /path="\/labs"/)
   assert.match(app, /path="\/labs\/:moduleId"/)
   assert.doesNotMatch(app, /^import LabHub/m)
+  assert.doesNotMatch(app, /labQuotaClient|supabase/i)
 })
 
 test("pilot catalog uses the three requested module types", () => {
@@ -23,23 +24,44 @@ test("pilot catalog uses the three requested module types", () => {
   assert.match(catalog, /unreviewed-placeholder/)
 })
 
-test("lab start remains locked until a server quota guard exists", () => {
+test("lab start is driven only by a verified server quota state", () => {
   const hub = read("src/pages/labs/LabHub.tsx")
-  assert.match(hub, /data-lab-start-guard="server-required"/)
-  assert.match(hub, /disabled/)
+  assert.match(hub, /data-lab-quota-source="server"/)
+  assert.match(hub, /data-lab-start-guard=/)
+  assert.match(hub, /canStart \? "server-verified" : "server-locked"/)
+  assert.match(hub, /state\.phase === "ready"/)
   assert.match(hub, /ساعة واحدة يوميًا بتوقيت بغداد/)
-  assert.match(hub, /لن نعتمد عدّادًا في المتصفح/)
+  assert.match(hub, /لا يوجد عدّ تنازلي محلي/)
 })
 
-test("shell adds no client quota store, payment, Supabase, or Three.js", () => {
+test("lab route has no client quota store, payment SDK, or 3D dependency", () => {
   const sources = [
     read("src/pages/labs/LabHub.tsx"),
     read("src/pages/labs/catalog.ts"),
+    read("src/pages/labs/labQuotaClient.ts"),
+    read("src/pages/labs/labQuotaSession.ts"),
   ].join("\n")
   assert.doesNotMatch(
     sources,
-    /localStorage|sessionStorage|indexedDB|setInterval|supabase|stripe|three|react-three/i,
+    /localStorage|sessionStorage|indexedDB|stripe|react-three|from ["']three["']/i,
   )
+  assert.doesNotMatch(sources, /VITE_SUPABASE_(SERVICE|SECRET)|service_role/i)
+})
+
+test("route client supports every reviewed RPC and no arbitrary function name", () => {
+  const client = read("src/pages/labs/labQuotaClient.ts")
+  for (const rpc of [
+    "get_lab_quota_status",
+    "start_lab_session",
+    "record_lab_heartbeat",
+    "end_lab_session",
+    "get_lab_module_content",
+  ]) {
+    assert.match(client, new RegExp(rpc))
+  }
+  assert.match(client, /export type LabRpcName/)
+  assert.match(client, /VITE_SUPABASE_URL/)
+  assert.match(client, /VITE_SUPABASE_ANON_KEY/)
 })
 
 test("clinical placeholder is explicitly blocked from real use", () => {
@@ -48,7 +70,7 @@ test("clinical placeholder is explicitly blocked from real use", () => {
     "غير مراجع طبيًا",
     "لا تُستخدم للتشخيص",
     "لا يمكن نشرها قبل اعتماد",
-    "لا تُحفظ نقاط أو تقدم أو شارات",
+    "لا\\s+تُحفظ نقاط أو تقدم أو شارات",
   ]) {
     assert.match(hub, new RegExp(phrase))
   }

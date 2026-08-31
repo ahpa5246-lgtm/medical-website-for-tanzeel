@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
   ArrowLeft,
   Boxes,
@@ -6,14 +7,25 @@ import {
   GitBranch,
   LockKeyhole,
   Play,
+  RefreshCw,
   ShieldAlert,
   Sparkles,
+  Square,
   Trophy,
 } from "lucide-react"
 import { Link, useParams } from "react-router-dom"
 import DemoLabel from "@/components/DemoLabel"
 import Badge from "@/components/ui/Badge"
 import { LAB_MODULES, labModuleById, type LabModule } from "./catalog"
+import {
+  createRouteLabQuotaClient,
+  type LabQuotaErrorCode,
+} from "./labQuotaClient"
+import {
+  createLabQuotaSession,
+  type LabQuotaSession,
+  type LabQuotaSessionState,
+} from "./labQuotaSession"
 
 function TypeIcon({ type }: { type: LabModule["type"] }) {
   if (type === "anatomy-3d") return <Boxes className="h-6 w-6" />
@@ -25,6 +37,65 @@ function typeLabel(type: LabModule["type"]) {
   if (type === "anatomy-3d") return "تشريح تفاعلي ثلاثي الأبعاد"
   if (type === "rapid-quiz") return "تحدٍ تشخيصي سريع"
   return "حالة سريرية متفرعة"
+}
+
+function useLabQuota() {
+  const sessionRef = useRef<LabQuotaSession | null>(null)
+  const [state, setState] = useState<LabQuotaSessionState>({
+    phase: "loading",
+    quota: null,
+    errorCode: null,
+  })
+
+  useEffect(() => {
+    const session = createLabQuotaSession(createRouteLabQuotaClient())
+    sessionRef.current = session
+    const unsubscribe = session.subscribe(setState)
+    void session.refresh()
+
+    return () => {
+      unsubscribe()
+      session.dispose()
+      if (sessionRef.current === session) sessionRef.current = null
+    }
+  }, [])
+
+  const refresh = useCallback(() => void sessionRef.current?.refresh(), [])
+  const start = useCallback(() => void sessionRef.current?.start(), [])
+  const end = useCallback(() => void sessionRef.current?.end(), [])
+
+  return { state, refresh, start, end }
+}
+
+function errorLabel(code: LabQuotaErrorCode | null) {
+  if (code === "unconfigured") {
+    return "اتصال المختبر غير مهيأ في هذا الإصدار، لذلك بقي الوصول مقفلاً."
+  }
+  if (code === "unauthenticated") {
+    return "يلزم ربط جلسة دخول حقيقية ومصادق عليها قبل فتح المختبر."
+  }
+  if (code === "network") {
+    return "تعذر الوصول إلى خادم الحصة. أُغلق البدء احترازيًا؛ يمكنك إعادة المحاولة."
+  }
+  return "لم نستطع التحقق من الحصة من الخادم، لذلك بقيت الوحدة مقفلة."
+}
+
+function quotaLabel(state: LabQuotaSessionState) {
+  if (state.phase === "loading") return "جارٍ التحقق من الحصة على الخادم…"
+  if (state.phase === "starting") return "جارٍ فتح جلسة محمية على الخادم…"
+  if (state.phase === "ending") return "جارٍ إنهاء الجلسة على الخادم…"
+  if (state.phase === "error") return errorLabel(state.errorCode)
+  if (state.quota?.kind === "unlimited") {
+    return "أكد الخادم أن هذه الجلسة ذات وصول غير محدود."
+  }
+  if (state.quota?.kind === "exhausted") {
+    return "أكد الخادم انتهاء حصة اليوم. تُعاد الحصة وفق يوم بغداد."
+  }
+  if (state.quota?.kind === "limited") {
+    const minutes = Math.max(1, Math.ceil(state.quota.remainingSeconds / 60))
+    return `المتبقي حسب الخادم: نحو ${minutes} دقيقة.`
+  }
+  return "لا توجد حالة حصة موثوقة بعد."
 }
 
 function LabList() {
@@ -42,8 +113,8 @@ function LabList() {
             تعلّم بالممارسة داخل حالات قصيرة وواضحة.
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-8 text-slate-300 sm:text-base">
-            هذه أول واجهة للمختبر فقط. لا توجد جلسات أو نقاط محفوظة أو اشتراكات
-            أو محتوى طبي معتمد في هذه المرحلة.
+            المحتوى السريري ما زال بنيويًا وغير معتمد. الوصول لا يعتمد على عدّاد
+            في المتصفح، ويبقى مقفلاً إذا تعذر إعداد الخادم أو المصادقة.
           </p>
         </div>
       </section>
@@ -57,8 +128,8 @@ function LabList() {
             <h2 className="mt-2 text-2xl font-black text-ink">وحدات المختبر</h2>
           </div>
           <p className="max-w-xl text-xs leading-6 text-slate-500">
-            سيُفتح التنفيذ التفاعلي فقط بعد ربط حارس الوقت والمحتوى بالخادم
-            واختبار تجاوز الحد عبر التحديث وفتح تبويب جديد.
+            يعيد كل تحميل أو تبويب جديد قراءة الحصة من الخادم. لا تُخزّن مدة
+            الاستخدام أو صلاحية الفتح في المتصفح.
           </p>
         </div>
 
@@ -111,6 +182,88 @@ function LabList() {
         </div>
       </section>
     </div>
+  )
+}
+
+function LabAccessPanel({ module }: { module: LabModule }) {
+  const { state, refresh, start, end } = useLabQuota()
+  const enabledShell = module.status === "pilot-shell"
+  const canStart = enabledShell && state.phase === "ready"
+  const active = state.phase === "active"
+  const busy = ["loading", "starting", "ending"].includes(state.phase)
+
+  return (
+    <aside
+      data-lab-quota-source="server"
+      data-lab-quota-state={state.phase}
+      className="h-fit rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+    >
+      <h2 className="font-black text-ink">الوصول الذي يؤكده الخادم</h2>
+      <ul className="mt-4 space-y-3 text-sm leading-7 text-slate-600">
+        <li>المجاني: ساعة واحدة يوميًا بتوقيت بغداد.</li>
+        <li>الاشتراك: حالة غير محدودة فقط إذا أكدها الخادم؛ الدفع غير مفعّل.</li>
+      </ul>
+
+      <div
+        aria-live="polite"
+        className={`mt-5 rounded-2xl p-4 text-xs leading-6 ${
+          state.phase === "error" || state.phase === "locked"
+            ? "bg-amber-50 text-amber-900"
+            : active
+              ? "bg-emerald-50 text-emerald-900"
+              : "bg-slate-50 text-slate-700"
+        }`}
+      >
+        <span className="mb-2 flex items-center gap-2 font-black">
+          <LockKeyhole className="h-4 w-4" /> حالة الحصة
+        </span>
+        {quotaLabel(state)}
+      </div>
+
+      {active ? (
+        <button
+          type="button"
+          onClick={end}
+          className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-800 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-900"
+        >
+          <Square className="h-4 w-4" /> إنهاء الجلسة
+        </button>
+      ) : (
+        <button
+          type="button"
+          disabled={!canStart}
+          onClick={start}
+          data-lab-start-guard={canStart ? "server-verified" : "server-locked"}
+          className={`mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${
+            canStart
+              ? "bg-primary-600 text-white transition hover:bg-primary-700"
+              : "cursor-not-allowed bg-slate-200 text-slate-500"
+          }`}
+        >
+          <Play className="h-4 w-4" />
+          {busy
+            ? "جارٍ التحقق…"
+            : enabledShell
+              ? "بدء الوحدة بعد تحقق الخادم"
+              : "هذه الوحدة مخططة لاحقًا"}
+        </button>
+      )}
+
+      {(state.phase === "error" || state.phase === "locked") && (
+        <button
+          type="button"
+          onClick={refresh}
+          className="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+        >
+          <RefreshCw className="h-3.5 w-3.5" /> إعادة التحقق من الخادم
+        </button>
+      )}
+
+      <p className="mt-3 text-center text-[11px] leading-5 text-slate-400">
+        نبضة الخادم كل 45 ثانية أثناء الجلسة فقط. لا يوجد عدّ تنازلي محلي، ولا
+        تُحفظ نقاط أو تقدم أو شارات في هذه المرحلة.
+      </p>
+    </aside>
   )
 }
 
@@ -178,31 +331,7 @@ function LabDetail({ module }: { module: LabModule }) {
           </div>
         </div>
 
-        <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="font-black text-ink">قاعدة الوصول المخطط لها</h2>
-          <ul className="mt-4 space-y-3 text-sm leading-7 text-slate-600">
-            <li>المجاني: ساعة واحدة يوميًا بتوقيت بغداد.</li>
-            <li>المدفوع: 5 دولارات شهريًا، وطريقة التجديد لم تُحدد بعد.</li>
-          </ul>
-          <div className="mt-5 rounded-2xl bg-slate-50 p-4 text-xs leading-6 text-slate-600">
-            <span className="mb-2 flex items-center gap-2 font-black text-slate-800">
-              <LockKeyhole className="h-4 w-4" /> الحارس غير موصول بعد
-            </span>
-            لن نعتمد عدّادًا في المتصفح. البدء سيبقى معطّلًا حتى يفرض الخادم الحصة
-            ويمنع جلب المحتوى بعد انتهائها.
-          </div>
-          <button
-            type="button"
-            disabled
-            data-lab-start-guard="server-required"
-            className="mt-5 inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-200 px-4 py-2.5 text-sm font-bold text-slate-500"
-          >
-            <Play className="h-4 w-4" /> بدء الوحدة بعد ربط الخادم
-          </button>
-          <p className="mt-3 text-center text-[11px] leading-5 text-slate-400">
-            لا تُحفظ نقاط أو تقدم أو شارات في هذه المرحلة.
-          </p>
-        </aside>
+        <LabAccessPanel module={module} />
       </section>
     </div>
   )
