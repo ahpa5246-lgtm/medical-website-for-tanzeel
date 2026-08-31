@@ -249,10 +249,12 @@ begin
   where user_id = v_user and usage_date = v_today
   for update;
 
-  if not found or not v_open then
+  if not found then
     raise exception using errcode = '55000', message = 'lab_session_required_or_expired';
   end if;
 
+  -- Reaching the cap closes the lease but must still return 0 so every client
+  -- (including a refreshed page or second tab) receives the same lock signal.
   if v_used >= v_limit then
     update public.daily_lab_usage
     set session_open = false,
@@ -260,6 +262,10 @@ begin
         lease_expires_at = null
     where user_id = v_user and usage_date = v_today;
     return 0;
+  end if;
+
+  if not v_open then
+    raise exception using errcode = '55000', message = 'lab_session_required_or_expired';
   end if;
 
   update public.daily_lab_usage
@@ -329,7 +335,7 @@ begin
     where user_id = v_user and usage_date = v_today
     for update;
 
-    if not found or not v_open then
+    if not found then
       raise exception using errcode = '55000', message = 'lab_session_required_or_expired';
     end if;
 
@@ -340,6 +346,10 @@ begin
           lease_expires_at = null
       where user_id = v_user and usage_date = v_today;
       raise exception using errcode = '54000', message = 'daily_lab_quota_exhausted';
+    end if;
+
+    if not v_open then
+      raise exception using errcode = '55000', message = 'lab_session_required_or_expired';
     end if;
   end if;
 

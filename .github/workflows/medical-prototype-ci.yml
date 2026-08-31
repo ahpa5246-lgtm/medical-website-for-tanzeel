@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "Build Medical Consultation Platform/**"
+      - "supabase/**"
       - ".github/workflows/medical-prototype-ci.yml"
   workflow_dispatch:
 
@@ -47,3 +48,34 @@ jobs:
 
       - name: Build production bundle
         run: pnpm build
+
+  quota-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prove server quota across refresh and a second tab
+        env:
+          PGPASSWORD: postgres
+        run: >-
+          docker run --rm --network host
+          -v "$PWD:/workspace" -w /workspace
+          -e PGPASSWORD
+          postgres:16-alpine
+          psql --host 127.0.0.1 --username postgres --dbname postgres
+          --set ON_ERROR_STOP=1
+          --file supabase/tests/learning_lab_quota.integration.sql
