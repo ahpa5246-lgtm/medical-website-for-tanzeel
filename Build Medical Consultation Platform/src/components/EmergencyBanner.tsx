@@ -1,5 +1,6 @@
 import { Phone, AlertTriangle, X } from "lucide-react"
 import { useState } from "react"
+import { EMERGENCY_CONTENT } from "@/lib/emergency"
 
 export default function EmergencyBanner({
   onDismiss,
@@ -27,28 +28,22 @@ export default function EmergencyBanner({
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-bold text-red-800 text-base">
-            تبدو حالتك قد تكون طارئة — لا تنتظر ردًا من طبيب
+            {EMERGENCY_CONTENT.title}
           </p>
           <p className="mt-1.5 text-sm text-red-700 leading-relaxed">
-            بعض الأعراض التي ذكرتها قد تستدعي رعاية طارئة فورية. يرجى الاتصال
-            بالإسعاف أو التوجه إلى أقرب طوارئ الآن. هذه المنصة{" "}
-            <strong>لا تُعالج الحالات الطارئة</strong>.
+            {EMERGENCY_CONTENT.body}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <a
-              href="tel:911"
-              className="inline-flex items-center gap-1.5 bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-700 transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-              الطوارئ الموحد: 911
-            </a>
-            <a
-              href="tel:122"
-              className="inline-flex items-center gap-1.5 bg-white border border-red-300 text-red-700 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-50 transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-              الإسعاف الفوري: 122
-            </a>
+            {EMERGENCY_CONTENT.contacts.map((contact) => (
+              <a
+                key={contact.href}
+                href={contact.href}
+                className="inline-flex items-center gap-1.5 bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-700 transition-colors"
+              >
+                <Phone className="w-4 h-4" />
+                {contact.label}
+              </a>
+            ))}
           </div>
           <button
             onClick={handleDismiss}

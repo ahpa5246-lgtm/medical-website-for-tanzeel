@@ -12,6 +12,7 @@ import {
 import Badge from "@/components/ui/Badge"
 import Button from "@/components/ui/Button"
 import { MOCK_DOCTORS } from "@/data/mockData"
+import DemoLabel from "@/components/DemoLabel"
 
 export default function DoctorProfile() {
   const { id } = useParams()
@@ -45,10 +46,11 @@ export default function DoctorProfile() {
               className="h-28 w-28 rounded-3xl object-cover"
             />
             <div>
+              <DemoLabel>ملف وهوية وتقييم وإحصاءات خيالية</DemoLabel>
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-black text-ink">{doctor.name}</h1>
                 <Badge variant="primary">
-                  <ShieldCheck className="h-3 w-3" /> موثّق
+                  <ShieldCheck className="h-3 w-3" /> تحقق غير منفّذ
                 </Badge>
               </div>
               <p className="mt-2 font-bold text-primary-700">
@@ -87,7 +89,7 @@ export default function DoctorProfile() {
           <p className="mt-4 text-sm leading-8 text-slate-600">{doctor.bio}</p>
           <div className="mt-8 border-t border-slate-100 pt-6">
             <h3 className="text-sm font-black text-ink">
-              ما الذي يعنيه التحقق؟
+              تصور التحقق غير المنفّذ
             </h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-600">
               {[

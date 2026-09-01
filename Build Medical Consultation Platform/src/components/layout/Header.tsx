@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { to: "/consultations", label: "استشاراتي" },
   { to: "/doctors", label: "الأطباء" },
   { to: "/articles", label: "المعرفة الصحية" },
+  { to: "/labs", label: "مختبرات التعلم" },
 ]
 
 const LATER_LINKS = [
@@ -147,7 +148,7 @@ export default function Header() {
               to="/verification/apply"
               className="mt-2 flex items-center justify-center gap-2 py-2 text-xs font-bold text-primary-700"
             >
-              <ShieldCheck className="h-4 w-4" /> انضم كطبيب موثّق
+              <ShieldCheck className="h-4 w-4" /> نموذج انضمام خيالي
             </Link>
           </div>
         </div>

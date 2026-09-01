@@ -44,8 +44,8 @@ export default function VerificationApplication() {
           تمت معاينة مسار الطلب
         </h1>
         <p className="mx-auto mt-4 max-w-lg text-sm leading-8 text-slate-600">
-          لم تُحفظ البيانات ولم تُرفع مستندات. بعد ربط التخزين الخاص ستتحول الحالة
-          من «مسودة» إلى «قيد المراجعة» مع سجل تدقيق كامل.
+          لم تُحفظ البيانات ولم تُرفع مستندات. ولا توجد مراجعة أو حالة طلب أو سجل
+          تدقيق في هذا النموذج.
         </p>
         <Link to="/">
           <Button className="mt-8">العودة للرئيسية</Button>
@@ -73,8 +73,8 @@ export default function VerificationApplication() {
                 الثقة تبدأ قبل أول إجابة.
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-8 text-slate-300">
-                لا يملك الطبيب صلاحية الرد أو الظهور في الدليل حتى يراجع مسؤول
-                مختص هويته المهنية ووثائقه.
+                هذا تصور خيالي لواجهة تحقق لم تُنفذ؛ لا يوجد مسؤول مراجعة أو
+                صلاحيات أو أطباء حقيقيون.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs leading-6 text-slate-300">
@@ -199,8 +199,7 @@ export default function VerificationApplication() {
               من يرى الوثائق؟
             </h2>
             <p className="mt-2 text-xs leading-6 text-slate-600">
-              صاحب الطلب والمراجع الإداري المخوّل فقط. لا تظهر روابط الوثائق في
-              ملف الطبيب العام.
+              لا أحد؛ اختيار الوثائق ورفعها معطّلان بالكامل في هذا النموذج.
             </p>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-white p-5 text-xs leading-6 text-slate-500">
