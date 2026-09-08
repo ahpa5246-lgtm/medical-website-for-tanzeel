@@ -21,6 +21,7 @@ import Button from "@/components/ui/Button"
 import Badge from "@/components/ui/Badge"
 import { SPECIALTIES } from "@/data/specialties"
 import { MOCK_ARTICLES } from "@/data/mockData"
+import DemoLabel from "@/components/DemoLabel"
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
 const specialtyIcons: ReactNode[] = [
@@ -35,13 +36,13 @@ const specialtyIcons: ReactNode[] = [
 const TRUST_POINTS = [
   {
     icon: ShieldCheck,
-    title: "الطبيب أولًا",
-    text: "لا تظهر أي إجابة طبية للمريض إلا من طبيب مرخّص بعد مراجعة وثائقه.",
+    title: "عرض الطبيب الخيالي",
+    text: "تصور العرض خيالي؛ لا توجد إجابات أو مراجعة وثائق أو أطباء متصلون.",
   },
   {
     icon: LockKeyhole,
     title: "بياناتك حساسة",
-    text: "الاستشارة خاصة افتراضيًا، ويمكنك استخدام هوية مجهولة داخل المحادثة.",
+    text: "لا توجد خصوصية أو هوية مجهولة مطبقة؛ لا تُدخل أي بيانات حقيقية.",
   },
   {
     icon: HeartPulse,
@@ -56,10 +57,8 @@ export default function Home() {
 
   function startConsultation(event: React.FormEvent) {
     event.preventDefault()
-    const value = query.trim()
-    navigate(
-      `/consultations/new${value ? `?q=${encodeURIComponent(value)}` : ""}`,
-    )
+    setQuery("")
+    navigate("/consultations/new")
   }
 
   return (
@@ -71,7 +70,7 @@ export default function Home() {
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-white">
                 <ShieldCheck className="h-3 w-3" />
               </span>
-              استشارة تمر عبر طبيب موثّق، لا إجابة آلية
+              تصور خيالي لمسار محتمل — لا توجد خدمة أو أطباء
             </div>
 
             <h1 className="hero-title mx-auto max-w-2xl text-[2.7rem] leading-[1.2] sm:text-5xl lg:mx-0 lg:text-[3.65rem]">
@@ -82,8 +81,8 @@ export default function Home() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-slate-600 lg:mx-0 lg:text-lg">
-              اكتب ما يشغلك، واختر التخصص، وتابع الحوار في مساحة خاصة مع طبيب
-              جرى التحقق من ترخيصه.
+              جرّب التنقل بنص خيالي فقط؛ لن يُنقل النص إلى الرابط أو يُرسل أو يُحفظ،
+              ولا توجد مراجعة طبية.
             </p>
 
             <form
@@ -117,11 +116,11 @@ export default function Home() {
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
               <span className="safe-chip">
                 <LockKeyhole className="h-3.5 w-3.5 text-primary-600" /> خصوصية
-                افتراضية
+                غير متاحة
               </span>
               <span className="safe-chip">
                 <UserRoundCheck className="h-3.5 w-3.5 text-primary-600" /> تحقق
-                مهني
+                غير منفّذ
               </span>
               <span className="safe-chip">
                 <HeartPulse className="h-3.5 w-3.5 text-coral-500" /> ليست
@@ -130,12 +129,15 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="care-stage" aria-label="مسار توضيحي للاستشارة الطبية">
+          <div
+            className="care-stage"
+            aria-label="تصور خيالي غير تشغيلي لواجهة سؤال طبي"
+          >
             <div className="care-card care-card-question">
               <div className="flex items-center justify-between gap-3">
-                <Badge variant="warning">قيد المراجعة</Badge>
+                <Badge variant="warning">حالة عرض خيالية</Badge>
                 <span className="text-[11px] font-medium text-slate-400">
-                  استشارة خاصة · الآن
+                  بطاقة واجهة خيالية · بلا إرسال
                 </span>
               </div>
               <div className="mt-4 flex items-start gap-3">
@@ -147,8 +149,7 @@ export default function Home() {
                     سؤال جديد في طب الأسرة
                   </p>
                   <p className="mt-1.5 text-xs leading-6 text-slate-500">
-                    صِف وقت بداية الأعراض والأدوية الحالية ليحصل الطبيب على
-                    السياق الصحيح.
+                    هذا نص واجهة تمثيلي فقط؛ لا تُدخل أعراضًا أو أدوية حقيقية.
                   </p>
                 </div>
               </div>
@@ -187,21 +188,21 @@ export default function Home() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-extrabold text-ink">
-                      الطبيب المستجيب
+                      شخصية طبيب خيالية
                     </p>
-                    <Badge variant="primary">موثّق</Badge>
+                    <Badge variant="primary">خيالي</Badge>
                   </div>
                   <p className="mt-1 text-xs text-slate-500">
-                    مطابقة التخصص قبل إتاحة الرد
+                    تصور غير منفّذ لمطابقة التخصص
                   </p>
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2 text-[11px]">
                 <span className="rounded-xl bg-primary-50 px-3 py-2 font-bold text-primary-800">
-                  ترخيص مراجع
+                  ترخيص خيالي غير مراجع
                 </span>
                 <span className="rounded-xl bg-slate-50 px-3 py-2 font-bold text-slate-600">
-                  سجل قابل للتدقيق
+                  سجل خيالي غير محفوظ
                 </span>
               </div>
             </div>
@@ -228,30 +229,30 @@ export default function Home() {
       <section className="section-shell bg-white">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="section-label justify-center">مسار الرعاية</p>
+            <p className="section-label justify-center">تصور الواجهة</p>
             <h2 className="mt-4 text-3xl font-black leading-tight text-ink sm:text-4xl">
-              ثلاث لحظات، ومسؤولية واحدة
+              ثلاث حالات مرئية في نموذج العرض
             </h2>
             <p className="mt-4 text-sm leading-7 text-slate-500">
-              كل خطوة في الاستشارة مصممة لتقليل الالتباس وحماية المريض.
+              هذه البطاقات تشرح تصورًا بصريًا فقط؛ لا تقدم رعاية ولا تحمي مريضًا.
             </p>
           </div>
           <div className="care-path-grid mt-12 grid gap-5 md:grid-cols-3">
             {[
               {
                 icon: MessageCircle,
-                label: "شارك السياق",
-                text: "نطلب التفاصيل التي يحتاجها الطبيب، مع كشف عبارات الخطر أثناء الكتابة.",
+                label: "مثال حقل خيالي",
+                text: "يعرض الحقل مثالًا محليًا فقط؛ لا يوجد طبيب ولا إرسال أو حفظ.",
               },
               {
                 icon: ShieldCheck,
-                label: "نطابق التخصص",
-                text: "تُتاح الاستشارة لطبيب واحد موثّق في التخصص المناسب لتجنب الآراء المتضاربة.",
+                label: "مثال مطابقة غير منفّذة",
+                text: "هذا تصور مرئي فقط؛ لا يوجد توجيه أو طبيب أو تحقق منفّذ.",
               },
               {
                 icon: Clock3,
-                label: "تابع في خيط واحد",
-                text: "السؤال والإجابة والمتابعة والتقييم تبقى في سجل واضح يمكن الرجوع إليه.",
+                label: "مثال خيط غير محفوظ",
+                text: "يعرض النموذج خيطًا خياليًا؛ لا يوجد سجل محفوظ أو متابعة فعلية.",
               },
             ].map(({ icon: Icon, label, text }, index) => (
               <article
@@ -343,6 +344,7 @@ export default function Home() {
                   <span className="absolute inset-0 bg-gradient-to-t from-ink/35 to-transparent" />
                 </div>
                 <div className="p-5">
+                  <DemoLabel>مقال ومؤلف خياليان</DemoLabel>
                   <div className="flex items-center justify-between gap-3">
                     <Badge variant="primary">{article.category}</Badge>
                     <span className="text-[11px] text-slate-400">
@@ -353,7 +355,7 @@ export default function Home() {
                     {article.title}
                   </h3>
                   <p className="mt-4 text-xs font-medium text-slate-400">
-                    راجعه {article.authorName}
+                    مؤلف العرض الخيالي: {article.authorName}
                   </p>
                 </div>
               </Link>
@@ -370,13 +372,13 @@ export default function Home() {
           />
           <div className="relative">
             <p className="text-xs font-bold text-primary-300">
-              عندما تحتاج إلى توجيه
+              نهاية نموذج العرض
             </p>
             <h2 className="mt-3 text-2xl font-black sm:text-3xl">
-              ابدأ بسؤال واضح، واترك الباقي لمسار الرعاية.
+              استكشف نموذج السؤال الخيالي دون إدخال بيانات حقيقية.
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-              الخدمة لا تستبدل الفحص المباشر، ولا تُستخدم في حالات الطوارئ.
+              هذا النموذج لا يقدم فحصًا أو توجيهًا أو خدمة طوارئ.
             </p>
           </div>
           <div className="relative mt-6 flex flex-wrap gap-3 lg:mt-0">
@@ -385,7 +387,7 @@ export default function Home() {
                 size="lg"
                 className="bg-white text-ink hover:bg-primary-50"
               >
-                ابدأ استشارة
+                عاين نموذج السؤال
               </Button>
             </Link>
             <Link to="/legal/disclaimer">

@@ -10,6 +10,7 @@ import {
 import Badge from "@/components/ui/Badge"
 import Button from "@/components/ui/Button"
 import { MOCK_ARTICLES } from "@/data/mockData"
+import DemoLabel from "@/components/DemoLabel"
 
 export default function ArticleDetail() {
   const { id } = useParams()
@@ -32,6 +33,7 @@ export default function ArticleDetail() {
       <header className="relative overflow-hidden border-b border-primary-100 bg-primary-50/70">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:py-16">
           <div>
+            <DemoLabel>مقال ومؤلف ومراجعة خيالية غير معتمدة</DemoLabel>
             <Link
               to="/articles"
               className="mb-6 inline-flex items-center gap-1 text-xs font-bold text-primary-700"
@@ -51,8 +53,8 @@ export default function ArticleDetail() {
                 دقائق
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-primary-600" /> مراجعة طبية
-                موثقة
+                <ShieldCheck className="h-4 w-4 text-primary-600" /> مراجعة
+                خيالية غير منفّذة
               </span>
             </div>
           </div>

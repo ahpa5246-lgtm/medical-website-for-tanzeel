@@ -1,135 +1,70 @@
 import { Link } from "react-router-dom"
 
+const UNAVAILABLE_FEATURES = [
+  "لا توجد حسابات مستخدمين أو تسجيل فعلي.",
+  "لا يوجد أطباء أو ممارسون صحيون متصلون بالنموذج.",
+  "لا توجد عملية تحقق من الهوية أو الترخيص أو الوثائق.",
+  "لا توجد خدمة لنشر المقالات أو الدورات أو أي محتوى.",
+  "لا توجد قواعد استخدام تشغيلية أو آلية إنفاذ أو تعليق أو إغلاق حسابات.",
+  "لا تُرسل إشعارات أو رسائل بريد إلكتروني أو تنبيهات داخل التطبيق.",
+  "لا توجد قناة دعم قانوني أو فريق قانوني تشغيلي للتواصل معه.",
+  "لا توجد حقوق تشغيلية للمنصة أو للمستخدمين مطبقة في هذا النموذج.",
+]
+
 export default function Terms() {
   return (
-    <div dir="rtl" className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-8">
-        <Link
-          to="/"
-          className="text-sm text-primary-600 hover:text-primary-700 transition-colors"
-        >
-          ← العودة للرئيسية
-        </Link>
-      </div>
+    <div dir="rtl" className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <Link
+        to="/"
+        className="text-sm text-primary-600 transition-colors hover:text-primary-700"
+      >
+        ← العودة للرئيسية
+      </Link>
 
-      <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
-        شروط الاستخدام
+      <h1 className="mt-8 text-2xl font-bold text-slate-900 sm:text-3xl">
+        حالة النموذج الأولي
       </h1>
-      <p className="text-slate-500 text-sm mb-8">آخر تحديث: يوليو 2025</p>
+      <p className="mt-2 text-sm text-slate-500">
+        إشعار وصفي لواجهة خيالية غير تشغيلية — وليس شروط خدمة.
+      </p>
 
-      <div className="space-y-8 text-sm text-slate-700 leading-relaxed">
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ١. قبول الشروط
-          </h2>
-          <p>
-            باستخدامك منصة ميدكونكت، سواء بالتصفح أو التسجيل أو تقديم محتوى،
-            فأنت توافق على الشروط الواردة في هذه الوثيقة وعلى{" "}
-            <Link to="/legal/privacy" className="text-primary-600 underline">
-              سياسة الخصوصية
-            </Link>{" "}
-            و{" "}
-            <Link to="/legal/disclaimer" className="text-primary-600 underline">
-              التنويه الطبي
-            </Link>
-            . إذا لم توافق، يرجى التوقف عن استخدام المنصة.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٢. طبيعة الخدمة
-          </h2>
-          <p>
-            ميدكونكت منصة معلوماتية وتعليمية تتيح التواصل مع أطباء معتمدين
-            للحصول على إرشاد طبي عام. الخدمة ليست خدمة طوارئ ولا تُنشئ علاقة
-            رعاية طبية رسمية كما يفهمها القانون. يُحظر الاعتماد عليها وحدها في
-            اتخاذ قرارات طبية مصيرية.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٣. أهلية المستخدم
-          </h2>
-          <ul className="list-disc ps-5 space-y-1">
-            <li>
-              يجب أن يكون المستخدم بالغًا (18 عامًا أو أكثر) أو تحت إشراف وليّ أمر.
-            </li>
-            <li>يتعهد المستخدم بتقديم بيانات صحيحة عند التسجيل.</li>
-            <li>يُحظر إنشاء أكثر من حساب لشخص واحد أو تقديم هوية مزيفة.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٤. الاستخدام المقبول
-          </h2>
-          <p>يوافق المستخدم على:</p>
-          <ul className="list-disc ps-5 space-y-1 mt-2">
-            <li>عدم نشر محتوى مُضلل أو طبيًا خاطئًا.</li>
-            <li>عدم استخدام المنصة للترويج لمنتجات أو خدمات غير مرخصة.</li>
-            <li>عدم انتهاك خصوصية المستخدمين الآخرين أو الأطباء.</li>
-            <li>عدم الإساءة أو التحرش بأي مستخدم أو طبيب.</li>
-            <li>الإبلاغ فورًا عن أي محتوى مشبوه أو خاطئ طبيًا.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٥. التحقق من الأطباء والمدربين
-          </h2>
-          <p>
-            يتعهد كل طبيب أو مدرب بتقديم وثائق حقيقية وصحيحة للتحقق. أي تزوير أو
-            انتحال للهوية المهنية يُعرّض الحساب للإغلاق الفوري والإحالة للجهات
-            القانونية المختصة.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٦. الملكية الفكرية
-          </h2>
-          <p>
-            المحتوى المنشور على المنصة من مقالات ودورات ومواد تعليمية محمي بحقوق
-            الملكية الفكرية للمؤلف أو المنصة. يُحظر نسخ أي محتوى أو إعادة نشره
-            دون إذن كتابي مسبق.
-          </p>
+      <div className="mt-8 space-y-6 text-sm leading-8 text-slate-700">
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950">
+          <h2 className="font-bold">لا ينشئ استخدام هذه الواجهة اتفاقًا</h2>
           <p className="mt-2">
-            بنشر محتوى على المنصة، تمنح ميدكونكت رخصة استخدام غير حصرية لعرض
-            المحتوى وتوزيعه على المستخدمين ضمن نطاق الخدمة.
+            التصفح أو تجربة الحقول لا يعني قبول شروط، ولا ينشئ حسابًا أو علاقة
+            طبية أو قانونية أو خدمة. لا تُدخل معلومات شخصية أو طبية حقيقية؛ القيم
+            التجريبية لا تُرسل ولا تُحفظ.
           </p>
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٧. إنهاء الخدمة
+          <h2 className="text-base font-bold text-slate-900">
+            ما الذي لم يُنفّذ؟
           </h2>
-          <p>
-            تحتفظ ميدكونكت بحقها في تعليق أو إنهاء أي حساب يخالف هذه الشروط أو
-            يشكّل خطرًا على سلامة المستخدمين أو يضر بمصداقية المنصة.
+          <ul className="mt-3 list-disc space-y-2 ps-5">
+            {UNAVAILABLE_FEATURES.map((feature) => (
+              <li key={feature}>{feature}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <h2 className="font-bold text-slate-900">المحتوى والوثائق</h2>
+          <p className="mt-2">
+            لا يمكن تسجيل بيانات حقيقية أو تقديم وثائق مهنية أو نشر محتوى عبر
+            هذه الواجهة. لا تمنح تجربة حقول العرض أي ترخيص للمحتوى، ولا يوجد
+            حساب يمكن تعليقه أو سياسة تشغيلية يمكن الإخطار بتغييرها.
           </p>
         </section>
 
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٨. تعديل الشروط
-          </h2>
-          <p>
-            قد تُعدّل هذه الشروط بحسب احتياجات المنصة أو المتطلبات القانونية. يُعلَن
-            عن أي تعديل جوهري قبل سريانه بسبعة أيام على الأقل عبر البريد
-            الإلكتروني أو الإشعارات داخل التطبيق.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-base font-bold text-slate-900 mb-3">
-            ٩. التواصل معنا
-          </h2>
-          <p>
-            لأي استفسار قانوني أو شكوى: <strong>legal@medconnect.app</strong>
-          </p>
-        </section>
+        <p>
+          صفحات العرض الأخرى، بما فيها إشعار الخصوصية و
+          <Link to="/legal/disclaimer" className="text-primary-700 underline">
+            التنويه الطبي
+          </Link>
+          ، تصف حدود النموذج فقط ولا تمثل خدمة قائمة.
+        </p>
       </div>
     </div>
   )

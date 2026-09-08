@@ -13,6 +13,7 @@ import Button from "@/components/ui/Button"
 import Badge from "@/components/ui/Badge"
 import Card from "@/components/ui/Card"
 import { MOCK_DOCTORS } from "@/data/mockData"
+import DemoLabel from "@/components/DemoLabel"
 import { SPECIALTIES } from "@/data/specialties"
 import WaveDivider from "@/components/decorative/WaveDivider"
 import FingerprintRidges from "@/components/decorative/FingerprintRidges"
@@ -39,9 +40,9 @@ export default function DoctorDirectory() {
       <div className="relative isolate overflow-hidden border-b border-slate-100 bg-gradient-to-l from-primary-50/60 to-white py-10 pb-16">
         <FingerprintRidges className="-right-12 -top-14 z-0 h-[26rem] w-[26rem] opacity-75" />
         <div className="relative z-[1] mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="section-kicker mb-2">الأطباء المعتمدون</p>
+          <p className="section-kicker mb-2">بيانات أطباء خيالية</p>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-2">
-            دليل الأطباء المعتمدين
+            دليل عرض غير تشغيلي
           </h1>
           <p className="text-slate-500 text-sm max-w-xl">
             نماذج توضيحية لشكل الملفات التي ستظهر بعد التحقق الفعلي من الشهادات
@@ -153,6 +154,7 @@ export default function DoctorDirectory() {
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
+                    <DemoLabel>طبيب وهوية وتقييم وإحصاءات خيالية</DemoLabel>
                     <div className="flex items-start justify-between gap-1">
                       <div>
                         <p className="font-bold text-slate-900">
@@ -225,13 +227,13 @@ export default function DoctorDirectory() {
         <div className="mt-12 rounded-3xl bg-primary-700 px-6 py-8 sm:p-10 text-center text-white shadow-[0_16px_50px_rgba(11,74,95,.22)]">
           <h3 className="text-xl font-black text-white mb-2">أنت طبيب مرخص؟</h3>
           <p className="text-sm text-primary-100 mb-6 max-w-md mx-auto leading-7">
-            انضم إلى شبكة أطبائنا وساهم في تعزيز الوعي الصحي في المنطقة. التحقق
-            مجاني وبسيط.
+            لا توجد شبكة أطباء أو عملية اعتماد. هذا رابط إلى نموذج واجهة لا يحفظ
+            البيانات.
           </p>
           <Link to="/auth/signup?role=doctor">
             <Button className="bg-white text-primary-700 hover:bg-primary-50 shadow-lg gap-2">
               <Shield className="w-4 h-4" />
-              انضم كطبيب معتمد
+              عاين نموذج الانضمام
             </Button>
           </Link>
         </div>
