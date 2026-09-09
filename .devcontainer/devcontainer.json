@@ -9,7 +9,7 @@
     }
   },
   "postCreateCommand": "corepack enable && corepack prepare pnpm@9.15.9 --activate && cd 'Build Medical Consultation Platform' && pnpm install --frozen-lockfile",
-  "postStartCommand": "cd 'Build Medical Consultation Platform' && nohup pnpm dev > /tmp/medical-prototype-vite.log 2>&1 &",
-  "waitFor": "postCreateCommand",
+  "postStartCommand": "bash .devcontainer/start-preview.sh",
+  "waitFor": "postStartCommand",
   "remoteUser": "node"
 }
