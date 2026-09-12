@@ -314,7 +314,7 @@ function LabDetail({ module }: { module: LabModule }) {
             </div>
           </div>
 
-          {enabledShell && <CaseRoom />}
+          {enabledShell && <CaseRoom key={module.id} moduleId={module.id} />}
 
           <div className="rounded-3xl border border-slate-200 bg-white p-6">
             <h2 className="text-lg font-black text-ink">

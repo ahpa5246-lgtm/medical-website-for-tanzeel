@@ -103,12 +103,106 @@ const SCENES: Scene[] = [
   },
 ]
 
-export default function CaseRoom() {
+const HANDOFF_SCENES: Scene[] = [
+  {
+    eyebrow: "غرفة التسليم · 01",
+    title: "ابدأ بخلاصة يمكن اختبارها",
+    prompt:
+      "لديك ملف خيالي طويل وملاحظات متفرقة. ما أفضل افتتاحية لتسليم الحالة إلى زميل آخر؟",
+    choices: [
+      {
+        id: "summary",
+        label: "جملة موجزة: ما نعرفه، وما الذي نحتاج حسمه",
+        note: "اختيار قوي: الخلاصة المحددة تمنح المستلم سؤالًا واضحًا بدل كومة معلومات.",
+        points: 2,
+      },
+      {
+        id: "transcript",
+        label: "قراءة كل الملاحظات حسب ترتيب كتابتها",
+        note: "الترتيب الزمني مفيد أحيانًا، لكنه لا يعوض عن خلاصة وسؤال واضحين.",
+        points: 1,
+      },
+      {
+        id: "conclusion",
+        label: "إعلان نتيجة نهائية قبل عرض الأدلة",
+        note: "هذا يجعل المراجعة أصعب وقد يدفع المستلم لقبول افتراض غير موثق.",
+        points: 0,
+      },
+    ],
+  },
+  {
+    eyebrow: "لوحة الفرز · 02",
+    title: "أبقِ المصدر ملازمًا للمعلومة",
+    prompt:
+      "وجدت معلومتين متشابهتين، إحداهما موثقة بوقت ومصدر والأخرى منسوخة بلا سياق. ماذا تسلّم؟",
+    choices: [
+      {
+        id: "source",
+        label: "المعلومة الموثقة مع وقتها ومصدرها وحدودها",
+        note: "صحيح: المصدر والوقت جزء من الدليل، وليسا حاشية يمكن إسقاطها.",
+        points: 2,
+      },
+      {
+        id: "both",
+        label: "المعلومتان وكأنهما دليلان مستقلان",
+        note: "النسخة غير الموثقة قد تكون تكرارًا، فلا ينبغي أن تضاعف وزن الدليل.",
+        points: 0,
+      },
+      {
+        id: "short",
+        label: "الأقصر منهما لتسريع التسليم",
+        note: "الاختصار جيد فقط إذا حافظ على المصدر والسياق وحدود اليقين.",
+        points: 1,
+      },
+    ],
+  },
+  {
+    eyebrow: "بوابة المراجعة · 03",
+    title: "حوّل المجهول إلى سؤال مراجعة",
+    prompt: "بقي تعارض غير محسوم في الملف الخيالي. كيف تنهي التسليم؟",
+    choices: [
+      {
+        id: "question",
+        label: "تسمية التعارض وكتابة سؤال محدد للمراجع البشري",
+        note: "ممتاز: أنت لا تخفي الفجوة ولا تحوّلها إلى يقين مصطنع.",
+        points: 2,
+      },
+      {
+        id: "hide",
+        label: "حذف إحدى المعلومتين كي يبدو الملف متسقًا",
+        note: "الاتساق الشكلي لا يبرر إخفاء تعارض قد يغيّر فهم الحالة.",
+        points: 0,
+      },
+      {
+        id: "flag",
+        label: "كتابة «غير واضح» بلا تحديد سبب أو خطوة تالية",
+        note: "رصد المشكلة بداية جيدة، لكن التسليم يحتاج سؤالًا أو خطوة مراجعة محددة.",
+        points: 1,
+      },
+    ],
+  },
+]
+
+const ROOM_COPY = {
+  evidence: {
+    kicker: "SAFE DEMO · تدريب منطق الواجهة",
+    title: "مسار دلتا: غرفة الأدلة",
+  },
+  handoff: {
+    kicker: "SAFE DEMO · تحدي التسليم المنظم",
+    title: "مسار سيغما: غرفة التسليم",
+  },
+}
+
+export default function CaseRoom({ moduleId }: { moduleId: string }) {
+  const room = moduleId === "handoff-case" ? "handoff" : "evidence"
+  const scenes = room === "handoff" ? HANDOFF_SCENES : SCENES
+  const copy = ROOM_COPY[room]
   const [sceneIndex, setSceneIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<number, Choice>>({})
-  const scene = SCENES[sceneIndex]
+  const scene = scenes[sceneIndex]
   const answer = answers[sceneIndex]
-  const finished = sceneIndex === SCENES.length - 1 && Boolean(answer)
+  const finished = sceneIndex === scenes.length - 1 && Boolean(answer)
   const score = useMemo(
     () =>
       Object.values(answers).reduce((total, item) => total + item.points, 0),
@@ -135,14 +229,14 @@ export default function CaseRoom() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-black tracking-[.18em] text-cyan-200">
-              SAFE DEMO · تدريب منطق الواجهة
+              {copy.kicker}
             </p>
             <h2 id="case-room-title" className="mt-2 text-2xl font-black">
-              مسار دلتا: غرفة الأدلة
+              {copy.title}
             </h2>
           </div>
           <div className="flex items-center gap-2" aria-label="تقدم المسار">
-            {SCENES.map((item, index) => (
+            {scenes.map((item, index) => (
               <span
                 key={item.eyebrow}
                 className={`h-2.5 rounded-full transition-all motion-reduce:transition-none ${
@@ -228,7 +322,7 @@ export default function CaseRoom() {
             <ClipboardList className="h-4 w-4 text-cyan-300" /> دفتر المسار
           </p>
           <ol className="mt-4 space-y-3 text-xs leading-6 text-slate-300">
-            {SCENES.map((item, index) => (
+            {scenes.map((item, index) => (
               <li key={item.title} className="flex gap-2">
                 <CheckCircle2
                   className={`mt-1 h-4 w-4 shrink-0 ${

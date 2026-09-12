@@ -30,6 +30,20 @@ export const LAB_MODULES: LabModule[] = [
     stages: ["العرض", "التاريخ", "اختيار الفحوص", "التفسير", "النتيجة"],
   },
   {
+    id: "handoff-case",
+    title: "غرفة تسليم الحالة",
+    specialty: "التواصل وتوثيق الأدلة",
+    description:
+      "تحدٍ خيالي قصير لتلخيص ملف، حفظ مصدر المعلومة، وتحويل المجهول إلى سؤال مراجعة واضح.",
+    type: "branching-case",
+    difficulty: "مبتدئ",
+    xpReward: 100,
+    estimatedMinutes: 8,
+    status: "playable-demo",
+    reviewStatus: "unreviewed-placeholder",
+    stages: ["الخلاصة", "فرز المصادر", "تسمية التعارض", "بوابة المراجعة"],
+  },
+  {
     id: "heart-anatomy",
     title: "مستكشف تشريح القلب",
     specialty: "التشريح",

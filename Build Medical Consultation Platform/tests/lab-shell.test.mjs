@@ -15,6 +15,7 @@ test("pilot catalog exposes a playable safe demo", () => {
   const catalog = read("src/pages/labs/catalog.ts")
   assert.match(catalog, /chest-pain-case/)
   assert.match(catalog, /playable-demo/)
+  assert.match(catalog, /handoff-case/)
   assert.match(catalog, /unreviewed-placeholder/)
 })
 
@@ -22,6 +23,8 @@ test("case room has deterministic scenes, feedback and an in-memory reset", () =
   const room = read("src/pages/labs/CaseRoom.tsx")
   assert.match(room, /const SCENES/)
   assert.match(room, /غرفة الأدلة/)
+  assert.match(room, /غرفة التسليم/)
+  assert.match(room, /HANDOFF_SCENES/)
   assert.match(room, /تغذية راجعة فورية/)
   assert.match(room, /data-demo-storage="memory-only"/)
   assert.match(room, /setAnswers\(\{\}\)/)
