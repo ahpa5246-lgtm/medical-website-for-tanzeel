@@ -7,7 +7,8 @@ const NAV_LINKS = [
   { to: "/consultations", label: "استشاراتي" },
   { to: "/doctors", label: "الأطباء" },
   { to: "/articles", label: "المعرفة الصحية" },
-  { to: "/labs", label: "مختبرات التعلم" },
+  { to: "/training", label: "تدريب" },
+  { to: "/labs", label: "المختبرات" },
 ]
 
 const LATER_LINKS = [

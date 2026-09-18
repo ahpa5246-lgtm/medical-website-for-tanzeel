@@ -22,6 +22,7 @@ import VerificationApplication from "@/pages/verification/Application"
 import PreviewNotice from "@/components/PreviewNotice"
 
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
+const Training = lazy(() => import("@/pages/training/Training"))
 
 function LazyLabRoute() {
   return (
@@ -102,6 +103,7 @@ export default function App() {
                 <Route path="/articles/:id" element={<ArticleDetail />} />
                 <Route path="/articles/new" element={<ArticleEditor />} />
                 <Route path="/courses" element={<CourseList />} />
+                <Route path="/training" element={<Training />} />
                 <Route path="/labs" element={<LazyLabRoute />} />
                 <Route path="/labs/:moduleId" element={<LazyLabRoute />} />
                 <Route path="/library" element={<LibraryList />} />
