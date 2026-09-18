@@ -21,6 +21,7 @@ import Privacy from "@/pages/legal/Privacy"
 import VerificationApplication from "@/pages/verification/Application"
 import PreviewNotice from "@/components/PreviewNotice"
 import { LoadingState } from "@/components/system/AsyncState"
+import RouteAnnouncer from "@/components/system/RouteAnnouncer"
 
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
 const Training = lazy(() => import("@/pages/training/Training"))
@@ -63,6 +64,7 @@ function NotFound() {
 export default function App() {
   return (
     <BrowserRouter>
+      <RouteAnnouncer />
       <PreviewNotice />
       <Routes>
         {/* Auth routes — no layout header/footer */}
