@@ -6,7 +6,7 @@ Repository: `ahpa5246-lgtm/medical-website-for-tanzeel`
 
 ## 1. Outcome
 
-Turn the existing Arabic-first React prototype into a connected, presentation-ready product whose primary journeys behave end to end. The platform must be credible for a Ministry of Health presentation while keeping clinical content, sample clinicians, and simulated consultations clearly labelled until licensing and medical review are complete.
+Turn the existing Arabic-first React prototype into a connected, launch-ready medical platform whose primary journeys behave end to end. The final product is designed for normal public internet use and must not present itself as a ministry demonstration, prototype, or simulated service.
 
 “Working” means that a user action has an observable, persistent result; every asynchronous action has loading, success, empty, denied, and failure behavior; navigation is valid on refresh; keyboard and mobile interaction work; and automated end-to-end tests cover every primary journey.
 
@@ -104,7 +104,7 @@ Sign up → verify email → choose role → complete profile → enter role-awa
 
 Patient creates a consultation → emergency-language screening runs → submission is blocked for emergency wording with immediate emergency guidance → valid consultation persists → eligible doctor/reviewer assignment occurs → participants exchange messages and private files → patient may request a second opinion → consultation closes → rating is stored.
 
-For the licensing presentation, sample consultations are seeded and marked as demonstration records.
+Development and automated-test environments may use clearly isolated fixtures. Production starts with real empty states and never exposes fictional consultations or clinicians as real records.
 
 ### Doctor verification
 
@@ -122,7 +122,7 @@ Learner enrolls → opens lesson/resource → progress persists → bookmarks an
 
 Learner selects an unlocked stage → opens a real mission screen rather than instantly completing it → answers or interacts → receives immediate feedback → completion is committed atomically → XP, streak, badge, and next-stage availability update.
 
-The first complete case is the fictional chest-pain structural example already described in the repository brief. It remains labelled unreviewed demonstration content. The engine supports scenes, choices, multi-select questions, results, scoring, feedback, and a final summary.
+The first complete case uses the chest-pain structure already described in the repository brief. Clinical wording must be reviewed and approved by the designated licensed medical reviewer before public release. Until that review occurs, the module remains unavailable in production rather than being presented as real medical instruction. The engine supports scenes, choices, multi-select questions, results, scoring, feedback, and a final summary.
 
 The anatomy lab lazy-loads its renderer and model. Lite mode shows an accessible labelled 2D diagram. WebGL failure and reduced motion automatically retain a usable fallback.
 
@@ -144,7 +144,7 @@ A calm, precise Arabic healthcare and learning environment composed like a livin
 
 - No generic purple/cyan gradient identity.
 - No repeated stock 24px cards with equal visual weight.
-- No fake metrics, testimonials, physicians, or ornamental medical charts.
+- No fake metrics, testimonials, physicians, consultations, reviews, or ornamental medical charts.
 - No glassmorphism on every surface.
 - No motion that delays reading or blocks low-power devices.
 
@@ -190,7 +190,7 @@ Every connected surface implements:
 - Deep-link and refresh behavior.
 - Mobile, keyboard, RTL, zoom, and reduced-motion behavior.
 
-A route-level error boundary prevents one feature from blanking the entire application.
+A route-level error boundary prevents one feature from blanking the entire application. Prototype banners, demo labels, mock-data fallbacks, and `noindex` metadata are development-only scaffolding and must be removed from the production release after connected flows replace them.
 
 ## 10. Testing and definition of done
 
@@ -214,7 +214,7 @@ Manual acceptance:
 - WebGL unavailable.
 - New user, empty account, populated demo account, doctor, reviewer, and administrator roles.
 
-The product is presentation-ready when all primary journeys pass automated tests, no visible action is inert, demonstration content is labelled, protected data cannot cross role boundaries in SQL tests, and the production build completes without blocking warnings.
+The product is launch-ready when all primary journeys pass automated tests, no visible action is inert, production contains no fictional operational records, protected data cannot cross role boundaries in SQL tests, public clinical learning content has reviewer approval, and the production build completes without blocking warnings.
 
 ## 11. Delivery sequence
 
@@ -229,4 +229,4 @@ The product is presentation-ready when all primary journeys pass automated tests
 
 ## 12. External requirements
 
-Live verification requires a Supabase project URL and anon/publishable key supplied as Codespaces secrets. Applying migrations and testing privileged workflows also requires authenticated Supabase CLI access or a project connection. Payment activation and real clinical publication remain blocked until provider and licensed-reviewer decisions are supplied.
+Live verification requires a Supabase project URL and anon/publishable key supplied as Codespaces secrets. Applying migrations and testing privileged workflows also requires authenticated Supabase CLI access or a project connection. Payment activation remains blocked until a provider and its commercial terms are selected. Public clinical learning content remains blocked until a licensed reviewer approves it. These gates affect the relevant features only and do not turn the rest of the product into a demo.
