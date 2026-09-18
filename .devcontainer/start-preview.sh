@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="$(git rev-parse --show-toplevel)/Build Medical Consultation Platform"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPOSITORY_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+APP_DIR="$REPOSITORY_ROOT/Build Medical Consultation Platform"
 LOG_FILE="/tmp/medical-prototype-vite.log"
 PID_FILE="/tmp/medical-prototype-vite.pid"
 HEALTH_URL="http://127.0.0.1:8443/"
