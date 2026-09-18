@@ -10,3 +10,15 @@ test("manual dev command listens on the forwarded Codespaces port", async () => 
   assert.match(packageJson.scripts.dev, /--port 8443/)
   assert.match(packageJson.scripts.dev, /--strictPort/)
 })
+
+test("Codespaces uses a writable user instead of the unavailable node home", async () => {
+  const devcontainer = JSON.parse(
+    await readFile(
+      new URL("../../.devcontainer/devcontainer.json", import.meta.url),
+      "utf8",
+    ),
+  )
+
+  assert.equal(devcontainer.containerUser, "root")
+  assert.equal(devcontainer.remoteUser, "root")
+})

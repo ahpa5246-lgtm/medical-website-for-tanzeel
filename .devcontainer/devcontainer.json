@@ -1,6 +1,9 @@
 {
   "name": "Medical Prototype Preview",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "containerUser": "root",
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
   "forwardPorts": [8443],
   "portsAttributes": {
     "8443": {
@@ -10,6 +13,5 @@
   },
   "postCreateCommand": "corepack enable && corepack prepare pnpm@9.15.9 --activate && cd 'Build Medical Consultation Platform' && pnpm install --frozen-lockfile",
   "postStartCommand": "bash .devcontainer/start-preview.sh",
-  "waitFor": "postStartCommand",
-  "remoteUser": "node"
+  "waitFor": "postStartCommand"
 }
