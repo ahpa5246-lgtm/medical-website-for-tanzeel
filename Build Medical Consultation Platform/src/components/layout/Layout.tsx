@@ -5,8 +5,17 @@ import type { ReactNode } from "react"
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="site-shell min-h-screen flex flex-col bg-white">
+      <a href="#main-content" className="mc-skip-link">
+        الانتقال إلى المحتوى الرئيسي
+      </a>
       <Header />
-      <main className="flex-1 page-enter">{children}</main>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="flex-1 page-enter outline-none"
+      >
+        {children}
+      </main>
       <Footer />
     </div>
   )
