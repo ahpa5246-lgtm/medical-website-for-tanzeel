@@ -14,7 +14,7 @@
 
 - Arabic-first RTL remains the default.
 - No production action may silently report success without persistence.
-- Existing emergency screening and prototype warnings remain active.
+- Existing emergency screening remains active. Prototype warnings remain only while the explicit `VITE_ENABLE_PROTOTYPE=true` development mode is used and are removed from the final connected release.
 - No Three.js or database dependency is introduced in phase one.
 - All interactions retain keyboard focus, reduced-motion behavior, and 44px touch targets.
 - The build must pass `pnpm test`, `pnpm typecheck`, `pnpm format:check`, and `pnpm build`.
@@ -44,7 +44,7 @@
 
 **Interfaces:**
 - Produces: `readRuntimeConfig(env): RuntimeConfigResult`
-- Produces: `RuntimeConfigResult = { mode: "demo" | "connected"; supabaseUrl?: string; supabaseAnonKey?: string; issues: string[] }`
+- Produces: `RuntimeConfigResult = { mode: "blocked" | "prototype" | "connected"; supabaseUrl?: string; supabaseAnonKey?: string; issues: string[] }`
 
 - [ ] **Step 1: Write the failing test**
 
@@ -53,13 +53,23 @@ import test from "node:test"
 import assert from "node:assert/strict"
 import { readRuntimeConfig } from "../src/lib/runtimeConfig.mjs"
 
-test("empty environment enters explicit demo mode", () => {
-  assert.deepEqual(readRuntimeConfig({}), { mode: "demo", issues: [] })
+test("empty environment blocks startup instead of faking a backend", () => {
+  assert.deepEqual(readRuntimeConfig({}), {
+    mode: "blocked",
+    issues: ["أضيفي إعدادات Supabase لتشغيل المنصة المتصلة."],
+  })
+})
+
+test("prototype mode requires an explicit development flag", () => {
+  assert.deepEqual(readRuntimeConfig({ VITE_ENABLE_PROTOTYPE: "true" }), {
+    mode: "prototype",
+    issues: [],
+  })
 })
 
 test("partial Supabase configuration is rejected", () => {
   assert.deepEqual(readRuntimeConfig({ VITE_SUPABASE_URL: "https://example.supabase.co" }), {
-    mode: "demo",
+    mode: "blocked",
     issues: ["أضيفي VITE_SUPABASE_ANON_KEY لإكمال اتصال Supabase."],
   })
 })
@@ -93,14 +103,22 @@ export function readRuntimeConfig(env) {
   if (supabaseUrl && !supabaseAnonKey) issues.push(missingKeyMessage)
   if (!supabaseUrl && supabaseAnonKey) issues.push(missingUrlMessage)
 
-  if (issues.length || !supabaseUrl || !supabaseAnonKey)
-    return { mode: "demo", issues }
+  if (!supabaseUrl && !supabaseAnonKey) {
+    if (env.VITE_ENABLE_PROTOTYPE === "true")
+      return { mode: "prototype", issues: [] }
+    return {
+      mode: "blocked",
+      issues: ["أضيفي إعدادات Supabase لتشغيل المنصة المتصلة."],
+    }
+  }
+
+  if (issues.length) return { mode: "blocked", issues }
 
   try {
     const url = new URL(supabaseUrl)
     if (url.protocol !== "https:") throw new Error("invalid")
   } catch {
-    return { mode: "demo", issues: ["رابط Supabase غير صالح أو لا يستخدم HTTPS."] }
+    return { mode: "blocked", issues: ["رابط Supabase غير صالح أو لا يستخدم HTTPS."] }
   }
 
   return { mode: "connected", supabaseUrl, supabaseAnonKey, issues: [] }
@@ -111,7 +129,7 @@ export function readRuntimeConfig(env) {
 
 ```ts
 export interface RuntimeConfigResult {
-  mode: "demo" | "connected"
+  mode: "blocked" | "prototype" | "connected"
   supabaseUrl?: string
   supabaseAnonKey?: string
   issues: string[]
@@ -125,7 +143,7 @@ export function readRuntimeConfig(
 - [ ] **Step 5: Run the focused test**
 
 Run: `cd "Build Medical Consultation Platform" && node --test tests/runtime-config.test.mjs`  
-Expected: 3 passing tests.
+Expected: 4 passing tests.
 
 - [ ] **Step 6: Commit**
 
@@ -228,7 +246,7 @@ Use a React class boundary. Render a calm full-page Arabic recovery surface, a r
 
 - [ ] **Step 4: Implement `ConfigurationGate`**
 
-Read the runtime contract once. When configuration is complete, render children. When no Supabase values exist, render children in explicit demo mode and retain the existing persistent preview notice. When only one value exists or the URL is invalid, show an actionable setup card and do not mount connected routes.
+Read the runtime contract once. When configuration is complete, render children. When `VITE_ENABLE_PROTOTYPE=true` is explicitly present, render the current prototype with its persistent notice for development only. With complete Supabase values, render the connected application. With empty, partial, or invalid production configuration, show an actionable setup card and do not mount application routes.
 
 - [ ] **Step 5: Wrap the root**
 
@@ -344,7 +362,7 @@ Expected: zero failures and exit code 0 for every command.
 
 - [ ] **Step 6: Inspect the diff**
 
-Confirm phase one contains no backend client, no clinical-content changes, no removed safety notice, and no inert button added.
+Confirm phase one contains no backend client, no clinical-content changes, no fake production fallback, and no inert button added.
 
 - [ ] **Step 7: Commit**
 
