@@ -64,7 +64,6 @@ function NotFound() {
 export default function App() {
   return (
     <BrowserRouter>
-      <RouteAnnouncer />
       <PreviewNotice />
       <Routes>
         {/* Auth routes — no layout header/footer */}
@@ -145,6 +144,7 @@ export default function App() {
           }
         />
       </Routes>
+      <RouteAnnouncer />
     </BrowserRouter>
   )
 }
