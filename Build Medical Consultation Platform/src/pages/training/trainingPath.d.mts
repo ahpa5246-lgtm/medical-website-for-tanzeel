@@ -21,8 +21,8 @@ export type TrainingWorld = {
 
 export type StageAvailability = "complete" | "active" | "locked"
 
-export const TRAINING_WORLDS: TrainingWorld[]
-export const ALL_STAGES: TrainingStage[]
+export declare const TRAINING_WORLDS: TrainingWorld[]
+export declare const ALL_STAGES: TrainingStage[]
 export function getStageAvailability(
   stageId: string,
   completedIds: string[],
