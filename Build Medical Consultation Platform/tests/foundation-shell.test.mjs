@@ -47,3 +47,16 @@ test("root is protected by configuration and error boundaries", () => {
   assert.match(gate, /VITE_ENABLE_PROTOTYPE/)
   assert.match(gate, /إعداد المنصة غير مكتمل/)
 })
+
+test("lazy routes use one shared loading surface", () => {
+  const app = read("src/App.tsx")
+  const states = read("src/components/system/AsyncState.tsx")
+
+  assert.match(app, /import.*LoadingState.*AsyncState/)
+  assert.match(app, /<LoadingState/)
+  assert.match(states, /export function LoadingState/)
+  assert.match(states, /export function EmptyState/)
+  assert.match(states, /export function ErrorState/)
+  assert.match(states, /export function DeniedState/)
+  assert.match(states, /export function OfflineState/)
+})
