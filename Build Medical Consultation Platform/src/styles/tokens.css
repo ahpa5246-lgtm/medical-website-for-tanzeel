@@ -1,0 +1,37 @@
+:root {
+  color-scheme: light;
+
+  --mc-canvas: oklch(0.982 0.008 92);
+  --mc-canvas-muted: oklch(0.958 0.012 190);
+  --mc-surface: oklch(0.995 0.004 92);
+  --mc-surface-raised: oklch(1 0 0);
+  --mc-inset: oklch(0.94 0.018 202);
+
+  --mc-ink: oklch(0.255 0.045 244);
+  --mc-muted: oklch(0.505 0.03 237);
+  --mc-edge: oklch(0.875 0.022 213);
+  --mc-edge-strong: oklch(0.745 0.045 214);
+
+  --mc-accent: oklch(0.575 0.105 199);
+  --mc-accent-strong: oklch(0.455 0.09 204);
+  --mc-accent-soft: oklch(0.935 0.045 195);
+  --mc-learning: oklch(0.72 0.135 72);
+  --mc-learning-soft: oklch(0.955 0.045 84);
+  --mc-positive: oklch(0.59 0.14 151);
+  --mc-warning: oklch(0.69 0.145 70);
+  --mc-critical: oklch(0.56 0.205 27);
+  --mc-focus: oklch(0.62 0.17 229);
+
+  --mc-radius-control: 0.7rem;
+  --mc-radius-record: 1rem;
+  --mc-radius-canvas: 1.5rem;
+
+  --mc-shadow-1: 0 1px 2px rgb(16 42 67 / 0.06);
+  --mc-shadow-2: 0 12px 32px rgb(16 42 67 / 0.09);
+  --mc-shadow-3: 0 28px 72px rgb(16 42 67 / 0.14);
+
+  --mc-motion-fast: 140ms;
+  --mc-motion-ui: 220ms;
+  --mc-motion-narrative: 420ms;
+  --mc-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
