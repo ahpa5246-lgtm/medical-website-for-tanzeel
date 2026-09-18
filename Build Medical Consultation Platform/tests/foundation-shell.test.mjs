@@ -34,3 +34,16 @@ test("semantic tokens cover product states", () => {
     assert.match(css, new RegExp(token))
   }
 })
+
+test("root is protected by configuration and error boundaries", () => {
+  const main = read("src/main.tsx")
+  const boundary = read("src/components/system/AppErrorBoundary.tsx")
+  const gate = read("src/components/system/ConfigurationGate.tsx")
+
+  assert.match(main, /<AppErrorBoundary>/)
+  assert.match(main, /<ConfigurationGate>/)
+  assert.match(boundary, /تعذر عرض المنصة/)
+  assert.match(boundary, /window\.location\.reload\(\)/)
+  assert.match(gate, /VITE_ENABLE_PROTOTYPE/)
+  assert.match(gate, /إعداد المنصة غير مكتمل/)
+})
