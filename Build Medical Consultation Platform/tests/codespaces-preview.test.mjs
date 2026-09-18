@@ -22,3 +22,13 @@ test("Codespaces uses a writable user instead of the unavailable node home", asy
   assert.equal(devcontainer.containerUser, "root")
   assert.equal(devcontainer.remoteUser, "root")
 })
+
+test("preview startup does not inspect Git ownership", async () => {
+  const startScript = await readFile(
+    new URL("../../.devcontainer/start-preview.sh", import.meta.url),
+    "utf8",
+  )
+
+  assert.doesNotMatch(startScript, /git\s+rev-parse/)
+  assert.match(startScript, /BASH_SOURCE/)
+})
