@@ -27,7 +27,9 @@ export function getStageAvailability(
   stageId: string,
   completedIds: string[],
 ): StageAvailability
-export function getTrainingProgress(completedIds: string[]): {
+export function getTrainingProgress(
+  completedIds: string[],
+): {
   completed: number
   total: number
   percent: number
