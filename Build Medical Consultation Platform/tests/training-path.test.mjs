@@ -18,10 +18,7 @@ test("only the first unfinished stage is active", () => {
     getStageAvailability("patient-safety", ["vital-signs"]),
     "active",
   )
-  assert.equal(
-    getStageAvailability("vital-signs", ["vital-signs"]),
-    "complete",
-  )
+  assert.equal(getStageAvailability("vital-signs", ["vital-signs"]), "complete")
 })
 
 test("progress reports completed stages and earned xp", () => {
