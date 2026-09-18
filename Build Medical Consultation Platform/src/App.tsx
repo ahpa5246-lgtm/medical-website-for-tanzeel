@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react"
+import { lazy, Suspense, type ReactNode } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Layout from "@/components/layout/Layout"
 import Home from "@/pages/Home"
@@ -20,25 +20,20 @@ import Terms from "@/pages/legal/Terms"
 import Privacy from "@/pages/legal/Privacy"
 import VerificationApplication from "@/pages/verification/Application"
 import PreviewNotice from "@/components/PreviewNotice"
+import { LoadingState } from "@/components/system/AsyncState"
 
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
 const Training = lazy(() => import("@/pages/training/Training"))
 
-function LazyLabRoute() {
+function LazyRoute({
+  children,
+  label,
+}: {
+  children: ReactNode
+  label: string
+}) {
   return (
-    <Suspense
-      fallback={
-        <div
-          dir="rtl"
-          role="status"
-          className="min-h-[50vh] flex items-center justify-center px-4 text-sm font-bold text-slate-500"
-        >
-          جارٍ تحميل مختبر التعلم…
-        </div>
-      }
-    >
-      <LabHub />
-    </Suspense>
+    <Suspense fallback={<LoadingState label={label} />}>{children}</Suspense>
   )
 }
 
@@ -103,9 +98,30 @@ export default function App() {
                 <Route path="/articles/:id" element={<ArticleDetail />} />
                 <Route path="/articles/new" element={<ArticleEditor />} />
                 <Route path="/courses" element={<CourseList />} />
-                <Route path="/training" element={<Training />} />
-                <Route path="/labs" element={<LazyLabRoute />} />
-                <Route path="/labs/:moduleId" element={<LazyLabRoute />} />
+                <Route
+                  path="/training"
+                  element={
+                    <LazyRoute label="جارٍ تحميل مسار التدريب…">
+                      <Training />
+                    </LazyRoute>
+                  }
+                />
+                <Route
+                  path="/labs"
+                  element={
+                    <LazyRoute label="جارٍ تحميل مختبر التعلم…">
+                      <LabHub />
+                    </LazyRoute>
+                  }
+                />
+                <Route
+                  path="/labs/:moduleId"
+                  element={
+                    <LazyRoute label="جارٍ تحميل الوحدة التدريبية…">
+                      <LabHub />
+                    </LazyRoute>
+                  }
+                />
                 <Route path="/library" element={<LibraryList />} />
 
                 {/* Legal */}
