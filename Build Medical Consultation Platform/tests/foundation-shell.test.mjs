@@ -60,3 +60,16 @@ test("lazy routes use one shared loading surface", () => {
   assert.match(states, /export function DeniedState/)
   assert.match(states, /export function OfflineState/)
 })
+
+test("layout supports skip navigation and route announcements", () => {
+  const layout = read("src/components/layout/Layout.tsx")
+  const app = read("src/App.tsx")
+  const announcer = read("src/components/system/RouteAnnouncer.tsx")
+
+  assert.match(layout, /href="#main-content"/)
+  assert.match(layout, /id="main-content"/)
+  assert.match(layout, /tabIndex=\{-1\}/)
+  assert.match(app, /<RouteAnnouncer\s*\/>/)
+  assert.match(announcer, /aria-live="polite"/)
+  assert.match(announcer, /preventScroll:\s*true/)
+})
