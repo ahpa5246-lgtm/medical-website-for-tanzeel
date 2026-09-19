@@ -1,7 +1,5 @@
-const missingKeyMessage =
-  "أضيفي VITE_SUPABASE_ANON_KEY لإكمال اتصال Supabase."
-const missingUrlMessage =
-  "أضيفي VITE_SUPABASE_URL لإكمال اتصال Supabase."
+const missingKeyMessage = "أضيفي VITE_SUPABASE_ANON_KEY لإكمال اتصال Supabase."
+const missingUrlMessage = "أضيفي VITE_SUPABASE_URL لإكمال اتصال Supabase."
 
 export function readRuntimeConfig(env) {
   const supabaseUrl = env.VITE_SUPABASE_URL?.trim()
