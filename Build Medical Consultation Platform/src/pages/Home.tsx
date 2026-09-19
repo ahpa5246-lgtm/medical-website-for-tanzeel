@@ -1,407 +1,289 @@
 import { useState, type ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import {
-  Activity,
   ArrowLeft,
-  Baby,
+  BookOpenText,
   Brain,
   CheckCircle2,
   ChevronLeft,
-  Clock3,
+  CirclePause,
+  CirclePlay,
+  GraduationCap,
   HeartPulse,
   LockKeyhole,
   MessageCircle,
   Microscope,
   Search,
   ShieldCheck,
+  Sparkles,
   Stethoscope,
-  UserRoundCheck,
 } from "lucide-react"
 import Button from "@/components/ui/Button"
-import Badge from "@/components/ui/Badge"
 import { SPECIALTIES } from "@/data/specialties"
-import { MOCK_ARTICLES } from "@/data/mockData"
-import DemoLabel from "@/components/DemoLabel"
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
 const specialtyIcons: ReactNode[] = [
-  <Stethoscope />,
-  <Microscope />,
-  <Brain />,
-  <Activity />,
-  <MessageCircle />,
-  <Baby />,
+  <Stethoscope aria-hidden="true" />,
+  <Microscope aria-hidden="true" />,
+  <Brain aria-hidden="true" />,
+  <HeartPulse aria-hidden="true" />,
+  <MessageCircle aria-hidden="true" />,
+  <Sparkles aria-hidden="true" />,
 ]
 
-const TRUST_POINTS = [
+const CARE_STEPS = [
+  { icon: Search, label: "اختيار التخصص", hint: "وصول أسرع للمسار المناسب" },
+  {
+    icon: MessageCircle,
+    label: "إرسال الاستشارة",
+    hint: "تفاصيل منظّمة وواضحة",
+  },
   {
     icon: ShieldCheck,
-    title: "عرض الطبيب الخيالي",
-    text: "تصور العرض خيالي؛ لا توجد إجابات أو مراجعة وثائق أو أطباء متصلون.",
+    label: "مراجعة المختص",
+    hint: "إدارة الاعتماد من المنصة",
   },
   {
-    icon: LockKeyhole,
-    title: "بياناتك حساسة",
-    text: "لا توجد خصوصية أو هوية مجهولة مطبقة؛ لا تُدخل أي بيانات حقيقية.",
+    icon: BookOpenText,
+    label: "محتوى صحي",
+    hint: "مكتبة قابلة للتحرير والنشر",
+  },
+  { icon: GraduationCap, label: "تدريب تفاعلي", hint: "مراحل ومستويات عملية" },
+]
+
+const CAPABILITIES = [
+  {
+    icon: MessageCircle,
+    number: "01",
+    title: "استشارة مرتّبة",
+    text: "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة.",
+    to: "/consultations/new",
   },
   {
-    icon: HeartPulse,
-    title: "الطوارئ لا تنتظر",
-    text: "نرصد عبارات الخطر أثناء الكتابة ونوجّهك فورًا لخدمات الطوارئ المحلية.",
+    icon: Stethoscope,
+    number: "02",
+    title: "دليل الأطباء",
+    text: "ملفات يمكن إدارتها ونشرها بعد استكمال بيانات واعتماد كل طبيب.",
+    to: "/doctors",
+  },
+  {
+    icon: GraduationCap,
+    number: "03",
+    title: "أكاديمية تدريب",
+    text: "مسارات تعليمية متدرّجة بتجربة بصرية تفاعلية ونتائج قابلة للمتابعة.",
+    to: "/training",
   },
 ]
 
 export default function Home() {
   const [query, setQuery] = useState("")
+  const [isMotionPaused, setIsMotionPaused] = useState(false)
   const navigate = useNavigate()
 
   function startConsultation(event: React.FormEvent) {
     event.preventDefault()
-    setQuery("")
-    navigate("/consultations/new")
+    navigate("/consultations/new", { state: { initialQuestion: query.trim() } })
   }
 
   return (
-    <div dir="rtl" className="overflow-x-hidden">
-      <section className="care-hero">
-        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 pb-14 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:grid-cols-[1.02fr_.98fr] lg:gap-14 lg:pb-24 lg:pt-20">
+    <main dir="rtl" className="home-premium overflow-x-hidden">
+      <section className="home-hero">
+        <div className="home-orbit home-orbit-one" aria-hidden="true" />
+        <div className="home-orbit home-orbit-two" aria-hidden="true" />
+
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1.08fr_.92fr] lg:px-8 lg:pb-24 lg:pt-20">
           <div className="relative z-10 text-center lg:text-right">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-white/80 px-3.5 py-1.5 text-xs font-bold text-primary-800 shadow-sm">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-white">
-                <ShieldCheck className="h-3 w-3" />
+            <p className="home-eyebrow">
+              <span aria-hidden="true">
+                <HeartPulse />
               </span>
-              تصور خيالي لمسار محتمل — لا توجد خدمة أو أطباء
-            </div>
-
-            <h1 className="hero-title mx-auto max-w-2xl text-[2.7rem] leading-[1.2] sm:text-5xl lg:mx-0 lg:text-[3.65rem]">
-              بين سؤالك وقرارك الصحي،
-              <span className="mt-1 block text-primary-600">
-                مسار واضح وآمن.
-              </span>
+              منصة رعاية رقمية متكاملة
+            </p>
+            <h1
+              aria-label="الرعاية تبدأ بخطوة أوضح"
+              className="home-display mx-auto mt-6 max-w-3xl lg:mx-0"
+            >
+              الرعاية تبدأ
+              <span>بخطوة أوضح.</span>
             </h1>
-
-            <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-slate-600 lg:mx-0 lg:text-lg">
-              جرّب التنقل بنص خيالي فقط؛ لن يُنقل النص إلى الرابط أو يُرسل أو يُحفظ،
-              ولا توجد مراجعة طبية.
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0">
+              مكان واحد للاستشارات، إدارة الأطباء، المعرفة الطبية والتدريب
+              التفاعلي؛ صُمّم ليجعل الوصول إلى الخدمة أبسط وأكثر تنظيمًا.
             </p>
 
             <form
               onSubmit={startConsultation}
-              className="mx-auto mt-8 max-w-xl lg:mx-0"
+              className="home-search mx-auto mt-9 lg:mx-0"
             >
               <label htmlFor="home-question" className="sr-only">
-                اكتب سؤالك الطبي
+                ما الخدمة التي تبحث عنها؟
               </label>
-              <div className="flex flex-col gap-2 rounded-[1.35rem] border border-primary-100 bg-white p-2.5 shadow-[0_18px_50px_rgba(16,42,67,.1)] sm:flex-row">
-                <div className="relative min-w-0 flex-1">
-                  <Search className="pointer-events-none absolute inset-y-0 start-0 my-auto ms-4 h-4.5 w-4.5 text-primary-600" />
-                  <input
-                    id="home-question"
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="مثال: أريد اختيار التخصص المناسب لحالتي"
-                    className="min-h-12 w-full rounded-xl border-0 bg-slate-50 py-3 pe-4 ps-11 text-sm text-ink outline-none placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-primary-200"
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="min-h-12 rounded-xl px-6"
-                >
-                  ابدأ بأمان <ArrowLeft className="h-4 w-4 rtl-flip" />
-                </Button>
-              </div>
+              <Search aria-hidden="true" className="home-search-icon" />
+              <input
+                id="home-question"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="اكتب سؤالك أو ابحث عن تخصص"
+              />
+              <Button type="submit" size="lg" className="home-search-button">
+                ابدأ الآن{" "}
+                <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
+              </Button>
             </form>
 
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
-              <span className="safe-chip">
-                <LockKeyhole className="h-3.5 w-3.5 text-primary-600" /> خصوصية
-                غير متاحة
+            <div className="home-assurances" aria-label="مزايا المنصة">
+              <span>
+                <LockKeyhole aria-hidden="true" /> خصوصية البيانات
               </span>
-              <span className="safe-chip">
-                <UserRoundCheck className="h-3.5 w-3.5 text-primary-600" /> تحقق
-                غير منفّذ
+              <span>
+                <ShieldCheck aria-hidden="true" /> إدارة التحقق
               </span>
-              <span className="safe-chip">
-                <HeartPulse className="h-3.5 w-3.5 text-coral-500" /> ليست
-                للطوارئ
+              <span>
+                <CheckCircle2 aria-hidden="true" /> تجربة عربية متكاملة
               </span>
             </div>
           </div>
 
-          <div
-            className="care-stage"
-            aria-label="تصور خيالي غير تشغيلي لواجهة سؤال طبي"
-          >
-            <div className="care-card care-card-question">
-              <div className="flex items-center justify-between gap-3">
-                <Badge variant="warning">حالة عرض خيالية</Badge>
-                <span className="text-[11px] font-medium text-slate-400">
-                  بطاقة واجهة خيالية · بلا إرسال
-                </span>
-              </div>
-              <div className="mt-4 flex items-start gap-3">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-coral-50 text-coral-600">
-                  <MessageCircle className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-sm font-extrabold text-ink">
-                    سؤال جديد في طب الأسرة
-                  </p>
-                  <p className="mt-1.5 text-xs leading-6 text-slate-500">
-                    هذا نص واجهة تمثيلي فقط؛ لا تُدخل أعراضًا أو أدوية حقيقية.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
-                <span className="block h-full w-2/3 rounded-full bg-primary-500" />
-              </div>
-              <p className="mt-2 text-[10px] font-medium text-slate-400">
-                اكتمال التفاصيل ٦٥٪
-              </p>
+          <div className="home-visual" aria-label="نظرة على مسارات المنصة">
+            <div className="home-visual-copy">
+              <span>من السؤال إلى المتابعة</span>
+              <strong>مسار واحد، بلا تعقيد.</strong>
+              <p>كل أداة في مكانها، وكل خطوة تقود بوضوح إلى التالية.</p>
             </div>
-
-            <svg
-              className="care-pulse"
-              viewBox="0 0 420 96"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 52h86l16-24 22 48 28-68 25 44h76l16-18 19 35 18-17h102"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <circle cx="414" cy="52" r="6" fill="#F47761" />
-            </svg>
-
-            <div className="care-card care-card-doctor">
-              <div className="flex items-center gap-3">
-                <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary-700 text-white">
-                  <Stethoscope className="h-5 w-5" />
-                  <span className="absolute -bottom-1 -left-1 grid h-5 w-5 place-items-center rounded-full border-2 border-white bg-emerald-500">
-                    <CheckCircle2 className="h-3 w-3" />
-                  </span>
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-extrabold text-ink">
-                      شخصية طبيب خيالية
-                    </p>
-                    <Badge variant="primary">خيالي</Badge>
-                  </div>
-                  <p className="mt-1 text-xs text-slate-500">
-                    تصور غير منفّذ لمطابقة التخصص
-                  </p>
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-2 text-[11px]">
-                <span className="rounded-xl bg-primary-50 px-3 py-2 font-bold text-primary-800">
-                  ترخيص خيالي غير مراجع
-                </span>
-                <span className="rounded-xl bg-slate-50 px-3 py-2 font-bold text-slate-600">
-                  سجل خيالي غير محفوظ
-                </span>
-              </div>
+            <div className="home-vital" aria-hidden="true">
+              <svg viewBox="0 0 500 118" fill="none">
+                <path d="M4 66h94l22-38 29 76 33-93 38 55h72l20-24 27 45 30-21h127" />
+              </svg>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-primary-100 bg-primary-900 text-white">
-        <div className="mx-auto grid max-w-6xl divide-y divide-white/10 px-4 sm:grid-cols-3 sm:divide-x sm:divide-x-reverse sm:divide-y-0 sm:px-6">
-          {TRUST_POINTS.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="flex gap-3 px-2 py-6 sm:px-6">
-              <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary-300" />
+            <div className="home-visual-seal">
+              <span>
+                <Stethoscope aria-hidden="true" />
+              </span>
               <div>
-                <p className="text-sm font-extrabold">{title}</p>
-                <p className="mt-1 text-xs leading-6 text-primary-100/75">
-                  {text}
-                </p>
+                <small>جاهزة للتخصيص</small>
+                <strong>لوحة إدارة كاملة</strong>
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+
+        <div className="care-flight-shell">
+          <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+            <button
+              type="button"
+              className="care-flight-toggle"
+              onClick={() => setIsMotionPaused((value) => !value)}
+              aria-pressed={isMotionPaused}
+              aria-label={isMotionPaused ? "تشغيل الحركة" : "إيقاف الحركة"}
+            >
+              {isMotionPaused ? (
+                <CirclePlay aria-hidden="true" />
+              ) : (
+                <CirclePause aria-hidden="true" />
+              )}
+            </button>
+            <div className="care-flight-window">
+              <div
+                className={`care-flight-track${
+                  isMotionPaused ? " is-paused" : ""
+                }`}
+              >
+                {[...CARE_STEPS, ...CARE_STEPS].map(
+                  ({ icon: Icon, label, hint }, index) => (
+                    <div
+                      className="care-flight-item"
+                      key={`${label}-${index}`}
+                      aria-hidden={index >= CARE_STEPS.length}
+                    >
+                      <span>
+                        <Icon aria-hidden="true" />
+                      </span>
+                      <div>
+                        <strong>{label}</strong>
+                        <small>{hint}</small>
+                      </div>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="section-shell bg-white">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="section-label justify-center">تصور الواجهة</p>
-            <h2 className="mt-4 text-3xl font-black leading-tight text-ink sm:text-4xl">
-              ثلاث حالات مرئية في نموذج العرض
+      <section className="home-section bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="home-section-heading">
+            <p>بنية خدمة واضحة</p>
+            <h2>
+              أكثر من واجهة جميلة؛
+              <br />
+              منظومة قابلة للإدارة.
             </h2>
-            <p className="mt-4 text-sm leading-7 text-slate-500">
-              هذه البطاقات تشرح تصورًا بصريًا فقط؛ لا تقدم رعاية ولا تحمي مريضًا.
-            </p>
+            <Link to="/articles">
+              استكشف المعرفة <ChevronLeft aria-hidden="true" />
+            </Link>
           </div>
-          <div className="care-path-grid mt-12 grid gap-5 md:grid-cols-3">
-            {[
-              {
-                icon: MessageCircle,
-                label: "مثال حقل خيالي",
-                text: "يعرض الحقل مثالًا محليًا فقط؛ لا يوجد طبيب ولا إرسال أو حفظ.",
-              },
-              {
-                icon: ShieldCheck,
-                label: "مثال مطابقة غير منفّذة",
-                text: "هذا تصور مرئي فقط؛ لا يوجد توجيه أو طبيب أو تحقق منفّذ.",
-              },
-              {
-                icon: Clock3,
-                label: "مثال خيط غير محفوظ",
-                text: "يعرض النموذج خيطًا خياليًا؛ لا يوجد سجل محفوظ أو متابعة فعلية.",
-              },
-            ].map(({ icon: Icon, label, text }, index) => (
-              <article
-                key={label}
-                className="relative rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-[0_12px_38px_rgba(16,42,67,.055)]"
-              >
-                <span className="relative z-10 mx-auto grid h-16 w-16 place-items-center rounded-2xl border-4 border-white bg-primary-600 text-white shadow-lg shadow-primary-600/20">
-                  <Icon className="h-6 w-6" />
+          <div className="home-capabilities">
+            {CAPABILITIES.map(({ icon: Icon, number, title, text, to }) => (
+              <Link to={to} className="home-capability" key={title}>
+                <span className="home-capability-number">{number}</span>
+                <Icon aria-hidden="true" />
+                <h3>{title}</h3>
+                <p>{text}</p>
+                <span className="home-capability-link">
+                  الدخول إلى القسم <ArrowLeft aria-hidden="true" />
                 </span>
-                <p className="mt-5 text-[10px] font-black tracking-[.16em] text-coral-500">
-                  الخطوة ٠{index + 1}
-                </p>
-                <h3 className="mt-2 text-lg font-black text-ink">{label}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-500">{text}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section-shell bg-slate-50">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="mb-9 flex items-end justify-between gap-5">
+      <section className="home-specialties">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
             <div>
-              <p className="section-label">اختر التخصص</p>
-              <h2 className="mt-3 text-3xl font-black text-ink">
-                ابدأ من الباب الصحيح
-              </h2>
+              <p className="home-kicker">الوصول السريع</p>
+              <h2>اختر نقطة البداية</h2>
             </div>
-            <Link
-              to="/doctors"
-              className="hidden items-center gap-1 text-sm font-bold text-primary-700 sm:flex"
-            >
-              كل التخصصات <ChevronLeft className="h-4 w-4 rtl-flip" />
+            <Link to="/doctors" className="home-inline-link">
+              عرض دليل الأطباء <ChevronLeft aria-hidden="true" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+          <div className="home-specialty-grid">
             {FEATURED_SPECIALTIES.map((specialty, index) => (
               <Link
                 key={specialty.id}
                 to={`/consultations/new?specialty=${specialty.id}`}
-                className="group rounded-2xl border border-slate-200 bg-white p-4 transition hover:-translate-y-1 hover:border-primary-300 hover:shadow-[0_14px_34px_rgba(16,42,67,.08)]"
+                className="home-specialty"
               >
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary-50 text-primary-700 [&_svg]:h-5 [&_svg]:w-5">
-                  {specialtyIcons[index]}
-                </span>
-                <h3 className="mt-5 text-sm font-extrabold leading-6 text-ink group-hover:text-primary-700">
-                  {specialty.nameAr}
-                </h3>
-                <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-slate-400">
-                  ابدأ السؤال <ArrowLeft className="h-3 w-3 rtl-flip" />
-                </span>
+                <span>{specialtyIcons[index]}</span>
+                <h3>{specialty.nameAr}</h3>
+                <ArrowLeft aria-hidden="true" />
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section-shell bg-white">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="mb-9 flex items-end justify-between gap-5">
-            <div>
-              <p className="section-label">معرفة مُراجعة</p>
-              <h2 className="mt-3 text-3xl font-black text-ink">
-                اقرأ بهدوء، لا بخوف
-              </h2>
-            </div>
-            <Link
-              to="/articles"
-              className="hidden items-center gap-1 text-sm font-bold text-primary-700 sm:flex"
-            >
-              كل المقالات <ChevronLeft className="h-4 w-4 rtl-flip" />
+      <section className="home-cta-wrap">
+        <div className="home-cta mx-auto max-w-7xl">
+          <div>
+            <p>ابدأ من مكان واحد</p>
+            <h2>ابنِ تجربة رعاية تليق بالثقة.</h2>
+            <span>يمكن إدارة المحتوى والأطباء والمستخدمين من لوحة التحكم.</span>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/consultations/new" className="home-cta-primary">
+              ابدأ استشارة <ArrowLeft aria-hidden="true" />
             </Link>
-          </div>
-          <div className="grid gap-5 md:grid-cols-3">
-            {MOCK_ARTICLES.slice(0, 3).map((article) => (
-              <Link
-                key={article.id}
-                to={`/articles/${article.id}`}
-                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_12px_36px_rgba(16,42,67,.05)]"
-              >
-                <div className="relative h-44 overflow-hidden bg-primary-50">
-                  <img
-                    src={article.coverUrl}
-                    alt=""
-                    loading="lazy"
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-                  <span className="absolute inset-0 bg-gradient-to-t from-ink/35 to-transparent" />
-                </div>
-                <div className="p-5">
-                  <DemoLabel>مقال ومؤلف خياليان</DemoLabel>
-                  <div className="flex items-center justify-between gap-3">
-                    <Badge variant="primary">{article.category}</Badge>
-                    <span className="text-[11px] text-slate-400">
-                      {article.readTimeMinutes} دقائق
-                    </span>
-                  </div>
-                  <h3 className="mt-4 line-clamp-2 text-base font-black leading-7 text-ink transition group-hover:text-primary-700">
-                    {article.title}
-                  </h3>
-                  <p className="mt-4 text-xs font-medium text-slate-400">
-                    مؤلف العرض الخيالي: {article.authorName}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 pb-20 sm:px-6">
-        <div className="relative mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-ink px-6 py-10 text-white sm:px-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10">
-          <div
-            className="absolute -left-16 -top-20 h-64 w-64 rounded-full border-[2rem] border-primary-500/10"
-            aria-hidden="true"
-          />
-          <div className="relative">
-            <p className="text-xs font-bold text-primary-300">
-              نهاية نموذج العرض
-            </p>
-            <h2 className="mt-3 text-2xl font-black sm:text-3xl">
-              استكشف نموذج السؤال الخيالي دون إدخال بيانات حقيقية.
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-              هذا النموذج لا يقدم فحصًا أو توجيهًا أو خدمة طوارئ.
-            </p>
-          </div>
-          <div className="relative mt-6 flex flex-wrap gap-3 lg:mt-0">
-            <Link to="/consultations/new">
-              <Button
-                size="lg"
-                className="bg-white text-ink hover:bg-primary-50"
-              >
-                عاين نموذج السؤال
-              </Button>
-            </Link>
-            <Link to="/legal/disclaimer">
-              <Button
-                size="lg"
-                variant="ghost"
-                className="text-white hover:bg-white/10"
-              >
-                اقرأ التنويه
-              </Button>
+            <Link to="/training" className="home-cta-secondary">
+              استكشف التدريب
             </Link>
           </div>
         </div>
       </section>
-    </div>
+    </main>
   )
 }
