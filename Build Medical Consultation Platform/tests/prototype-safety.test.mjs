@@ -5,12 +5,13 @@ import assert from "node:assert/strict"
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
 
-test("persistent warning wraps every route and cannot be dismissed", () => {
+test("preview status is backend-aware and cannot be dismissed", () => {
   const app = read("src/App.tsx")
   const notice = read("src/components/PreviewNotice.tsx")
   assert.match(app, /<BrowserRouter>\s*<PreviewNotice \/>\s*<Routes>/)
   assert.doesNotMatch(notice, /useState|onClick|button|\bX\b/)
-  assert.match(notice, /نموذج أولي غير تشغيلي/)
+  assert.match(notice, /isSupabaseConfigured/)
+  assert.match(notice, /وضع المعاينة/)
 })
 
 test("medical question content is not read from or written to URL parameters", () => {
@@ -51,7 +52,6 @@ test("mock content is labelled at each repeated point of use", () => {
     "src/pages/doctors/Profile.tsx",
     "src/pages/articles/List.tsx",
     "src/pages/articles/Detail.tsx",
-    "src/pages/Home.tsx",
   ]) {
     assert.match(read(path), /<DemoLabel/)
   }
@@ -105,18 +105,17 @@ test("terms page contains none of the removed promises or obligations", () => {
   }
 })
 
-test("home point-of-use workflow labels are explicitly fictional", () => {
+test("home makes no unsupported verification claims", () => {
   const home = read("src/pages/Home.tsx")
-  for (const removedPhrase of [
-    "قيد المراجعة",
-    "استشارة خاصة",
+  for (const unsupportedClaim of [
+    "طبيب موثّق",
     "ترخيص مراجع",
     "الطبيب المستجيب",
-    "حماية المريض",
-    "مسار الرعاية",
+    "حماية مضمونة",
+    "اعتماد رسمي",
   ]) {
-    assert.doesNotMatch(home, new RegExp(removedPhrase))
+    assert.doesNotMatch(home, new RegExp(unsupportedClaim))
   }
-  assert.match(home, /بطاقة واجهة خيالية/)
-  assert.match(home, /لا تقدم رعاية ولا تحمي مريضًا/)
+  assert.match(home, /إدارة التحقق/)
+  assert.match(home, /بعد استكمال بيانات واعتماد كل طبيب/)
 })
