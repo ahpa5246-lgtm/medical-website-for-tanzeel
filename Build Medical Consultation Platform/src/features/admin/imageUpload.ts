@@ -12,13 +12,20 @@ export function validateDoctorImage(file: File) {
 
 export async function uploadDoctorImage(file: File, doctorId: string) {
   validateDoctorImage(file)
-  const extension = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg"
+  const extension =
+    file.type === "image/png"
+      ? "png"
+      : file.type === "image/webp"
+        ? "webp"
+        : "jpg"
   const path = `${doctorId}/portrait.${extension}`
-  const { error } = await supabase.storage.from("doctor-images").upload(path, file, {
-    cacheControl: "31536000",
-    contentType: file.type,
-    upsert: true,
-  })
+  const { error } = await supabase.storage
+    .from("doctor-images")
+    .upload(path, file, {
+      cacheControl: "31536000",
+      contentType: file.type,
+      upsert: true,
+    })
   if (error) throw new Error(`تعذر رفع الصورة: ${error.message}`)
   return path
 }
