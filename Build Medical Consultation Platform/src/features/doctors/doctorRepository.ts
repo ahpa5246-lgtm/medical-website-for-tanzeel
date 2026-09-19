@@ -1,3 +1,4 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 import { supabase } from "@/lib/supabase"
 import type { DoctorCardRecord, DoctorPage } from "./types"
 
@@ -30,7 +31,7 @@ export async function listPublishedDoctors({
     .range(from, to)
 
   if (specialtyId) request = request.eq("specialty_id", specialtyId)
-  const normalized = query.trim().replaceAll(/[,%()]/g, " ")
+  const normalized = query.trim().replace(/[,%()]/g, " ")
   if (normalized) {
     request = request.or(
       `display_name.ilike.%${normalized}%,bio.ilike.%${normalized}%`,
