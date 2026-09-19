@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { ArrowRight, Languages, Sparkles } from "lucide-react"
 import DoctorKindBadge from "@/features/doctors/DoctorKindBadge"
+import DemoLabel from "@/components/DemoLabel"
 import {
   doctorImageUrl,
   getPublishedDoctorBySlug,
@@ -62,6 +63,11 @@ export default function DoctorProfile() {
             <div className="mt-6">
               <DoctorKindBadge kind={doctor.profile_kind} />
             </div>
+            {doctor.profile_kind === "fictional_demo" ? (
+              <div className="mt-3">
+                <DemoLabel>شخصية وصورة ومعلومات افتراضية</DemoLabel>
+              </div>
+            ) : null}
             <h1 className="mt-4 text-3xl font-black text-slate-900">
               {doctor.display_name}
             </h1>
