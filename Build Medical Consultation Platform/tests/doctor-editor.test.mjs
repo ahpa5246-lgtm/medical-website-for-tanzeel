@@ -2,7 +2,8 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 
-const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
+const read = (path) =>
+  readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
 
 test("doctor draft validates required Arabic content and survives refresh", () => {
   const source = read("src/features/admin/doctorDraft.ts")
@@ -36,7 +37,10 @@ test("editor provides preview, save, review and role-filtered publishing", () =>
   assert.match(source, /DoctorPreview/)
   assert.match(source, /حفظ المسودة/)
   assert.match(source, /إرسال للمراجعة/)
-  assert.match(source, /profile\?\.role === "owner" \|\| profile\?\.role === "admin"/)
+  assert.match(
+    source,
+    /profile\?\.role === "owner" \|\| profile\?\.role === "admin"/,
+  )
   assert.match(source, /تعارض في التعديلات/)
 })
 
