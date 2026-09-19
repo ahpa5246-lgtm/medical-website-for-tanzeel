@@ -1,119 +1,107 @@
+import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import {
-  ArrowLeft,
-  Building2,
-  CheckCircle2,
-  Clock3,
-  MessageCircle,
-  ShieldCheck,
-  Star,
-  Stethoscope,
-} from "lucide-react"
-import Badge from "@/components/ui/Badge"
-import Button from "@/components/ui/Button"
-import { MOCK_DOCTORS } from "@/data/mockData"
+import { ArrowRight, Languages, Sparkles } from "lucide-react"
+import DoctorKindBadge from "@/features/doctors/DoctorKindBadge"
 import DemoLabel from "@/components/DemoLabel"
+import {
+  doctorImageUrl,
+  getPublishedDoctorBySlug,
+} from "@/features/doctors/doctorRepository"
+import type { DoctorCardRecord } from "@/features/doctors/types"
+import {
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from "@/components/system/AsyncState"
 
 export default function DoctorProfile() {
-  const { id } = useParams()
-  const doctor = MOCK_DOCTORS.find((item) => item.id === id)
+  const { id: slug = "" } = useParams()
+  const [doctor, setDoctor] = useState<DoctorCardRecord | null | undefined>()
+  const [error, setError] = useState("")
 
-  if (!doctor) {
+  useEffect(() => {
+    setDoctor(undefined)
+    getPublishedDoctorBySlug(slug)
+      .then(setDoctor)
+      .catch(() => setError("تعذر تحميل الملف الآن."))
+  }, [slug])
+
+  if (error)
     return (
-      <div dir="rtl" className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <h1 className="text-2xl font-black text-ink">الطبيب غير موجود</h1>
-        <Link to="/doctors">
-          <Button className="mt-6">دليل الأطباء</Button>
-        </Link>
-      </div>
+      <ErrorState
+        description={error}
+        onRetry={() => window.location.reload()}
+      />
     )
-  }
+  if (doctor === undefined) return <LoadingState label="جارٍ تحميل الملف…" />
+  if (!doctor)
+    return (
+      <EmptyState
+        title="الملف غير موجود"
+        description="قد يكون الملف غير منشور أو تغيّر رابطه."
+      />
+    )
 
   return (
-    <div dir="rtl" className="pb-20">
-      <section className="bg-primary-50/70">
-        <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-          <Link
-            to="/doctors"
-            className="inline-flex items-center gap-1 text-xs font-bold text-primary-700"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 rotate-180" /> دليل الأطباء
-          </Link>
-          <div className="mt-7 grid gap-7 rounded-[2rem] border border-primary-100 bg-white p-5 shadow-[0_18px_50px_rgba(16,42,67,.07)] sm:p-8 md:grid-cols-[auto_1fr_auto] md:items-center">
-            <img
-              src={doctor.avatarUrl}
-              alt={`صورة توضيحية لـ ${doctor.name}`}
-              className="h-28 w-28 rounded-3xl object-cover"
-            />
-            <div>
-              <DemoLabel>ملف وهوية وتقييم وإحصاءات خيالية</DemoLabel>
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl font-black text-ink">{doctor.name}</h1>
-                <Badge variant="primary">
-                  <ShieldCheck className="h-3 w-3" /> تحقق غير منفّذ
-                </Badge>
-              </div>
-              <p className="mt-2 font-bold text-primary-700">
-                {doctor.specialty}
-              </p>
-              {doctor.hospital && (
-                <p className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
-                  <Building2 className="h-4 w-4" /> {doctor.hospital}
-                </p>
-              )}
-              <div className="mt-4 flex flex-wrap gap-3 text-xs text-slate-500">
-                <span className="flex items-center gap-1">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />{" "}
-                  {doctor.rating}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock3 className="h-4 w-4" /> {doctor.yearsExperience} سنوات
-                  خبرة
-                </span>
-                <span className="flex items-center gap-1">
-                  <MessageCircle className="h-4 w-4" /> ملف توضيحي
-                </span>
-              </div>
-            </div>
-            <Link to={`/consultations/new?specialty=${doctor.specialtyId}`}>
-              <Button size="lg" className="w-full md:w-auto">
-                ابدأ استشارة
-              </Button>
+    <main dir="rtl" className="min-h-screen bg-slate-50 py-10">
+      <article className="mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div className="grid md:grid-cols-[18rem_1fr]">
+          <img
+            src={doctorImageUrl(doctor.image_path)}
+            alt={doctor.image_alt}
+            width="640"
+            height="800"
+            className="h-full min-h-72 w-full object-cover"
+          />
+          <div className="p-7 sm:p-10">
+            <Link
+              to="/doctors"
+              className="inline-flex items-center gap-2 text-sm font-bold text-primary-700"
+            >
+              <ArrowRight className="h-4 w-4" /> العودة إلى الدليل
             </Link>
+            <div className="mt-6">
+              <DoctorKindBadge kind={doctor.profile_kind} />
+            </div>
+            {doctor.profile_kind === "fictional_demo" ? (
+              <div className="mt-3">
+                <DemoLabel>شخصية وصورة ومعلومات افتراضية</DemoLabel>
+              </div>
+            ) : null}
+            <h1 className="mt-4 text-3xl font-black text-slate-900">
+              {doctor.display_name}
+            </h1>
+            <p className="mt-2 font-bold text-primary-700">
+              {doctor.specialties?.name_ar}
+            </p>
+            <p className="mt-6 leading-8 text-slate-600">{doctor.bio}</p>
+            <div className="mt-7 grid gap-4 sm:grid-cols-2">
+              <section className="rounded-2xl bg-slate-50 p-4">
+                <h2 className="flex items-center gap-2 font-black text-slate-900">
+                  <Languages className="h-4 w-4" /> اللغات
+                </h2>
+                <p className="mt-2 text-sm text-slate-600">
+                  {doctor.languages.join("، ")}
+                </p>
+              </section>
+              <section className="rounded-2xl bg-slate-50 p-4">
+                <h2 className="flex items-center gap-2 font-black text-slate-900">
+                  <Sparkles className="h-4 w-4" /> مجالات الاهتمام
+                </h2>
+                <p className="mt-2 text-sm text-slate-600">
+                  {doctor.interests.join("، ")}
+                </p>
+              </section>
+            </div>
+            {doctor.profile_kind === "fictional_demo" ? (
+              <p className="mt-7 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-7 text-amber-900">
+                هذه شخصية افتراضية توضح تجربة المنصة فقط. لا يمكن طلب استشارة أو
+                الاعتماد عليها كمقدم رعاية حقيقي.
+              </p>
+            ) : null}
           </div>
         </div>
-      </section>
-      <div className="mx-auto grid max-w-5xl gap-6 px-4 pt-8 sm:px-6 md:grid-cols-[1fr_18rem]">
-        <section className="rounded-3xl border border-slate-200 bg-white p-6">
-          <h2 className="text-xl font-black text-ink">عن الطبيب</h2>
-          <p className="mt-4 text-sm leading-8 text-slate-600">{doctor.bio}</p>
-          <div className="mt-8 border-t border-slate-100 pt-6">
-            <h3 className="text-sm font-black text-ink">
-              تصور التحقق غير المنفّذ
-            </h3>
-            <ul className="mt-4 space-y-3 text-sm text-slate-600">
-              {[
-                "مراجعة وثيقة الهوية المهنية",
-                "مطابقة التخصص قبل إتاحة الرد",
-                "تسجيل كل إجراء متعلق بحالة التحقق",
-              ].map((item) => (
-                <li key={item} className="flex gap-2">
-                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary-600" />{" "}
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-        <aside className="h-fit rounded-3xl bg-ink p-5 text-white">
-          <Stethoscope className="h-6 w-6 text-primary-300" />
-          <h2 className="mt-4 text-base font-black">ملف توضيحي</h2>
-          <p className="mt-2 text-xs leading-6 text-slate-300">
-            الأسماء والصور والبيانات في نسخة المعاينة أمثلة مركبة وليست دليلًا
-            على أطباء منضمين حاليًا.
-          </p>
-        </aside>
-      </div>
-    </div>
+      </article>
+    </main>
   )
 }

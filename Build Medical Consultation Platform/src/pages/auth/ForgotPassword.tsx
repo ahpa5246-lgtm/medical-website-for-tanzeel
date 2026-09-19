@@ -1,111 +1,84 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { ArrowLeft, CheckCircle2, KeyRound, Mail, Phone } from "lucide-react"
+import { ArrowLeft, CheckCircle2, KeyRound, Mail } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
+import { requestPasswordReset } from "@/features/auth/authRepository"
 
 export default function ForgotPassword() {
-  const [method, setMethod] = useState<"phone" | "email">("phone")
-  const [value, setValue] = useState("")
+  const [email, setEmail] = useState("")
   const [done, setDone] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  function submit(event: React.FormEvent) {
+  async function submit(event: React.FormEvent) {
     event.preventDefault()
-    if (!value.trim()) {
-      setError(
-        method === "phone" ? "أدخل رقم الهاتف" : "أدخل البريد الإلكتروني",
-      )
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError("أدخلي بريدًا إلكترونيًا صحيحًا.")
       return
     }
+    setLoading(true)
     setError("")
-    setDone(true)
+    try {
+      await requestPasswordReset(email.trim())
+      setDone(true)
+    } catch {
+      setError("تعذر إرسال رسالة الاستعادة الآن. أعيدي المحاولة.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div
+    <main
       dir="rtl"
       className="grid min-h-screen place-items-center bg-slate-50 px-4 py-12"
     >
-      <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_50px_rgba(16,42,67,.08)] sm:p-9">
+      <section className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
         {done ? (
-          <div className="text-center">
-            <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-50 text-primary-700">
-              <CheckCircle2 className="h-7 w-7" />
-            </span>
-            <h1 className="mt-5 text-2xl font-black text-ink">
-              المسار جاهز للربط
+          <div className="text-center" role="status">
+            <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-600" />
+            <h1 className="mt-5 text-2xl font-black text-slate-900">
+              تحققي من بريدك
             </h1>
             <p className="mt-3 text-sm leading-7 text-slate-500">
-              في نسخة الإنتاج سيصل رمز آمن إلى وسيلة التواصل التي اخترتها. لم
-              تُرسل أي رسالة في هذه المعاينة.
+              إذا كان البريد مرتبطًا بحساب، ستصل رسالة استعادة آمنة خلال دقائق.
             </p>
-            <Link to="/auth/login">
-              <Button className="mt-7 w-full">العودة إلى الدخول</Button>
-            </Link>
           </div>
         ) : (
           <>
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary-50 text-primary-700">
-              <KeyRound className="h-6 w-6" />
-            </span>
-            <h1 className="mt-5 text-2xl font-black text-ink">
+            <KeyRound className="h-10 w-10 text-primary-700" />
+            <h1 className="mt-5 text-2xl font-black text-slate-900">
               استعادة الوصول
             </h1>
-            <p className="mt-2 text-sm leading-7 text-slate-500">
-              اختر أين تريد استلام رمز التحقق.
-            </p>
-            <div className="mt-6 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
-              <button
-                type="button"
-                onClick={() => setMethod("phone")}
-                className={`rounded-lg py-2 text-sm font-bold ${
-                  method === "phone"
-                    ? "bg-white text-ink shadow-sm"
-                    : "text-slate-500"
-                }`}
-              >
-                الهاتف
-              </button>
-              <button
-                type="button"
-                onClick={() => setMethod("email")}
-                className={`rounded-lg py-2 text-sm font-bold ${
-                  method === "email"
-                    ? "bg-white text-ink shadow-sm"
-                    : "text-slate-500"
-                }`}
-              >
-                البريد
-              </button>
-            </div>
             <form onSubmit={submit} className="mt-6 space-y-5">
               <Input
-                label={method === "phone" ? "رقم الهاتف" : "البريد الإلكتروني"}
-                value={value}
-                onChange={(event) => setValue(event.target.value)}
+                label="البريد الإلكتروني"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 error={error}
-                startIcon={
-                  method === "phone" ? (
-                    <Phone className="h-4 w-4" />
-                  ) : (
-                    <Mail className="h-4 w-4" />
-                  )
-                }
+                autoComplete="email"
+                startIcon={<Mail className="h-4 w-4" />}
               />
-              <Button type="submit" size="lg" className="w-full">
-                متابعة
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                loading={loading}
+              >
+                إرسال رابط الاستعادة
               </Button>
             </form>
-            <Link
-              to="/auth/login"
-              className="mt-6 flex items-center justify-center gap-1 text-sm font-bold text-primary-700"
-            >
-              <ArrowLeft className="h-4 w-4 rotate-180" /> العودة إلى الدخول
-            </Link>
           </>
         )}
-      </div>
-    </div>
+        <Link
+          to="/auth/login"
+          className="mt-6 flex items-center justify-center gap-1 text-sm font-bold text-primary-700"
+        >
+          <ArrowLeft className="h-4 w-4 rotate-180" /> العودة إلى الدخول
+        </Link>
+      </section>
+    </main>
   )
 }
