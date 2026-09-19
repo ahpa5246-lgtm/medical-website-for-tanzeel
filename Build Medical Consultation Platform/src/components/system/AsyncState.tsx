@@ -42,7 +42,9 @@ export function LoadingState({ label = "جارٍ تحميل المحتوى…" }
     <StateSurface
       title="لحظات قليلة"
       description={label}
-      icon={<LoaderCircle className="animate-spin motion-reduce:animate-none" />}
+      icon={
+        <LoaderCircle className="animate-spin motion-reduce:animate-none" />
+      }
     />
   )
 }
@@ -83,7 +85,11 @@ export function ErrorState({
       role="alert"
       action={
         onRetry ? (
-          <button type="button" onClick={onRetry} className="mc-system-state__action">
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mc-system-state__action"
+          >
             <RotateCcw className="h-4 w-4" /> إعادة المحاولة
           </button>
         ) : undefined
