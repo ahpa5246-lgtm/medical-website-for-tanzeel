@@ -19,7 +19,10 @@ export default function ConfigurationGate({
 
   return (
     <main dir="rtl" className="mc-system-state">
-      <section className="mc-system-state__panel mc-surface-raised" role="alert">
+      <section
+        className="mc-system-state__panel mc-surface-raised"
+        role="alert"
+      >
         <span className="mc-system-state__icon" aria-hidden="true">
           <Settings2 />
         </span>
