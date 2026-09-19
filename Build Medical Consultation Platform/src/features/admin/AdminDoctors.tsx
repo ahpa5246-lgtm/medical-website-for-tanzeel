@@ -44,7 +44,7 @@ export default function AdminDoctors() {
           <thead className="bg-slate-50 text-slate-500">
             <tr>
               <th className="p-4">الاسم</th>
-              <th className="p-4">التخصص</th>
+              <th className="p-4">نوع الملف</th>
               <th className="p-4">الحالة</th>
               <th className="p-4">آخر تحديث</th>
             </tr>
@@ -58,8 +58,9 @@ export default function AdminDoctors() {
                   </Link>
                 </td>
                 <td className="p-4 text-slate-600">
-                  {(doctor.specialties as { name_ar?: string } | null)
-                    ?.name_ar ?? "—"}
+                  {doctor.profile_kind === "fictional_demo"
+                    ? "تجريبي"
+                    : "مزود حقيقي"}
                 </td>
                 <td className="p-4 text-slate-600">
                   {doctor.publication_status}
