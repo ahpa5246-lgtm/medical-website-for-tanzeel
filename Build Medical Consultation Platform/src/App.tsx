@@ -26,7 +26,12 @@ import RouteAnnouncer from "@/components/system/RouteAnnouncer"
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
 const Training = lazy(() => import("@/pages/training/Training"))
 
-function LazyRoute({ children, label }: { children: ReactNode label: string }) {
+interface LazyRouteProps {
+  children: ReactNode
+  label: string
+}
+
+function LazyRoute({ children, label }: LazyRouteProps) {
   return (
     <Suspense fallback={<LoadingState label={label} />}>{children}</Suspense>
   )
