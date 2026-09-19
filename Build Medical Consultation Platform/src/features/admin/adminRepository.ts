@@ -22,7 +22,7 @@ export async function listAdminDoctors(page = 1, pageSize = 20) {
   const { data, count, error } = await supabase
     .from("doctors")
     .select(
-      "id, slug, display_name, profile_kind, publication_status, revision, updated_at, specialties(name_ar)",
+      "id, slug, display_name, profile_kind, publication_status, revision, updated_at",
       { count: "exact" },
     )
     .order("updated_at", { ascending: false })
