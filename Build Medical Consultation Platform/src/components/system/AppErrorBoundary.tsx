@@ -31,7 +31,10 @@ export default class AppErrorBoundary extends Component<Props, State> {
 
     return (
       <main dir="rtl" className="mc-system-state">
-        <section className="mc-system-state__panel mc-surface-raised" role="alert">
+        <section
+          className="mc-system-state__panel mc-surface-raised"
+          role="alert"
+        >
           <span className="mc-system-state__icon" aria-hidden="true">
             <AlertTriangle />
           </span>
@@ -41,7 +44,11 @@ export default class AppErrorBoundary extends Component<Props, State> {
             مغادرة الصفحة، أو إعادة تحميل المنصة إذا استمر الخطأ.
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
-            <button type="button" onClick={this.retry} className="mc-system-state__action">
+            <button
+              type="button"
+              onClick={this.retry}
+              className="mc-system-state__action"
+            >
               <RotateCcw className="h-4 w-4" /> إعادة المحاولة
             </button>
             <button
