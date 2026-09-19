@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom"
 import { ChevronLeft, ChevronRight, Search, Stethoscope } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Card from "@/components/ui/Card"
+import DemoLabel from "@/components/DemoLabel"
 import {
   EmptyState,
   ErrorState,
@@ -111,6 +112,9 @@ export default function DoctorDirectory() {
                   />
                   <div className="space-y-4 p-5">
                     <DoctorKindBadge kind={doctor.profile_kind} />
+                    {doctor.profile_kind === "fictional_demo" ? (
+                      <DemoLabel>شخصية وصورة ومعلومات افتراضية</DemoLabel>
+                    ) : null}
                     <div>
                       <h2 className="text-lg font-black text-slate-900">
                         {doctor.display_name}
