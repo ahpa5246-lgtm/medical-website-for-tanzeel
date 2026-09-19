@@ -3,6 +3,7 @@ import { LayoutDashboard, LogOut, Stethoscope } from "lucide-react"
 import { useAuth } from "@/features/auth/AuthProvider"
 import AdminDashboard from "./AdminDashboard"
 import AdminDoctors from "./AdminDoctors"
+import DoctorEditor from "./DoctorEditor"
 
 export default function AdminLayout() {
   const { profile, signOut } = useAuth()
@@ -53,6 +54,8 @@ export default function AdminLayout() {
         <Routes>
           <Route index element={<AdminDashboard />} />
           <Route path="doctors" element={<AdminDoctors />} />
+          <Route path="doctors/new" element={<DoctorEditor />} />
+          <Route path="doctors/:id" element={<DoctorEditor />} />
         </Routes>
       </main>
     </div>
