@@ -22,9 +22,11 @@ import VerificationApplication from "@/pages/verification/Application"
 import PreviewNotice from "@/components/PreviewNotice"
 import { LoadingState } from "@/components/system/AsyncState"
 import RouteAnnouncer from "@/components/system/RouteAnnouncer"
+import RequireRole from "@/features/auth/RequireRole"
 
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
 const Training = lazy(() => import("@/pages/training/Training"))
+const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
 
 interface LazyRouteProps {
   children: ReactNode
@@ -69,6 +71,17 @@ export default function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+
+        <Route
+          path="/admin/*"
+          element={
+            <RequireRole allow={["owner", "admin", "editor"]}>
+              <LazyRoute label="جارٍ تحميل مساحة الإدارة…">
+                <AdminLayout />
+              </LazyRoute>
+            </RequireRole>
+          }
+        />
 
         {/* Main layout routes */}
         <Route
