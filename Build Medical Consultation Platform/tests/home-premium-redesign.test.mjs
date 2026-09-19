@@ -12,6 +12,7 @@ const read = (path) => {
 
 const home = read("../src/pages/Home.tsx")
 const css = read("../src/index.css")
+const previewNotice = read("../src/components/PreviewNotice.tsx")
 
 test("the public home page contains no fictional-doctor presentation copy", () => {
   for (const phrase of [
@@ -41,4 +42,10 @@ test("the home page routes users to real platform capabilities", () => {
     "/articles",
   ])
     assert.match(home, new RegExp(route.replace("/", "\\/")))
+})
+
+test("preview status appears only when the live backend is not configured", () => {
+  assert.match(previewNotice, /isSupabaseConfigured/)
+  assert.match(previewNotice, /if \(isSupabaseConfigured\(\)\) return null/)
+  assert.doesNotMatch(previewNotice, /كل الأسماء والمحتوى.*خيالية/)
 })
