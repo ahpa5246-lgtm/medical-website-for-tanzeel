@@ -33,9 +33,21 @@ const specialtyIcons: ReactNode[] = [
 
 const CARE_STEPS = [
   { icon: Search, label: "اختيار التخصص", hint: "وصول أسرع للمسار المناسب" },
-  { icon: MessageCircle, label: "إرسال الاستشارة", hint: "تفاصيل منظّمة وواضحة" },
-  { icon: ShieldCheck, label: "مراجعة المختص", hint: "إدارة الاعتماد من المنصة" },
-  { icon: BookOpenText, label: "محتوى صحي", hint: "مكتبة قابلة للتحرير والنشر" },
+  {
+    icon: MessageCircle,
+    label: "إرسال الاستشارة",
+    hint: "تفاصيل منظّمة وواضحة",
+  },
+  {
+    icon: ShieldCheck,
+    label: "مراجعة المختص",
+    hint: "إدارة الاعتماد من المنصة",
+  },
+  {
+    icon: BookOpenText,
+    label: "محتوى صحي",
+    hint: "مكتبة قابلة للتحرير والنشر",
+  },
   { icon: GraduationCap, label: "تدريب تفاعلي", hint: "مراحل ومستويات عملية" },
 ]
 
@@ -82,20 +94,30 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1.08fr_.92fr] lg:px-8 lg:pb-24 lg:pt-20">
           <div className="relative z-10 text-center lg:text-right">
             <p className="home-eyebrow">
-              <span aria-hidden="true"><HeartPulse /></span>
+              <span aria-hidden="true">
+                <HeartPulse />
+              </span>
               منصة رعاية رقمية متكاملة
             </p>
-            <h1 aria-label="الرعاية تبدأ بخطوة أوضح" className="home-display mx-auto mt-6 max-w-3xl lg:mx-0">
+            <h1
+              aria-label="الرعاية تبدأ بخطوة أوضح"
+              className="home-display mx-auto mt-6 max-w-3xl lg:mx-0"
+            >
               الرعاية تبدأ
               <span>بخطوة أوضح.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0">
-              مكان واحد للاستشارات، إدارة الأطباء، المعرفة الطبية والتدريب التفاعلي؛
-              صُمّم ليجعل الوصول إلى الخدمة أبسط وأكثر تنظيمًا.
+              مكان واحد للاستشارات، إدارة الأطباء، المعرفة الطبية والتدريب
+              التفاعلي؛ صُمّم ليجعل الوصول إلى الخدمة أبسط وأكثر تنظيمًا.
             </p>
 
-            <form onSubmit={startConsultation} className="home-search mx-auto mt-9 lg:mx-0">
-              <label htmlFor="home-question" className="sr-only">ما الخدمة التي تبحث عنها؟</label>
+            <form
+              onSubmit={startConsultation}
+              className="home-search mx-auto mt-9 lg:mx-0"
+            >
+              <label htmlFor="home-question" className="sr-only">
+                ما الخدمة التي تبحث عنها؟
+              </label>
               <Search aria-hidden="true" className="home-search-icon" />
               <input
                 id="home-question"
@@ -104,14 +126,21 @@ export default function Home() {
                 placeholder="اكتب سؤالك أو ابحث عن تخصص"
               />
               <Button type="submit" size="lg" className="home-search-button">
-                ابدأ الآن <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
+                ابدأ الآن{" "}
+                <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
               </Button>
             </form>
 
             <div className="home-assurances" aria-label="مزايا المنصة">
-              <span><LockKeyhole aria-hidden="true" /> خصوصية البيانات</span>
-              <span><ShieldCheck aria-hidden="true" /> إدارة التحقق</span>
-              <span><CheckCircle2 aria-hidden="true" /> تجربة عربية متكاملة</span>
+              <span>
+                <LockKeyhole aria-hidden="true" /> خصوصية البيانات
+              </span>
+              <span>
+                <ShieldCheck aria-hidden="true" /> إدارة التحقق
+              </span>
+              <span>
+                <CheckCircle2 aria-hidden="true" /> تجربة عربية متكاملة
+              </span>
             </div>
           </div>
 
@@ -127,8 +156,13 @@ export default function Home() {
               </svg>
             </div>
             <div className="home-visual-seal">
-              <span><Stethoscope aria-hidden="true" /></span>
-              <div><small>جاهزة للتخصيص</small><strong>لوحة إدارة كاملة</strong></div>
+              <span>
+                <Stethoscope aria-hidden="true" />
+              </span>
+              <div>
+                <small>جاهزة للتخصيص</small>
+                <strong>لوحة إدارة كاملة</strong>
+              </div>
             </div>
           </div>
         </div>
@@ -142,16 +176,35 @@ export default function Home() {
               aria-pressed={isMotionPaused}
               aria-label={isMotionPaused ? "تشغيل الحركة" : "إيقاف الحركة"}
             >
-              {isMotionPaused ? <CirclePlay aria-hidden="true" /> : <CirclePause aria-hidden="true" />}
+              {isMotionPaused ? (
+                <CirclePlay aria-hidden="true" />
+              ) : (
+                <CirclePause aria-hidden="true" />
+              )}
             </button>
             <div className="care-flight-window">
-              <div className={`care-flight-track${isMotionPaused ? " is-paused" : ""}`}>
-                {[...CARE_STEPS, ...CARE_STEPS].map(({ icon: Icon, label, hint }, index) => (
-                  <div className="care-flight-item" key={`${label}-${index}`} aria-hidden={index >= CARE_STEPS.length}>
-                    <span><Icon aria-hidden="true" /></span>
-                    <div><strong>{label}</strong><small>{hint}</small></div>
-                  </div>
-                ))}
+              <div
+                className={`care-flight-track${
+                  isMotionPaused ? " is-paused" : ""
+                }`}
+              >
+                {[...CARE_STEPS, ...CARE_STEPS].map(
+                  ({ icon: Icon, label, hint }, index) => (
+                    <div
+                      className="care-flight-item"
+                      key={`${label}-${index}`}
+                      aria-hidden={index >= CARE_STEPS.length}
+                    >
+                      <span>
+                        <Icon aria-hidden="true" />
+                      </span>
+                      <div>
+                        <strong>{label}</strong>
+                        <small>{hint}</small>
+                      </div>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
           </div>
@@ -162,8 +215,14 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="home-section-heading">
             <p>بنية خدمة واضحة</p>
-            <h2>أكثر من واجهة جميلة؛<br />منظومة قابلة للإدارة.</h2>
-            <Link to="/articles">استكشف المعرفة <ChevronLeft aria-hidden="true" /></Link>
+            <h2>
+              أكثر من واجهة جميلة؛
+              <br />
+              منظومة قابلة للإدارة.
+            </h2>
+            <Link to="/articles">
+              استكشف المعرفة <ChevronLeft aria-hidden="true" />
+            </Link>
           </div>
           <div className="home-capabilities">
             {CAPABILITIES.map(({ icon: Icon, number, title, text, to }) => (
@@ -172,7 +231,9 @@ export default function Home() {
                 <Icon aria-hidden="true" />
                 <h3>{title}</h3>
                 <p>{text}</p>
-                <span className="home-capability-link">الدخول إلى القسم <ArrowLeft aria-hidden="true" /></span>
+                <span className="home-capability-link">
+                  الدخول إلى القسم <ArrowLeft aria-hidden="true" />
+                </span>
               </Link>
             ))}
           </div>
@@ -182,12 +243,21 @@ export default function Home() {
       <section className="home-specialties">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
-            <div><p className="home-kicker">الوصول السريع</p><h2>اختر نقطة البداية</h2></div>
-            <Link to="/doctors" className="home-inline-link">عرض دليل الأطباء <ChevronLeft aria-hidden="true" /></Link>
+            <div>
+              <p className="home-kicker">الوصول السريع</p>
+              <h2>اختر نقطة البداية</h2>
+            </div>
+            <Link to="/doctors" className="home-inline-link">
+              عرض دليل الأطباء <ChevronLeft aria-hidden="true" />
+            </Link>
           </div>
           <div className="home-specialty-grid">
             {FEATURED_SPECIALTIES.map((specialty, index) => (
-              <Link key={specialty.id} to={`/consultations/new?specialty=${specialty.id}`} className="home-specialty">
+              <Link
+                key={specialty.id}
+                to={`/consultations/new?specialty=${specialty.id}`}
+                className="home-specialty"
+              >
                 <span>{specialtyIcons[index]}</span>
                 <h3>{specialty.nameAr}</h3>
                 <ArrowLeft aria-hidden="true" />
@@ -199,10 +269,18 @@ export default function Home() {
 
       <section className="home-cta-wrap">
         <div className="home-cta mx-auto max-w-7xl">
-          <div><p>ابدأ من مكان واحد</p><h2>ابنِ تجربة رعاية تليق بالثقة.</h2><span>يمكن إدارة المحتوى والأطباء والمستخدمين من لوحة التحكم.</span></div>
+          <div>
+            <p>ابدأ من مكان واحد</p>
+            <h2>ابنِ تجربة رعاية تليق بالثقة.</h2>
+            <span>يمكن إدارة المحتوى والأطباء والمستخدمين من لوحة التحكم.</span>
+          </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/consultations/new" className="home-cta-primary">ابدأ استشارة <ArrowLeft aria-hidden="true" /></Link>
-            <Link to="/training" className="home-cta-secondary">استكشف التدريب</Link>
+            <Link to="/consultations/new" className="home-cta-primary">
+              ابدأ استشارة <ArrowLeft aria-hidden="true" />
+            </Link>
+            <Link to="/training" className="home-cta-secondary">
+              استكشف التدريب
+            </Link>
           </div>
         </div>
       </section>
