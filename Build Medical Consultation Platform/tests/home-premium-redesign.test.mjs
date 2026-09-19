@@ -34,6 +34,11 @@ test("the signature care rail is controllable and respects reduced motion", () =
 })
 
 test("the home page routes users to real platform capabilities", () => {
-  for (const route of ["/consultations/new", "/doctors", "/training", "/articles"])
+  for (const route of [
+    "/consultations/new",
+    "/doctors",
+    "/training",
+    "/articles",
+  ])
     assert.match(home, new RegExp(route.replace("/", "\\/")))
 })
