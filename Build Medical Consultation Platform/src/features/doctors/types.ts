@@ -1,3 +1,8 @@
+export interface SpecialtySummary {
+  name_ar: string
+  slug: string
+}
+
 export interface DoctorCardRecord {
   id: string
   slug: string
@@ -8,7 +13,7 @@ export interface DoctorCardRecord {
   image_alt: string
   languages: string[]
   interests: string[]
-  specialties: { name_ar: string slug: string } | null
+  specialties: SpecialtySummary | null
 }
 
 export interface DoctorPage {
