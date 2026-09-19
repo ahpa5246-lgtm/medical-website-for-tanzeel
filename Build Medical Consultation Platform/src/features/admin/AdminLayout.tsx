@@ -1,15 +1,17 @@
 import { NavLink, Route, Routes } from "react-router-dom"
-import { LayoutDashboard, LogOut, Stethoscope } from "lucide-react"
+import { LayoutDashboard, LogOut, Stethoscope, Users } from "lucide-react"
 import { useAuth } from "@/features/auth/AuthProvider"
 import AdminDashboard from "./AdminDashboard"
 import AdminDoctors from "./AdminDoctors"
 import DoctorEditor from "./DoctorEditor"
+import AdminUsers from "./AdminUsers"
 
 export default function AdminLayout() {
   const { profile, signOut } = useAuth()
   const links = [
     ["/admin", "لوحة التحكم", LayoutDashboard],
     ["/admin/doctors", "إدارة الأطباء", Stethoscope],
+    ["/admin/users", "المستخدمون", Users],
   ] as const
   return (
     <div
@@ -56,6 +58,7 @@ export default function AdminLayout() {
           <Route path="doctors" element={<AdminDoctors />} />
           <Route path="doctors/new" element={<DoctorEditor />} />
           <Route path="doctors/:id" element={<DoctorEditor />} />
+          <Route path="users" element={<AdminUsers />} />
         </Routes>
       </main>
     </div>
