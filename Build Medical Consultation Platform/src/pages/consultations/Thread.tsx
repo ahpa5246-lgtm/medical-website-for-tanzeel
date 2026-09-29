@@ -12,22 +12,27 @@ import {
   type ConsultationRecord,
 } from "@/features/consultations/consultationRepository"
 
-const statusLabels: Record<string,string> = { open:"بانتظار المراجعة", assigned:"تم تعيين طبيب", answered:"تمت الإجابة", closed:"مغلقة" }
+const statusLabels: Record<string, string> = {
+  open: "بانتظار المراجعة",
+  assigned: "تم تعيين طبيب",
+  answered: "تمت الإجابة",
+  closed: "مغلقة",
+}
 
 export default function ConsultationThread() {
-  const { id="" } = useParams()
+  const { id = "" } = useParams()
   const { session, profile } = useAuth()
-  const [consultation,setConsultation] = useState<ConsultationRecord|null>(null)
-  const [messages,setMessages] = useState<ConsultationMessage[]>([])
-  const [draft,setDraft] = useState("")
-  const [error,setError] = useState("")
-  const [loading,setLoading] = useState(true)
-  const [sending,setSending] = useState(false)
-  const [rating,setRating] = useState(0)
+  const [consultation, setConsultation] =\n    useState<ConsultationRecord | null>(null)
+  const [messages, setMessages] = useState<ConsultationMessage[]>([])
+  const [draft, setDraft] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [sending, setSending] = useState(false)
+  const [rating, setRating] = useState(0)
 
   async function reload() {
     if (!id) return
-    setLoading(true); setError("")
+    setLoading(true)\n    setError("")
     try {
       const [c,m] = await Promise.all([getConsultation(id), listMessages(id)])
       setConsultation(c); setMessages(m)
@@ -36,13 +41,13 @@ export default function ConsultationThread() {
     finally { setLoading(false) }
   }
 
-  useEffect(()=>{ void reload() },[id])
+  useEffect(() => {\n    void reload()\n  }, [id])
 
   const senderKind = useMemo<"patient"|"doctor"|"staff">(()=>{
     if (profile && ["owner","admin","editor"].includes(profile.role)) return "staff"
     if (consultation && session?.user.id === consultation.patient_id) return "patient"
     return "doctor"
-  },[profile,consultation,session])
+  }, [profile, consultation, session])
 
   async function handleSend(e:React.FormEvent) {
     e.preventDefault()
