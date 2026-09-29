@@ -9,7 +9,12 @@ import {
 } from "@/features/consultations/consultationRepository"
 import { listAdminDoctors } from "./adminRepository"
 
-const statusOptions: { value: ConsultationStatus label: string }[] = [
+interface StatusOption {
+  value: ConsultationStatus
+  label: string
+}
+
+const statusOptions: StatusOption[] = [
   { value: "open", label: "بانتظار المراجعة" },
   { value: "assigned", label: "تم تعيين طبيب" },
   { value: "answered", label: "تمت الإجابة" },
