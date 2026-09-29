@@ -86,7 +86,7 @@ test("privacy and terms describe operational data handling without claiming paym
   assert.match(privacy, /مساحة تخزين خاصة/)
   assert.match(privacy, /محررو المحتوى لا تمنحهم/)
   assert.match(terms, /بوابة الدفع المعتمدة/)
-  assert.match(terms, /لا يثبت تحصيل المال/)
+  assert.match(terms, /لا يثبت\s+تحصيل المال/)
 })
 
 test("robots remain noindex until a production domain is deliberately launched", () => {
