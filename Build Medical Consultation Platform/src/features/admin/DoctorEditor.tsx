@@ -68,7 +68,8 @@ export default function DoctorEditor() {
             bio: doctor.bio,
             profile_kind: doctor.profile_kind,
             provider_user_id: doctor.provider_user_id,
-            verification_status: doctor.verification_status as DoctorDraft["verification_status"],
+            verification_status:
+              doctor.verification_status as DoctorDraft["verification_status"],
             languages: doctor.languages,
             interests: doctor.interests,
             image_path: doctor.image_path,
@@ -230,7 +231,9 @@ export default function DoctorEditor() {
                 <select
                   className={field}
                   value={draft.provider_user_id ?? ""}
-                  onChange={(e) => change("provider_user_id", e.target.value || null)}
+                  onChange={(e) =>
+                    change("provider_user_id", e.target.value || null)
+                  }
                 >
                   <option value="">اختر حساب الطبيب</option>
                   {providers.map((provider) => (
@@ -240,7 +243,9 @@ export default function DoctorEditor() {
                   ))}
                 </select>
                 {errors.provider_user_id && (
-                  <span className="mt-1 block text-xs text-red-700">{errors.provider_user_id}</span>
+                  <span className="mt-1 block text-xs text-red-700">
+                    {errors.provider_user_id}
+                  </span>
                 )}
               </label>
               <label className="block text-sm font-bold text-slate-800">
@@ -248,7 +253,12 @@ export default function DoctorEditor() {
                 <select
                   className={field}
                   value={draft.verification_status}
-                  onChange={(e) => change("verification_status", e.target.value as DoctorDraft["verification_status"])}
+                  onChange={(e) =>
+                    change(
+                      "verification_status",
+                      e.target.value as DoctorDraft["verification_status"],
+                    )
+                  }
                 >
                   <option value="pending">بانتظار التحقق</option>
                   <option value="verified">تم التحقق</option>
