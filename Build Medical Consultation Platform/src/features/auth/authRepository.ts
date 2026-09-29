@@ -48,7 +48,9 @@ export async function requestPasswordReset(email: string) {
 export async function getProfile(userId: string) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, role, status, phone, requested_role, created_at, updated_at")
+    .select(
+      "id, display_name, role, status, phone, requested_role, created_at, updated_at",
+    )
     .eq("id", userId)
     .single()
 
