@@ -41,6 +41,29 @@ alter table public.doctors
 create unique index if not exists doctors_provider_user_unique
   on public.doctors(provider_user_id) where provider_user_id is not null;
 
+create or replace function public.enforce_real_provider_publish()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  if new.profile_kind = 'real_provider'
+     and new.publication_status = 'published'
+     and (new.provider_user_id is null or new.verification_status <> 'verified') then
+    raise exception 'real providers require a linked account and verified status before publication';
+  end if;
+  if new.profile_kind = 'fictional_demo' then
+    new.provider_user_id := null;
+    new.verification_status := 'not_applicable';
+  end if;
+  return new;
+end;
+$$;
+
+create trigger doctors_publish_guard
+before insert or update on public.doctors
+for each row execute function public.enforce_real_provider_publish();
+
 create table public.consultations (
   id uuid primary key default gen_random_uuid(),
   patient_id uuid not null references auth.users(id) on delete cascade,
