@@ -9,9 +9,9 @@ export interface Database {
   public: {
     Tables: {
       profiles: {
-        Row: { id:string; display_name:string; role:AppRole; status:AccountStatus; created_at:string; updated_at:string }
-        Insert: { id:string; display_name:string; role?:AppRole; status?:AccountStatus; created_at?:string; updated_at?:string }
-        Update: { display_name?:string; role?:AppRole; status?:AccountStatus; updated_at?:string }
+        Row: { id:string; display_name:string; role:AppRole; status:AccountStatus; phone:string|null; requested_role:string|null; created_at:string; updated_at:string }
+        Insert: { id:string; display_name:string; role?:AppRole; status?:AccountStatus; phone?:string|null; requested_role?:string|null; created_at?:string; updated_at?:string }
+        Update: { display_name?:string; role?:AppRole; status?:AccountStatus; phone?:string|null; requested_role?:string|null; updated_at?:string }
         Relationships: []
       }
       specialties: {
