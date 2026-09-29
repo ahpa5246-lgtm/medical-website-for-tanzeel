@@ -22,7 +22,8 @@ const statusLabels: Record<string, string> = {
 export default function ConsultationThread() {
   const { id = "" } = useParams()
   const { session, profile } = useAuth()
-  const [consultation, setConsultation] =\n    useState<ConsultationRecord | null>(null)
+  const [consultation, setConsultation] =
+    useState<ConsultationRecord | null>(null)
   const [messages, setMessages] = useState<ConsultationMessage[]>([])
   const [draft, setDraft] = useState("")
   const [error, setError] = useState("")
@@ -32,7 +33,8 @@ export default function ConsultationThread() {
 
   async function reload() {
     if (!id) return
-    setLoading(true)\n    setError("")
+    setLoading(true)
+    setError("")
     try {
       const [c,m] = await Promise.all([getConsultation(id), listMessages(id)])
       setConsultation(c); setMessages(m)
@@ -41,10 +43,12 @@ export default function ConsultationThread() {
     finally { setLoading(false) }
   }
 
-  useEffect(() => {\n    void reload()\n  }, [id])
+  useEffect(() => {
+    void reload()
+  }, [id])
 
   const senderKind = useMemo<"patient"|"doctor"|"staff">(()=>{
-    if (profile && ["owner","admin","editor"].includes(profile.role)) return "staff"
+    if (profile && ["owner", "admin"].includes(profile.role)) return "staff"
     if (consultation && session?.user.id === consultation.patient_id) return "patient"
     return "doctor"
   }, [profile, consultation, session])
