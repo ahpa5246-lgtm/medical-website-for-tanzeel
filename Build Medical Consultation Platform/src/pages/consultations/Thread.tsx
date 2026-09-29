@@ -22,8 +22,9 @@ const statusLabels: Record<string, string> = {
 export default function ConsultationThread() {
   const { id = "" } = useParams()
   const { session, profile } = useAuth()
-  const [consultation, setConsultation] =
-    useState<ConsultationRecord | null>(null)
+  const [consultation, setConsultation] = useState<ConsultationRecord | null>(
+    null,
+  )
   const [messages, setMessages] = useState<ConsultationMessage[]>([])
   const [draft, setDraft] = useState("")
   const [error, setError] = useState("")
@@ -106,10 +107,7 @@ export default function ConsultationThread() {
 
   if (loading)
     return (
-      <div
-        dir="rtl"
-        className="mx-auto max-w-3xl px-4 py-20 text-slate-500"
-      >
+      <div dir="rtl" className="mx-auto max-w-3xl px-4 py-20 text-slate-500">
         جارٍ تحميل الاستشارة…
       </div>
     )
@@ -130,10 +128,7 @@ export default function ConsultationThread() {
 
   return (
     <div dir="rtl" className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <Link
-        to="/consultations"
-        className="text-sm font-bold text-primary-700"
-      >
+      <Link to="/consultations" className="text-sm font-bold text-primary-700">
         العودة للاستشارات
       </Link>
 

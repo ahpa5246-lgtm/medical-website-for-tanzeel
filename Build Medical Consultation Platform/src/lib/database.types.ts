@@ -1,10 +1,6 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | {
+  [key: string]: Json | undefined
+} | Json[]
 
 type AppRole = "owner" | "admin" | "editor" | "member"
 type AccountStatus = "active" | "disabled"
@@ -66,9 +62,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
-        Update: Partial<
-          Database["public"]["Tables"]["specialties"]["Insert"]
-        >
+        Update: Partial<Database["public"]["Tables"]["specialties"]["Insert"]>
         Relationships: []
       }
       doctors: {
@@ -144,9 +138,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
-        Update: Partial<
-          Database["public"]["Tables"]["consultations"]["Insert"]
-        >
+        Update: Partial<Database["public"]["Tables"]["consultations"]["Insert"]>
         Relationships: []
       }
       consultation_messages: {

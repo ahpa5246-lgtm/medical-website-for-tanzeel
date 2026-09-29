@@ -65,9 +65,7 @@ export default function ConsultationList() {
         </Link>
       </div>
 
-      {loading && (
-        <p className="mt-8 text-sm text-slate-500">جارٍ التحميل…</p>
-      )}
+      {loading && <p className="mt-8 text-sm text-slate-500">جارٍ التحميل…</p>}
       {error && (
         <p className="mt-8 rounded-xl bg-red-50 p-4 text-red-700">{error}</p>
       )}

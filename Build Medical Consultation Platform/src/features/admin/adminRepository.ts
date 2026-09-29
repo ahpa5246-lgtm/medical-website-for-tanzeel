@@ -134,7 +134,6 @@ export async function listAdminDoctors(page = 1, pageSize = 20) {
   return { doctors: data ?? [], count: count ?? 0 }
 }
 
-
 export async function listProviderCandidates() {
   const { data, error } = await supabase
     .from("profiles")

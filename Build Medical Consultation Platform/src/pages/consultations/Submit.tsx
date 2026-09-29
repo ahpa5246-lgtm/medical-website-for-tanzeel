@@ -39,8 +39,7 @@ export default function SubmitConsultation() {
             (specialty) =>
               specialty.id === requested || specialty.slug === requested,
           )
-          if (match)
-            setForm((value) => ({ ...value, specialty: match.id }))
+          if (match) setForm((value) => ({ ...value, specialty: match.id }))
         }
       })
       .catch(() => setError("تعذر تحميل التخصصات من قاعدة البيانات."))
@@ -71,8 +70,7 @@ export default function SubmitConsultation() {
         body: form.description,
         emergencyFlag: emergency,
       })
-      for (const file of files)
-        await uploadAttachment(consultation.id, file)
+      for (const file of files) await uploadAttachment(consultation.id, file)
       navigate(`/consultations/${consultation.id}`)
     } catch {
       setError(

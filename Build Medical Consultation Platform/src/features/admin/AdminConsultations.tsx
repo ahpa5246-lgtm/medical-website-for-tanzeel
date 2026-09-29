@@ -9,7 +9,7 @@ import {
 } from "@/features/consultations/consultationRepository"
 import { listAdminDoctors } from "./adminRepository"
 
-const statusOptions: { value: ConsultationStatus; label: string }[] = [
+const statusOptions: { value: ConsultationStatus label: string }[] = [
   { value: "open", label: "بانتظار المراجعة" },
   { value: "assigned", label: "تم تعيين طبيب" },
   { value: "answered", label: "تمت الإجابة" },
@@ -18,9 +18,10 @@ const statusOptions: { value: ConsultationStatus; label: string }[] = [
 
 export default function AdminConsultations() {
   const [items, setItems] = useState<ConsultationRecord[]>([])
-  const [doctors, setDoctors] = useState<
-    Array<{ id: string; display_name: string }>
-  >([])
+  const [doctors, setDoctors] = useState<Array<{
+    id: string
+    display_name: string
+  }>>([])
   const [editing, setEditing] = useState<string | null>(null)
   const [draft, setDraft] = useState<Partial<ConsultationRecord>>({})
   const [error, setError] = useState("")

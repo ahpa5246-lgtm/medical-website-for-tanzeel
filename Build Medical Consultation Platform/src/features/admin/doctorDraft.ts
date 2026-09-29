@@ -4,12 +4,7 @@ export interface DoctorDraft {
   bio: string
   profile_kind: "fictional_demo" | "real_provider"
   provider_user_id: string | null
-  verification_status:
-    | "not_applicable"
-    | "pending"
-    | "verified"
-    | "rejected"
-    | "suspended"
+  verification_status: "not_applicable" | "pending" | "verified" | "rejected" | "suspended"
   languages: string[]
   interests: string[]
   image_path: string | null

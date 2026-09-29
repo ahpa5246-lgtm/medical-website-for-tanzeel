@@ -51,15 +51,9 @@ test("consultation pages no longer consume mock consultation data", () => {
     const source = read(path)
     assert.doesNotMatch(source, /MOCK_CONSULTATIONS|MOCK_THREAD|mockData/)
   }
-  assert.match(
-    read("src/pages/consultations/List.tsx"),
-    /listMyConsultations/,
-  )
+  assert.match(read("src/pages/consultations/List.tsx"), /listMyConsultations/)
   assert.match(read("src/pages/consultations/Thread.tsx"), /listMessages/)
-  assert.match(
-    read("src/pages/consultations/Submit.tsx"),
-    /createConsultation/,
-  )
+  assert.match(read("src/pages/consultations/Submit.tsx"), /createConsultation/)
 })
 
 test("signup delegates to Supabase auth rather than a timer simulation", () => {
@@ -90,10 +84,7 @@ test("privacy and terms describe operational data handling without claiming paym
 })
 
 test("robots remain noindex until a production domain is deliberately launched", () => {
-  assert.match(
-    read("index.html"),
-    /name="robots" content="noindex, nofollow"/,
-  )
+  assert.match(read("index.html"), /name="robots" content="noindex, nofollow"/)
 })
 
 test("home makes no unsupported verification claims", () => {

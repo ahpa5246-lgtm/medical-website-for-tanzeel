@@ -31,11 +31,9 @@ const roles = [
 export default function Signup() {
   const [params] = useSearchParams()
   const navigate = useNavigate()
-  const initial = (params.get("role") as Role) || "patient"
+  const initial = params.get("role") as Role || "patient"
   const [role, setRole] = useState<Role>(
-    ["patient", "doctor", "instructor"].includes(initial)
-      ? initial
-      : "patient",
+    ["patient", "doctor", "instructor"].includes(initial) ? initial : "patient",
   )
   const [form, setForm] = useState({
     fullName: "",
@@ -54,8 +52,7 @@ export default function Signup() {
     setError("")
     setMessage("")
 
-    if (form.fullName.trim().length < 3)
-      return setError("اكتب الاسم الكامل.")
+    if (form.fullName.trim().length < 3) return setError("اكتب الاسم الكامل.")
     if (!/^\+?[0-9]{9,15}$/.test(form.phone.replace(/\s/g, "")))
       return setError("اكتب رقم هاتف صحيحًا.")
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
@@ -64,8 +61,7 @@ export default function Signup() {
       return setError("كلمة المرور يجب أن تكون 8 أحرف على الأقل.")
     if (form.password !== form.confirmPassword)
       return setError("كلمتا المرور غير متطابقتين.")
-    if (!form.agree)
-      return setError("يجب الموافقة على الشروط وسياسة الخصوصية.")
+    if (!form.agree) return setError("يجب الموافقة على الشروط وسياسة الخصوصية.")
 
     setLoading(true)
     try {
@@ -93,8 +89,8 @@ export default function Signup() {
       <div className="mx-auto max-w-xl rounded-3xl border border-slate-100 bg-white p-7 shadow-sm sm:p-9">
         <h1 className="text-3xl font-black text-slate-900">إنشاء حساب</h1>
         <p className="mt-2 text-sm leading-7 text-slate-500">
-          الحساب العادي يُنشأ مباشرة. طلب الطبيب أو المدرّب يبقى طلبًا فقط إلى
-          أن تراجعه الإدارة.
+          الحساب العادي يُنشأ مباشرة. طلب الطبيب أو المدرّب يبقى طلبًا فقط إلى أن
+          تراجعه الإدارة.
         </p>
 
         <div className="mt-7 grid gap-3">
