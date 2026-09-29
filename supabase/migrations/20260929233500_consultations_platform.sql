@@ -2,6 +2,39 @@ create type public.consultation_status as enum ('open','assigned','answered','cl
 create type public.message_sender_kind as enum ('patient','doctor','staff');
 create type public.payment_status as enum ('unpaid','pending','paid','refunded','failed');
 
+alter table public.profiles
+  add column if not exists phone text,
+  add column if not exists requested_role text;
+
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $
+begin
+  insert into public.profiles(id, display_name, role, status, phone, requested_role)
+  values (
+    new.id,
+    coalesce(nullif(trim(new.raw_user_meta_data->>'full_name'), ''), split_part(coalesce(new.email, 'مستخدم'), '@', 1)),
+    'member',
+    'active',
+    nullif(trim(new.raw_user_meta_data->>'phone'), ''),
+    coalesce(nullif(trim(new.raw_user_meta_data->>'requested_role'), ''), 'patient')
+  )
+  on conflict (id) do update set
+    display_name = excluded.display_name,
+    phone = excluded.phone,
+    requested_role = excluded.requested_role;
+  return new;
+end;
+$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute function public.handle_new_user();
+
 alter table public.doctors
   add column if not exists provider_user_id uuid references public.profiles(id);
 
