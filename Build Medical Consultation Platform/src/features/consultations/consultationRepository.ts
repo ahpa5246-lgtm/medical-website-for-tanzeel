@@ -16,6 +16,22 @@ export interface ConsultationRecord {
   updated_at: string
 }
 
+export interface SpecialtyOption {
+  id: string
+  slug: string
+  name_ar: string
+}
+
+export async function listActiveSpecialties() {
+  const { data, error } = await supabase
+    .from("specialties")
+    .select("id, slug, name_ar")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+  if (error) throw error
+  return (data ?? []) as SpecialtyOption[]
+}
+
 export interface ConsultationMessage {
   id: string
   consultation_id: string
