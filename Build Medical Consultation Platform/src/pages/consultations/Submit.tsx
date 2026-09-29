@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { AlertTriangle, Upload } from "lucide-react"
 import Button from "@/components/ui/Button"
@@ -6,7 +6,7 @@ import EmergencyBanner from "@/components/EmergencyBanner"
 import { SPECIALTIES } from "@/data/specialties"
 import { detectEmergency } from "@/lib/emergency"
 import { useAuth } from "@/features/auth/AuthProvider"
-import { createConsultation, uploadAttachment } from "@/features/consultations/consultationRepository"
+import { createConsultation, listActiveSpecialties, uploadAttachment, type SpecialtyOption } from "@/features/consultations/consultationRepository"
 
 const MAX_CHARS = 5000
 
@@ -15,7 +15,7 @@ export default function SubmitConsultation() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const [form, setForm] = useState({ title:"", description:"", specialty:params.get("specialty") || "" })
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<File[]>([])\n  const [specialties, setSpecialties] = useState<SpecialtyOption[]>([])
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const emergency = detectEmergency(form.description)
@@ -66,7 +66,7 @@ export default function SubmitConsultation() {
           <select value={form.specialty} onChange={e=>setForm(f=>({...f,specialty:e.target.value}))}
             className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3">
             <option value="">اختر التخصص</option>
-            {SPECIALTIES.map(s=><option key={s.id} value={s.id}>{s.nameAr}</option>)}
+            {specialties.map(s=><option key={s.id} value={s.id}>{s.name_ar}</option>)}
           </select>
         </label>
 
