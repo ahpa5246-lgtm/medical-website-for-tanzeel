@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { Plus } from "lucide-react"
+import { Pencil, Plus } from "lucide-react"
 import Button from "@/components/ui/Button"
 import { ErrorState, LoadingState } from "@/components/system/AsyncState"
 import { listAdminDoctors } from "./adminRepository"
@@ -46,7 +46,7 @@ export default function AdminDoctors() {
               <th className="p-4">الاسم</th>
               <th className="p-4">نوع الملف</th>
               <th className="p-4">الحالة</th>
-              <th className="p-4">آخر تحديث</th>
+              <th className="p-4">آخر تحديث</th>\n              <th className="p-4">الإجراءات</th>
             </tr>
           </thead>
           <tbody>
