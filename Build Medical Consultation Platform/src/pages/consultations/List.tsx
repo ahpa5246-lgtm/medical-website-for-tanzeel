@@ -1,113 +1,106 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { MessageCircle, Clock, Plus, ChevronLeft } from "lucide-react"
+import { MessageCircle, Plus } from "lucide-react"
 import Button from "@/components/ui/Button"
-import Badge from "@/components/ui/Badge"
-import Card from "@/components/ui/Card"
-import { MOCK_CONSULTATIONS } from "@/data/mockData"
-import { formatTimeAgo } from "@/lib/utils"
-import DemoLabel from "@/components/DemoLabel"
+import { useAuth } from "@/features/auth/AuthProvider"
+import {
+  listMyConsultations,
+  type ConsultationRecord,
+} from "@/features/consultations/consultationRepository"
 
-const STATUS_LABELS: Record<string, string> = {
-  open: "قيد الانتظار",
+const labels: Record<string, string> = {
+  open: "بانتظار المراجعة",
+  assigned: "تم تعيين طبيب",
   answered: "تمت الإجابة",
   closed: "مغلقة",
 }
 
-const STATUS_VARIANTS: Record<string, "warning" | "success" | "muted"> = {
-  open: "warning",
-  answered: "success",
-  closed: "muted",
-}
-
 export default function ConsultationList() {
-  // TODO: Replace with real query filtered by current user's ID via Supabase RLS
-  const consultations = MOCK_CONSULTATIONS
+  const { session, loading: authLoading } = useAuth()
+  const [items, setItems] = useState<ConsultationRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    if (authLoading) return
+    if (!session) {
+      setLoading(false)
+      return
+    }
+
+    listMyConsultations(session.user.id)
+      .then(setItems)
+      .catch(() => setError("تعذر تحميل الاستشارات."))
+      .finally(() => setLoading(false))
+  }, [session, authLoading])
+
+  if (!authLoading && !session)
+    return (
+      <div dir="rtl" className="mx-auto max-w-2xl px-4 py-20 text-center">
+        <MessageCircle className="mx-auto h-10 w-10 text-slate-400" />
+        <h1 className="mt-4 text-2xl font-black">استشاراتك خاصة بحسابك</h1>
+        <p className="mt-3 text-slate-500">
+          سجّل الدخول لعرض الاستشارات المحفوظة.
+        </p>
+        <Link to="/auth/login">
+          <Button className="mt-6">تسجيل الدخول</Button>
+        </Link>
+      </div>
+    )
 
   return (
-    <div dir="rtl" className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-      <div className="flex items-center justify-between mb-8">
+    <div dir="rtl" className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">استشاراتي</h1>
-          <p className="text-slate-500 text-sm mt-1">
-            متابعة جميع استشاراتك الطبية
+          <h1 className="text-3xl font-black">استشاراتي</h1>
+          <p className="mt-2 text-sm text-slate-500">
+            كل الاستشارات المحفوظة في حسابك.
           </p>
         </div>
         <Link to="/consultations/new">
-          <Button className="gap-1.5">
-            <Plus className="w-4 h-4" />
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
             استشارة جديدة
           </Button>
         </Link>
       </div>
-      <div className="mb-5 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3 text-xs leading-6 text-primary-900">
-        الاستشارات أدناه أمثلة مركبة لشرح الحالات المتوقعة، وليست بيانات مرضى
-        حقيقية.
-      </div>
 
-      {consultations.length === 0 ? (
-        <div className="text-center py-20">
-          <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-            <MessageCircle className="w-8 h-8 text-slate-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-slate-800 mb-2">
-            لا توجد استشارات بعد
-          </h3>
-          <p className="text-slate-500 text-sm mb-6 max-w-xs mx-auto">
-            اطرح أول سؤال طبي وسيجيبك طبيب متخصص خلال ساعات
-          </p>
-          <Link to="/consultations/new">
-            <Button variant="accent">ابدأ استشارتك الأولى</Button>
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {consultations.map((c) => (
-            <Link key={c.id} to={`/consultations/${c.id}`}>
-              <Card hover className="flex items-start gap-4">
-                <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                    c.status === "answered"
-                      ? "bg-emerald-50 text-emerald-600"
-                      : c.status === "open"
-                        ? "bg-amber-50 text-amber-600"
-                        : "bg-slate-100 text-slate-500"
-                  }`}
-                >
-                  <MessageCircle className="w-5 h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <DemoLabel>استشارة وهوية ورسائل خيالية</DemoLabel>
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="font-semibold text-slate-900 text-sm line-clamp-1">
-                      {c.title}
-                    </p>
-                    <Badge variant={STATUS_VARIANTS[c.status]} size="sm">
-                      {STATUS_LABELS[c.status]}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-slate-500 mt-1">{c.specialty}</p>
-                  <div className="flex items-center gap-3 mt-2 text-xs text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5" />
-                      {formatTimeAgo(new Date(c.submittedAt))}
-                    </span>
-                    {c.doctorName && (
-                      <span className="flex items-center gap-1">
-                        <span>·</span>
-                        {c.doctorName}
-                      </span>
-                    )}
-                    <span className="flex items-center gap-1 ms-auto">
-                      {c.messageCount} رسائل
-                      <ChevronLeft className="w-3.5 h-3.5 rtl-flip" />
-                    </span>
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ))}
+      {loading && <p className="mt-8 text-sm text-slate-500">جارٍ التحميل…</p>}
+      {error && (
+        <p className="mt-8 rounded-xl bg-red-50 p-4 text-red-700">{error}</p>
+      )}
+      {!loading && !error && items.length === 0 && (
+        <div className="mt-10 rounded-2xl border border-dashed border-slate-300 p-10 text-center text-slate-500">
+          لا توجد استشارات بعد.
         </div>
       )}
+
+      <div className="mt-8 space-y-3">
+        {items.map((consultation) => (
+          <Link
+            key={consultation.id}
+            to={`/consultations/${consultation.id}`}
+            className="block rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-primary-300 hover:shadow-sm"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="font-bold text-slate-900">
+                  {consultation.subject}
+                </h2>
+                <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
+                  {consultation.body}
+                </p>
+              </div>
+              <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+                {labels[consultation.status] ?? consultation.status}
+              </span>
+            </div>
+            <p className="mt-3 text-xs text-slate-400">
+              {new Date(consultation.created_at).toLocaleString("ar-IQ")}
+            </p>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }

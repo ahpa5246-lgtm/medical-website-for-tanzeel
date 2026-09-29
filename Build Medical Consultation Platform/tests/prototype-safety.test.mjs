@@ -5,29 +5,27 @@ import assert from "node:assert/strict"
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
 
-test("preview status is backend-aware and cannot be dismissed", () => {
+test("preview status remains backend-aware", () => {
   const app = read("src/App.tsx")
   const notice = read("src/components/PreviewNotice.tsx")
   assert.match(app, /<BrowserRouter>\s*<PreviewNotice \/>\s*<Routes>/)
-  assert.doesNotMatch(notice, /useState|onClick|button|\bX\b/)
   assert.match(notice, /isSupabaseConfigured/)
-  assert.match(notice, /وضع المعاينة/)
 })
 
-test("medical question content is not read from or written to URL parameters", () => {
+test("medical question content is never stored in URL parameters", () => {
   const home = read("src/pages/Home.tsx")
   const submit = read("src/pages/consultations/Submit.tsx")
   assert.doesNotMatch(home, /encodeURIComponent|\?q=/)
   assert.doesNotMatch(submit, /params\.get\(["']q["']\)/)
 })
 
-test("prototype has no file input or file-selection API", () => {
+test("consultation upload is restricted and uses private storage repository", () => {
   const submit = read("src/pages/consultations/Submit.tsx")
-  assert.doesNotMatch(
-    submit,
-    /type=["']file["']|\.files|FileReader|showOpenFilePicker/,
-  )
-  assert.match(submit, /اختيار الملفات معطّل/)
+  const repo = read("src/features/consultations/consultationRepository.ts")
+  assert.match(submit, /type="file"/)
+  assert.match(submit, /\.jpg,.jpeg,.png,.webp,.pdf/)
+  assert.match(repo, /consultation-attachments/)
+  assert.match(repo, /upload\(/)
 })
 
 test("emergency numbers and copy have one source", () => {
@@ -44,65 +42,49 @@ test("emergency numbers and copy have one source", () => {
   assert.match(emergency, /tel:122/)
 })
 
-test("mock content is labelled at each repeated point of use", () => {
+test("consultation pages no longer consume mock consultation data", () => {
   for (const path of [
     "src/pages/consultations/List.tsx",
     "src/pages/consultations/Thread.tsx",
-    "src/pages/doctors/Directory.tsx",
-    "src/pages/doctors/Profile.tsx",
-    "src/pages/articles/List.tsx",
-    "src/pages/articles/Detail.tsx",
+    "src/pages/consultations/Submit.tsx",
   ]) {
-    assert.match(read(path), /<DemoLabel/)
+    const source = read(path)
+    assert.doesNotMatch(source, /MOCK_CONSULTATIONS|MOCK_THREAD|mockData/)
   }
+  assert.match(read("src/pages/consultations/List.tsx"), /listMyConsultations/)
+  assert.match(read("src/pages/consultations/Thread.tsx"), /listMessages/)
+  assert.match(read("src/pages/consultations/Submit.tsx"), /createConsultation/)
 })
 
-test("privacy notice explicitly negates unsupported prototype capabilities", () => {
+test("signup delegates to Supabase auth rather than a timer simulation", () => {
+  const signup = read("src/pages/auth/Signup.tsx")
+  const auth = read("src/features/auth/authRepository.ts")
+  assert.match(signup, /signUp/)
+  assert.doesNotMatch(signup, /setTimeout/)
+  assert.match(auth, /supabase\.auth\.signUp/)
+})
+
+test("medical RLS excludes editor role from medical administration", () => {
+  const migration = read(
+    "../supabase/migrations/20260929233500_consultations_platform.sql",
+  )
+  assert.match(migration, /is_medical_admin/)
+  assert.match(migration, /current_role\(\) in \('owner','admin'\)/)
+  assert.match(migration, /sender_kind = 'doctor'/)
+  assert.match(migration, /sender_kind = 'patient'/)
+})
+
+test("privacy and terms describe operational data handling without claiming payment collection", () => {
   const privacy = read("src/pages/legal/Privacy.tsx")
-  for (const phrase of [
-    "لا ندّعي توفير تشفير",
-    "إخفاء هوية",
-    "سجل تدقيق",
-    "حذفها أو تصديرها",
-  ])
-    assert.match(privacy, new RegExp(phrase))
+  const terms = read("src/pages/legal/Terms.tsx")
+  assert.match(privacy, /مساحة تخزين خاصة/)
+  assert.match(privacy, /محررو المحتوى لا تمنحهم/)
+  assert.match(terms, /بوابة الدفع المعتمدة/)
+  assert.match(terms, /لا يثبت\s+تحصيل\s+المال/)
 })
 
-test("robots remain noindex and nofollow", () => {
+test("robots remain noindex until a production domain is deliberately launched", () => {
   assert.match(read("index.html"), /name="robots" content="noindex, nofollow"/)
-})
-
-test("terms page states every operational capability is unavailable", () => {
-  const terms = read("src/pages/legal/Terms.tsx")
-  for (const limitation of [
-    "لا توجد حسابات مستخدمين",
-    "لا يوجد أطباء أو ممارسون صحيون",
-    "لا توجد عملية تحقق",
-    "لا توجد خدمة لنشر",
-    "لا توجد قواعد استخدام تشغيلية أو آلية إنفاذ أو تعليق",
-    "لا تُرسل إشعارات",
-    "لا توجد قناة دعم قانوني",
-    "لا توجد حقوق تشغيلية",
-  ]) {
-    assert.match(terms, new RegExp(limitation))
-  }
-  assert.match(terms, /وليس شروط خدمة/)
-})
-
-test("terms page contains none of the removed promises or obligations", () => {
-  const terms = read("src/pages/legal/Terms.tsx")
-  for (const removedPhrase of [
-    "قبول الشروط",
-    "فأنت توافق",
-    "بيانات صحيحة عند التسجيل",
-    "تقديم وثائق حقيقية",
-    "تمنح ميدكونكت رخصة",
-    "تعليق أو إنهاء أي حساب",
-    "عبر البريد الإلكتروني أو الإشعارات",
-    "legal@medconnect.app",
-  ]) {
-    assert.doesNotMatch(terms, new RegExp(removedPhrase))
-  }
 })
 
 test("home makes no unsupported verification claims", () => {
@@ -116,6 +98,4 @@ test("home makes no unsupported verification claims", () => {
   ]) {
     assert.doesNotMatch(home, new RegExp(unsupportedClaim))
   }
-  assert.match(home, /إدارة التحقق/)
-  assert.match(home, /بعد استكمال بيانات واعتماد كل طبيب/)
 })

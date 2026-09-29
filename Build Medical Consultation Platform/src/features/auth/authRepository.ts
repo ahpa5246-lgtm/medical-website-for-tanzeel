@@ -9,6 +9,29 @@ export async function signIn(email: string, password: string) {
   if (error) throw error
 }
 
+export async function signUp(input: {
+  email: string
+  password: string
+  fullName: string
+  phone: string
+  requestedRole: "patient" | "doctor" | "instructor"
+}) {
+  const { data, error } = await supabase.auth.signUp({
+    email: input.email.trim(),
+    password: input.password,
+    options: {
+      data: {
+        full_name: input.fullName.trim(),
+        phone: input.phone.trim(),
+        requested_role: input.requestedRole,
+      },
+      emailRedirectTo: `${window.location.origin}/auth/login`,
+    },
+  })
+  if (error) throw error
+  return data
+}
+
 export async function signOut() {
   const { error } = await supabase.auth.signOut()
   if (error) throw error
@@ -25,7 +48,9 @@ export async function requestPasswordReset(email: string) {
 export async function getProfile(userId: string) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, role, status, created_at, updated_at")
+    .select(
+      "id, display_name, role, status, phone, requested_role, created_at, updated_at",
+    )
     .eq("id", userId)
     .single()
 

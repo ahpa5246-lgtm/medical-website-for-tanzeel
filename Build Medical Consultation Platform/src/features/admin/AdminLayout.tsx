@@ -1,18 +1,30 @@
 import { NavLink, Route, Routes } from "react-router-dom"
-import { LayoutDashboard, LogOut, Stethoscope, Users } from "lucide-react"
+import {
+  LayoutDashboard,
+  LogOut,
+  MessageSquareText,
+  Stethoscope,
+  Users,
+} from "lucide-react"
 import { useAuth } from "@/features/auth/AuthProvider"
+import RequireRole from "@/features/auth/RequireRole"
 import AdminDashboard from "./AdminDashboard"
 import AdminDoctors from "./AdminDoctors"
 import DoctorEditor from "./DoctorEditor"
 import AdminUsers from "./AdminUsers"
+import AdminConsultations from "./AdminConsultations"
 
 export default function AdminLayout() {
   const { profile, signOut } = useAuth()
   const links = [
-    ["/admin", "لوحة التحكم", LayoutDashboard],
-    ["/admin/doctors", "إدارة الأطباء", Stethoscope],
-    ["/admin/users", "المستخدمون", Users],
-  ] as const
+    ["/admin", "لوحة التحكم", LayoutDashboard] as const,
+    ["/admin/doctors", "إدارة الأطباء", Stethoscope] as const,
+    ...(profile?.role === "owner" || profile?.role === "admin"
+      ? [["/admin/consultations", "الاستشارات", MessageSquareText] as const]
+      : []),
+    ["/admin/users", "المستخدمون", Users] as const,
+  ]
+
   return (
     <div
       dir="rtl"
@@ -48,7 +60,8 @@ export default function AdminLayout() {
             onClick={() => void signOut()}
             className="mt-4 flex items-center gap-2 text-sm font-bold text-red-300"
           >
-            <LogOut className="h-4 w-4" /> تسجيل الخروج
+            <LogOut className="h-4 w-4" />
+            تسجيل الخروج
           </button>
         </div>
       </aside>
@@ -59,6 +72,14 @@ export default function AdminLayout() {
           <Route path="doctors/new" element={<DoctorEditor />} />
           <Route path="doctors/:id" element={<DoctorEditor />} />
           <Route path="users" element={<AdminUsers />} />
+          <Route
+            path="consultations"
+            element={
+              <RequireRole allow={["owner", "admin"]}>
+                <AdminConsultations />
+              </RequireRole>
+            }
+          />
         </Routes>
       </main>
     </div>

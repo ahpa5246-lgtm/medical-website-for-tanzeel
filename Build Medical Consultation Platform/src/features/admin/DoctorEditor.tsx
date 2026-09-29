@@ -7,6 +7,7 @@ import {
   DoctorRevisionConflict,
   getAdminDoctor,
   listSpecialties,
+  listProviderCandidates,
   saveDoctor,
   transitionDoctor,
 } from "./adminRepository"
@@ -25,6 +26,12 @@ interface SpecialtyOption {
   id: string
   name_ar: string
 }
+interface ProviderCandidate {
+  id: string
+  display_name: string
+  status: string
+  requested_role: string | null
+}
 
 export default function DoctorEditor() {
   const { id } = useParams()
@@ -33,6 +40,7 @@ export default function DoctorEditor() {
   const recoveryId = id ?? "new"
   const [draft, setDraft] = useState<DoctorDraft>(EMPTY_DOCTOR_DRAFT)
   const [specialties, setSpecialties] = useState<SpecialtyOption[]>([])
+  const [providers, setProviders] = useState<ProviderCandidate[]>([])
   const [revision, setRevision] = useState<number | undefined>()
   const [doctorId, setDoctorId] = useState(id)
   const [loading, setLoading] = useState(Boolean(id))
@@ -42,9 +50,12 @@ export default function DoctorEditor() {
   const canPublish = profile?.role === "owner" || profile?.role === "admin"
 
   useEffect(() => {
-    void listSpecialties()
-      .then(setSpecialties)
-      .catch(() => setMessage("تعذر تحميل التخصصات."))
+    void Promise.all([listSpecialties(), listProviderCandidates()])
+      .then(([specialtyRows, providerRows]) => {
+        setSpecialties(specialtyRows)
+        setProviders(providerRows as ProviderCandidate[])
+      })
+      .catch(() => setMessage("تعذر تحميل بيانات الإدارة."))
     const recovered = loadRecoveryDraft(recoveryId)
     if (recovered) setDraft(recovered)
     if (!id) return
@@ -56,6 +67,9 @@ export default function DoctorEditor() {
             specialty_id: doctor.specialty_id,
             bio: doctor.bio,
             profile_kind: doctor.profile_kind,
+            provider_user_id: doctor.provider_user_id,
+            verification_status:
+              doctor.verification_status as DoctorDraft["verification_status"],
             languages: doctor.languages,
             interests: doctor.interests,
             image_path: doctor.image_path,
@@ -210,6 +224,50 @@ export default function DoctorEditor() {
               <option value="real_provider">مزود حقيقي (يتطلب تحققًا)</option>
             </select>
           </label>
+          {draft.profile_kind === "real_provider" && (
+            <>
+              <label className="block text-sm font-bold text-slate-800">
+                حساب الطبيب المسجل
+                <select
+                  className={field}
+                  value={draft.provider_user_id ?? ""}
+                  onChange={(e) =>
+                    change("provider_user_id", e.target.value || null)
+                  }
+                >
+                  <option value="">اختر حساب الطبيب</option>
+                  {providers.map((provider) => (
+                    <option key={provider.id} value={provider.id}>
+                      {provider.display_name}
+                    </option>
+                  ))}
+                </select>
+                {errors.provider_user_id && (
+                  <span className="mt-1 block text-xs text-red-700">
+                    {errors.provider_user_id}
+                  </span>
+                )}
+              </label>
+              <label className="block text-sm font-bold text-slate-800">
+                حالة التحقق
+                <select
+                  className={field}
+                  value={draft.verification_status}
+                  onChange={(e) =>
+                    change(
+                      "verification_status",
+                      e.target.value as DoctorDraft["verification_status"],
+                    )
+                  }
+                >
+                  <option value="pending">بانتظار التحقق</option>
+                  <option value="verified">تم التحقق</option>
+                  <option value="rejected">مرفوض</option>
+                  <option value="suspended">موقوف</option>
+                </select>
+              </label>
+            </>
+          )}
           <label className="block text-sm font-bold text-slate-800">
             النبذة
             <textarea

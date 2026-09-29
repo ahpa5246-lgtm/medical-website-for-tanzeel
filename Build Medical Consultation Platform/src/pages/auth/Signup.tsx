@@ -1,401 +1,242 @@
 import { useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import {
-  User,
-  Stethoscope,
-  GraduationCap,
-  Mail,
-  Phone,
-  Lock,
-  Eye,
-  EyeOff,
-  CheckCircle2,
-  Info,
-} from "lucide-react"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
+import { GraduationCap, Info, Stethoscope, User } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
-import { cn } from "@/lib/utils"
+import { signUp } from "@/features/auth/authRepository"
 
 type Role = "patient" | "doctor" | "instructor"
 
-const ROLE_OPTIONS: {
-  id: Role
-  label: string
-  sublabel: string
-  icon: React.ReactNode
-}[] = [
+const roles = [
   {
-    id: "patient",
+    id: "patient" as const,
     label: "مريض / مستخدم عادي",
-    sublabel: "أبحث عن استشارة طبية أو محتوى صحي",
-    icon: <User className="w-5 h-5" />,
+    note: "أبحث عن استشارة أو محتوى صحي",
+    icon: User,
   },
   {
-    id: "doctor",
+    id: "doctor" as const,
     label: "طبيب",
-    sublabel: "أريد الإجابة على الاستشارات ومشاركة خبرتي",
-    icon: <Stethoscope className="w-5 h-5" />,
+    note: "أريد التقديم كمقدم خدمة صحية",
+    icon: Stethoscope,
   },
   {
-    id: "instructor",
+    id: "instructor" as const,
     label: "مدرّب / معلم",
-    sublabel: "أريد إنشاء دورات تعليمية طبية",
-    icon: <GraduationCap className="w-5 h-5" />,
+    note: "أريد التقديم لإنشاء محتوى تعليمي",
+    icon: GraduationCap,
   },
 ]
 
 export default function Signup() {
   const [params] = useSearchParams()
-  const initialRole = params.get("role") as Role || "patient"
-  const [role, setRole] = useState<Role>(initialRole)
-  const [step, setStep] = useState<1 | 2>(1)
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const initial = params.get("role") as Role || "patient"
+  const [role, setRole] = useState<Role>(
+    ["patient", "doctor", "instructor"].includes(initial) ? initial : "patient",
+  )
   const [form, setForm] = useState({
     fullName: "",
     phone: "",
     email: "",
     password: "",
     confirmPassword: "",
-    agreeTerms: false,
+    agree: false,
   })
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [previewMessage, setPreviewMessage] = useState("")
+  const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  function validateStep1() {
-    const e: Record<string, string> = {}
-    if (!form.fullName.trim() || form.fullName.trim().length < 3)
-      e.fullName = "الاسم الكامل مطلوب (3 أحرف على الأقل)"
-    return e
-  }
+  async function submit(event: React.FormEvent) {
+    event.preventDefault()
+    setError("")
+    setMessage("")
 
-  function validateStep2() {
-    const e: Record<string, string> = {}
-    if (
-      !form.phone.trim() ||
-      !/^\+?[0-9]{9,15}$/.test(form.phone.replace(/\s/g, ""))
-    )
-      e.phone = "رقم هاتف صحيح مطلوب"
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      e.email = "بريد إلكتروني غير صحيح"
-    if (!form.password || form.password.length < 8)
-      e.password = "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
+    if (form.fullName.trim().length < 3) return setError("اكتب الاسم الكامل.")
+    if (!/^\+?[0-9]{9,15}$/.test(form.phone.replace(/\s/g, "")))
+      return setError("اكتب رقم هاتف صحيحًا.")
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      return setError("البريد الإلكتروني مطلوب وصيغته غير صحيحة.")
+    if (form.password.length < 8)
+      return setError("كلمة المرور يجب أن تكون 8 أحرف على الأقل.")
     if (form.password !== form.confirmPassword)
-      e.confirmPassword = "كلمتا المرور غير متطابقتين"
-    if (!form.agreeTerms) e.agreeTerms = "يجب الموافقة على الشروط للمتابعة"
-    return e
-  }
+      return setError("كلمتا المرور غير متطابقتين.")
+    if (!form.agree) return setError("يجب الموافقة على الشروط وسياسة الخصوصية.")
 
-  function handleNext(e: React.FormEvent) {
-    e.preventDefault()
-    const errs = validateStep1()
-    if (Object.keys(errs).length) {
-      setErrors(errs)
-      return
-    }
-    setErrors({})
-    setStep(2)
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    const errs = validateStep2()
-    if (Object.keys(errs).length) {
-      setErrors(errs)
-      return
-    }
-    setErrors({})
     setLoading(true)
-    setTimeout(() => {
+    try {
+      const result = await signUp({
+        email: form.email,
+        password: form.password,
+        fullName: form.fullName,
+        phone: form.phone,
+        requestedRole: role,
+      })
+      if (result.session) navigate("/")
+      else
+        setMessage(
+          "تم إنشاء الحساب. افتح رسالة التأكيد المرسلة إلى بريدك ثم سجّل الدخول.",
+        )
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "تعذر إنشاء الحساب.")
+    } finally {
       setLoading(false)
-      setPreviewMessage(
-        "تم اختبار النموذج فقط. لم يُنشأ حساب ولم تُحفظ أي بيانات في نسخة المعاينة.",
-      )
-    }, 700)
+    }
   }
-
-  const needsVerification = role === "doctor" || role === "instructor"
 
   return (
-    <div
-      dir="rtl"
-      className="min-h-[calc(100vh-4rem)] bg-slate-50 flex items-center justify-center px-4 py-12"
-    >
-      <div className="w-full max-w-lg">
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-slate-900">
-              إنشاء حساب جديد
-            </h1>
-            <p className="text-slate-500 text-sm mt-1">
-              مجاني تمامًا — لا بطاقة مطلوبة
-            </p>
+    <div dir="rtl" className="min-h-screen bg-slate-50 px-4 py-12">
+      <div className="mx-auto max-w-xl rounded-3xl border border-slate-100 bg-white p-7 shadow-sm sm:p-9">
+        <h1 className="text-3xl font-black text-slate-900">إنشاء حساب</h1>
+        <p className="mt-2 text-sm leading-7 text-slate-500">
+          الحساب العادي يُنشأ مباشرة. طلب الطبيب أو المدرّب يبقى طلبًا فقط إلى أن
+          تراجعه الإدارة.
+        </p>
 
-            {/* Step indicator */}
-            <div className="flex items-center justify-center gap-2 mt-4">
-              {[1, 2].map((s) => (
-                <div key={s} className="flex items-center gap-2">
-                  <div
-                    className={cn(
-                      "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors",
-                      step >= s
-                        ? "bg-primary-600 text-white"
-                        : "bg-slate-100 text-slate-400",
-                    )}
-                  >
-                    {step > s ? <CheckCircle2 className="w-4 h-4" /> : s}
-                  </div>
-                  {s < 2 && (
-                    <div
-                      className={cn(
-                        "w-12 h-0.5 rounded-full transition-colors",
-                        step > s ? "bg-primary-600" : "bg-slate-200",
-                      )}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Step 1: Role + name */}
-          {step === 1 && (
-            <form onSubmit={handleNext} className="space-y-5">
-              <div>
-                <p className="text-sm font-medium text-slate-700 mb-3">
-                  كيف ستستخدم ميدكونكت؟ <span className="text-red-500">*</span>
-                </p>
-                <div className="space-y-2.5">
-                  {ROLE_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => setRole(opt.id)}
-                      className={cn(
-                        "w-full flex items-center gap-3 p-3.5 rounded-xl border text-start transition-all duration-150",
-                        role === opt.id
-                          ? "border-primary-400 bg-primary-50 shadow-sm"
-                          : "border-slate-200 hover:border-slate-300 hover:bg-slate-50",
-                      )}
-                    >
-                      <div
-                        className={cn(
-                          "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors",
-                          role === opt.id
-                            ? "bg-primary-100 text-primary-700"
-                            : "bg-slate-100 text-slate-500",
-                        )}
-                      >
-                        {opt.icon}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-900">
-                          {opt.label}
-                        </p>
-                        <p className="text-xs text-slate-500 mt-0.5">
-                          {opt.sublabel}
-                        </p>
-                      </div>
-                      <div
-                        className={cn(
-                          "w-4.5 h-4.5 rounded-full border-2 ms-auto shrink-0 transition-colors",
-                          role === opt.id
-                            ? "border-primary-600 bg-primary-600"
-                            : "border-slate-300",
-                        )}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {needsVerification && (
-                <div className="flex gap-2.5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
-                  <Info className="w-4.5 h-4.5 shrink-0 mt-0.5 text-amber-600" />
-                  <p>
-                    ستحتاج إلى تقديم وثائق ترخيص طبي للتحقق من هويتك قبل الوصول
-                    لصلاحيات{" "}
-                    {role === "doctor"
-                      ? "الإجابة على الاستشارات"
-                      : "إنشاء الدورات"}
-                    .
-                  </p>
-                </div>
-              )}
-
-              <Input
-                label="الاسم الكامل"
-                type="text"
-                placeholder="محمد الأحمد"
-                value={form.fullName}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, fullName: e.target.value }))
-                }
-                error={errors.fullName}
-                startIcon={<User className="w-4 h-4" />}
-                required
-              />
-
-              <Button type="submit" className="w-full" size="lg">
-                التالي
-              </Button>
-            </form>
-          )}
-
-          {/* Step 2: Account credentials */}
-          {step === 2 && (
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        <div className="mt-7 grid gap-3">
+          {roles.map((option) => {
+            const Icon = option.icon
+            return (
               <button
+                key={option.id}
                 type="button"
-                onClick={() => setStep(1)}
-                className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1 mb-2"
+                onClick={() => setRole(option.id)}
+                className={`flex items-center gap-3 rounded-2xl border p-4 text-right ${
+                  role === option.id
+                    ? "border-primary-400 bg-primary-50"
+                    : "border-slate-200"
+                }`}
               >
-                ← رجوع
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-white text-primary-700">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span>
+                  <strong className="block text-sm text-slate-900">
+                    {option.label}
+                  </strong>
+                  <span className="text-xs text-slate-500">{option.note}</span>
+                </span>
               </button>
-
-              <Input
-                label="رقم الهاتف"
-                type="tel"
-                dir="ltr"
-                placeholder="+964 XXX XXX XXXX"
-                value={form.phone}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, phone: e.target.value }))
-                }
-                error={errors.phone}
-                startIcon={<Phone className="w-4 h-4" />}
-                hint="لن يُرسل رمز؛ استخدم قيمة خيالية فقط"
-                required
-              />
-
-              <Input
-                label="البريد الإلكتروني (اختياري)"
-                type="email"
-                dir="ltr"
-                placeholder="name@email.com"
-                value={form.email}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, email: e.target.value }))
-                }
-                error={errors.email}
-                startIcon={<Mail className="w-4 h-4" />}
-              />
-
-              <div className="relative">
-                <Input
-                  label="كلمة المرور"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="8 أحرف على الأقل"
-                  value={form.password}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, password: e.target.value }))
-                  }
-                  error={errors.password}
-                  startIcon={<Lock className="w-4 h-4" />}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute end-3 top-9 text-slate-400 hover:text-slate-600 transition-colors"
-                  aria-label={showPassword ? "إخفاء" : "إظهار"}
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-
-              <Input
-                label="تأكيد كلمة المرور"
-                type="password"
-                placeholder="أعد كتابة كلمة المرور"
-                value={form.confirmPassword}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, confirmPassword: e.target.value }))
-                }
-                error={errors.confirmPassword}
-                startIcon={<Lock className="w-4 h-4" />}
-                required
-              />
-
-              {/* Terms */}
-              <div>
-                <label className="flex items-start gap-2.5 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={form.agreeTerms}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, agreeTerms: e.target.checked }))
-                    }
-                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500/30"
-                  />
-                  <span className="text-xs text-slate-600 leading-relaxed">
-                    أوافق على{" "}
-                    <Link
-                      to="/legal/terms"
-                      target="_blank"
-                      className="text-primary-600 underline hover:text-primary-700"
-                    >
-                      شروط الاستخدام
-                    </Link>{" "}
-                    و{" "}
-                    <Link
-                      to="/legal/privacy"
-                      target="_blank"
-                      className="text-primary-600 underline hover:text-primary-700"
-                    >
-                      سياسة الخصوصية
-                    </Link>{" "}
-                    و{" "}
-                    <Link
-                      to="/legal/disclaimer"
-                      target="_blank"
-                      className="text-primary-600 underline hover:text-primary-700"
-                    >
-                      التنويه الطبي
-                    </Link>
-                  </span>
-                </label>
-                {errors.agreeTerms && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {errors.agreeTerms}
-                  </p>
-                )}
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full"
-                size="lg"
-                loading={loading}
-              >
-                إنشاء الحساب
-              </Button>
-              {previewMessage && (
-                <p
-                  role="status"
-                  className="rounded-xl bg-primary-50 px-4 py-3 text-xs leading-6 text-primary-900"
-                >
-                  {previewMessage}
-                </p>
-              )}
-            </form>
-          )}
-
-          <div className="mt-6 text-center text-sm text-slate-600">
-            لديك حساب بالفعل؟{" "}
-            <Link
-              to="/auth/login"
-              className="font-semibold text-primary-600 hover:text-primary-700"
-            >
-              سجّل الدخول
-            </Link>
-          </div>
+            )
+          })}
         </div>
+
+        {role !== "patient" && (
+          <div className="mt-4 flex gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-6 text-amber-900">
+            <Info className="mt-1 h-4 w-4 shrink-0" />
+            لن تحصل على صلاحيات طبية بمجرد التسجيل؛ يجب التحقق من الهوية
+            والترخيص وربط الحساب بملف مقدم الخدمة من الإدارة.
+          </div>
+        )}
+
+        <form onSubmit={submit} className="mt-7 space-y-4">
+          <Input
+            label="الاسم الكامل"
+            value={form.fullName}
+            onChange={(event) =>
+              setForm((value) => ({ ...value, fullName: event.target.value }))
+            }
+            required
+          />
+          <Input
+            label="رقم الهاتف"
+            type="tel"
+            dir="ltr"
+            value={form.phone}
+            onChange={(event) =>
+              setForm((value) => ({ ...value, phone: event.target.value }))
+            }
+            placeholder="+964..."
+            required
+          />
+          <Input
+            label="البريد الإلكتروني"
+            type="email"
+            dir="ltr"
+            value={form.email}
+            onChange={(event) =>
+              setForm((value) => ({ ...value, email: event.target.value }))
+            }
+            required
+          />
+          <Input
+            label="كلمة المرور"
+            type="password"
+            value={form.password}
+            onChange={(event) =>
+              setForm((value) => ({ ...value, password: event.target.value }))
+            }
+            required
+          />
+          <Input
+            label="تأكيد كلمة المرور"
+            type="password"
+            value={form.confirmPassword}
+            onChange={(event) =>
+              setForm((value) => ({
+                ...value,
+                confirmPassword: event.target.value,
+              }))
+            }
+            required
+          />
+
+          <label className="flex items-start gap-2 text-xs leading-6 text-slate-600">
+            <input
+              className="mt-1"
+              type="checkbox"
+              checked={form.agree}
+              onChange={(event) =>
+                setForm((value) => ({ ...value, agree: event.target.checked }))
+              }
+            />
+            <span>
+              أوافق على{" "}
+              <Link
+                className="font-bold text-primary-700 underline"
+                to="/legal/terms"
+              >
+                الشروط
+              </Link>{" "}
+              و
+              <Link
+                className="font-bold text-primary-700 underline"
+                to="/legal/privacy"
+              >
+                سياسة الخصوصية
+              </Link>{" "}
+              و
+              <Link
+                className="font-bold text-primary-700 underline"
+                to="/legal/disclaimer"
+              >
+                التنويه الطبي
+              </Link>
+              .
+            </span>
+          </label>
+
+          {error && (
+            <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">
+              {error}
+            </p>
+          )}
+          {message && (
+            <p className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">
+              {message}
+            </p>
+          )}
+          <Button type="submit" size="lg" className="w-full" loading={loading}>
+            إنشاء الحساب
+          </Button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-slate-500">
+          لديك حساب؟{" "}
+          <Link className="font-bold text-primary-700" to="/auth/login">
+            سجّل الدخول
+          </Link>
+        </p>
       </div>
     </div>
   )

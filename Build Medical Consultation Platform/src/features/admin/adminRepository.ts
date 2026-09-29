@@ -22,7 +22,7 @@ export async function getAdminDoctor(id: string) {
   const { data, error } = await supabase
     .from("doctors")
     .select(
-      "id, slug, display_name, profile_kind, specialty_id, bio, languages, interests, image_path, image_alt, publication_status, revision",
+      "id, slug, display_name, profile_kind, specialty_id, bio, languages, interests, image_path, image_alt, verification_status, provider_user_id, publication_status, revision",
     )
     .eq("id", id)
     .single()
@@ -46,6 +46,12 @@ export async function saveDoctor(
     specialty_id: input.specialty_id,
     bio: input.bio.trim(),
     profile_kind: input.profile_kind,
+    provider_user_id:
+      input.profile_kind === "real_provider" ? input.provider_user_id : null,
+    verification_status:
+      input.profile_kind === "real_provider"
+        ? input.verification_status
+        : "not_applicable",
     languages: input.languages,
     interests: input.interests,
     image_path: input.image_path,
@@ -126,4 +132,15 @@ export async function listAdminDoctors(page = 1, pageSize = 20) {
     .range(from, to)
   if (error) throw error
   return { doctors: data ?? [], count: count ?? 0 }
+}
+
+export async function listProviderCandidates() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, display_name, status, requested_role")
+    .eq("status", "active")
+    .eq("requested_role", "doctor")
+    .order("display_name")
+  if (error) throw error
+  return data ?? []
 }
