@@ -96,6 +96,16 @@ for each row execute function public.touch_updated_at();
 create trigger consultation_payments_touch before update on public.consultation_payments
 for each row execute function public.touch_updated_at();
 
+create or replace function public.is_medical_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $
+  select public.current_role() in ('owner','admin');
+$;
+
 create or replace function public.can_access_consultation(target uuid)
 returns boolean
 language sql
@@ -111,7 +121,7 @@ as $$
       and (
         c.patient_id = auth.uid()
         or d.provider_user_id = auth.uid()
-        or public.is_staff()
+        or public.is_medical_admin()
       )
   );
 $$;
@@ -129,7 +139,7 @@ create policy "participants read consultations" on public.consultations
 for select to authenticated
 using (
   patient_id = auth.uid()
-  or public.is_staff()
+  or public.is_medical_admin()
   or exists (
     select 1 from public.doctors d
     where d.id = doctor_id and d.provider_user_id = auth.uid()
@@ -163,19 +173,22 @@ with check (
   sender_id = auth.uid()
   and public.can_access_consultation(consultation_id)
   and (
-    sender_kind = 'patient'
-    or public.is_staff()
-    or exists (
+    (sender_kind = 'patient' and exists (
+      select 1 from public.consultations c
+      where c.id = consultation_id and c.patient_id = auth.uid()
+    ))
+    or (sender_kind = 'doctor' and exists (
       select 1
       from public.consultations c
       join public.doctors d on d.id = c.doctor_id
       where c.id = consultation_id and d.provider_user_id = auth.uid()
-    )
+    ))
+    or (sender_kind = 'staff' and public.is_medical_admin())
   )
 );
 
 create policy "patient reads own rating" on public.consultation_ratings
-for select to authenticated using (patient_id = auth.uid() or public.is_staff());
+for select to authenticated using (patient_id = auth.uid() or public.is_medical_admin());
 
 create policy "patient creates own rating" on public.consultation_ratings
 for insert to authenticated
@@ -195,11 +208,11 @@ using (patient_id = auth.uid())
 with check (patient_id = auth.uid());
 
 create policy "patient reads own payment" on public.consultation_payments
-for select to authenticated using (patient_id = auth.uid() or public.is_staff());
+for select to authenticated using (patient_id = auth.uid() or public.is_medical_admin());
 
 create policy "staff manages payments" on public.consultation_payments
 for all to authenticated
-using (public.is_staff()) with check (public.is_staff());
+using (public.is_medical_admin()) with check (public.is_medical_admin());
 
 insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
 values (
@@ -218,7 +231,53 @@ create policy "participants read consultation attachments" on storage.objects
 for select to authenticated
 using (
   bucket_id = 'consultation-attachments'
-  and public.can_access_consultation((split_part(name,'/',1))::uuid)
+  and case
+    when split_part(name,'/',1) ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
+);
+
+create policy "patient uploads own consultation attachments" on storage.objects
+for insert to authenticated
+with check (
+  bucket_id = 'consultation-attachments'
+  and case
+    when split_part(name,'/',1) ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
+);
+
+grant execute on function public.is_medical_admin() to authenticated;
+grant execute on function public.can_access_consultation(uuid) to authenticated;
+
+      then public.can_access_consultation((split_part(name,'/',1))::uuid)
+    else false
+  end
+);
+
+create policy "patient uploads own consultation attachments" on storage.objects
+for insert to authenticated
+with check (
+  bucket_id = 'consultation-attachments'
+  and exists (
+    select 1 from public.consultations c
+    where c.id = (split_part(name,'/',1))::uuid
+      and c.patient_id = auth.uid()
+  )
+);
+
+grant execute on function public.can_access_consultation(uuid) to authenticated;
+
+      then exists (
+        select 1 from public.consultations c
+        where c.id = (split_part(name,'/',1))::uuid
+          and c.patient_id = auth.uid()
+      )
+    else false
+  end
+);
+
+grant execute on function public.can_access_consultation(uuid) to authenticated;
+
+      then public.can_access_consultation((split_part(name,'/',1))::uuid)
+    else false
+  end
 );
 
 create policy "patient uploads own consultation attachments" on storage.objects
