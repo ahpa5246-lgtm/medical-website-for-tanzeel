@@ -46,8 +46,12 @@ export async function saveDoctor(
     specialty_id: input.specialty_id,
     bio: input.bio.trim(),
     profile_kind: input.profile_kind,
-    provider_user_id:\n      input.profile_kind === "real_provider" ? input.provider_user_id : null,
-    verification_status:\n      input.profile_kind === "real_provider"\n        ? input.verification_status\n        : "not_applicable",
+    provider_user_id:
+      input.profile_kind === "real_provider" ? input.provider_user_id : null,
+    verification_status:
+      input.profile_kind === "real_provider"
+        ? input.verification_status
+        : "not_applicable",
     languages: input.languages,
     interests: input.interests,
     image_path: input.image_path,
