@@ -199,7 +199,7 @@ export default function DoctorEditor() {
                 <option key={s.id} value={s.id}>
                   {s.name_ar}
                 </option>
-              ))}
+              )}
             </select>
             {errors.specialty_id && (
               <span className="mt-1 block text-xs text-red-700">
