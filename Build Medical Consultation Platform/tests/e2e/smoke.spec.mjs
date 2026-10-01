@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test"
+import { expect, test } from "@playwright/test"
 
 test("home renders in RTL without runtime crashes", async ({ page }) => {
   const runtimeErrors = []
@@ -15,7 +15,9 @@ test("viewport has no horizontal overflow", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" })
 
   const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
   )
 
   expect(overflow).toBeLessThanOrEqual(1)
