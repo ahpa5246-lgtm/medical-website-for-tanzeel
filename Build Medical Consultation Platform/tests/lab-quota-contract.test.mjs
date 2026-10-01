@@ -2,6 +2,14 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { test } from "node:test"
 
+const foundation = readFileSync(
+  new URL(
+    "../../supabase/migrations/20260831150000_learning_lab_foundation.sql",
+    import.meta.url,
+  ),
+  "utf8",
+)
+
 const migration = readFileSync(
   new URL(
     "../../supabase/migrations/20260831160000_learning_lab_quota.sql",
@@ -9,6 +17,26 @@ const migration = readFileSync(
   ),
   "utf8",
 )
+
+test("fresh databases receive only the minimal relational lab foundation", () => {
+  assert.match(
+    foundation,
+    /create table if not exists public\.learning_modules/i,
+  )
+  assert.match(
+    foundation,
+    /create table if not exists public\.subscriptions/i,
+  )
+  assert.match(
+    foundation,
+    /create table if not exists public\.daily_lab_usage/i,
+  )
+  assert.match(foundation, /references auth\.users\(id\)/i)
+  assert.doesNotMatch(
+    foundation,
+    /create table if not exists public\.users/i,
+  )
+})
 
 test("quota migration extends existing relational storage without creating a parallel store", () => {
   assert.match(migration, /alter table public\.daily_lab_usage/)
