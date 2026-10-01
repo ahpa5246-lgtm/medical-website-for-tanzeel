@@ -19,11 +19,12 @@ jobs:
       run:
         working-directory: "Build Medical Consultation Platform"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
+          package-manager-cache: false
 
       - name: Enable pinned package manager
         run: corepack enable
@@ -34,11 +35,14 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Install exact Playwright test runner for CI only
+        run: pnpm add -D @playwright/test@1.63.0 --lockfile=false
+
       - name: Install Playwright Chromium
-        run: npx -y @playwright/test@1.63.0 install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run browser smoke tests
-        run: npx -y @playwright/test@1.63.0 test -c playwright.config.mjs
+        run: pnpm exec playwright test -c playwright.config.mjs
 
       - name: Enforce JavaScript transfer budget
         run: >
@@ -48,11 +52,11 @@ jobs:
           size-limit --limit "400 kB" "dist/assets/*.js"
 
       - name: Run Lighthouse CI
-        run: npx -y @lhci/cli@0.15.x autorun --config=lighthouserc.cjs
+        run: npx -y @lhci/cli@0.15.1 autorun --config=lighthouserc.cjs
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: playwright-report
           path: "Build Medical Consultation Platform/playwright-report"
@@ -61,7 +65,7 @@ jobs:
 
       - name: Upload Lighthouse report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: lighthouse-report
           path: "Build Medical Consultation Platform/lhci_reports"
