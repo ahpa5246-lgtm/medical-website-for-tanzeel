@@ -1,13 +1,12 @@
 import { useState, type ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
+
 import {
   ArrowLeft,
   BookOpenText,
   Brain,
   CheckCircle2,
   ChevronLeft,
-  CirclePause,
-  CirclePlay,
   GraduationCap,
   HeartPulse,
   LockKeyhole,
@@ -18,70 +17,107 @@ import {
   Sparkles,
   Stethoscope,
 } from "lucide-react"
+
 import Button from "@/components/ui/Button"
+
 import { SPECIALTIES } from "@/data/specialties"
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
+
 const specialtyIcons: ReactNode[] = [
   <Stethoscope aria-hidden="true" />,
+
   <Microscope aria-hidden="true" />,
+
   <Brain aria-hidden="true" />,
+
   <HeartPulse aria-hidden="true" />,
+
   <MessageCircle aria-hidden="true" />,
+
   <Sparkles aria-hidden="true" />,
 ]
 
 const CARE_STEPS = [
   { icon: Search, label: "اختيار التخصص", hint: "وصول أسرع للمسار المناسب" },
+
   {
     icon: MessageCircle,
+
     label: "إرسال الاستشارة",
+
     hint: "تفاصيل منظّمة وواضحة",
   },
+
   {
     icon: ShieldCheck,
+
     label: "مراجعة المختص",
+
     hint: "إدارة الاعتماد من المنصة",
   },
+
   {
     icon: BookOpenText,
+
     label: "محتوى صحي",
+
     hint: "مكتبة قابلة للتحرير والنشر",
   },
-  { icon: GraduationCap, label: "تدريب تفاعلي", hint: "مراحل ومستويات عملية" },
+
+  {
+    icon: GraduationCap,
+    label: "الأكاديمية",
+    hint: "دروس قابلة للتحرير والنشر",
+  },
 ]
 
 const CAPABILITIES = [
   {
     icon: MessageCircle,
+
     number: "01",
+
     title: "استشارة مرتّبة",
+
     text: "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة.",
+
     to: "/consultations/new",
   },
+
   {
     icon: Stethoscope,
+
     number: "02",
+
     title: "دليل الأطباء",
+
     text: "ملفات يمكن إدارتها ونشرها بعد استكمال بيانات واعتماد كل طبيب.",
+
     to: "/doctors",
   },
+
   {
     icon: GraduationCap,
+
     number: "03",
+
     title: "أكاديمية تدريب",
+
     text: "مسارات تعليمية متدرّجة بتجربة بصرية تفاعلية ونتائج قابلة للمتابعة.",
-    to: "/training",
+
+    to: "/courses",
   },
 ]
 
 export default function Home() {
   const [query, setQuery] = useState("")
-  const [isMotionPaused, setIsMotionPaused] = useState(false)
+
   const navigate = useNavigate()
 
   function startConsultation(event: React.FormEvent) {
     event.preventDefault()
+
     navigate("/consultations/new", { state: { initialQuestion: query.trim() } })
   }
 
@@ -169,25 +205,8 @@ export default function Home() {
 
         <div className="care-flight-shell">
           <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-            <button
-              type="button"
-              className="care-flight-toggle"
-              onClick={() => setIsMotionPaused((value) => !value)}
-              aria-pressed={isMotionPaused}
-              aria-label={isMotionPaused ? "تشغيل الحركة" : "إيقاف الحركة"}
-            >
-              {isMotionPaused ? (
-                <CirclePlay aria-hidden="true" />
-              ) : (
-                <CirclePause aria-hidden="true" />
-              )}
-            </button>
             <div className="care-flight-window">
-              <div
-                className={`care-flight-track${
-                  isMotionPaused ? " is-paused" : ""
-                }`}
-              >
+              <div className="care-flight-track">
                 {[...CARE_STEPS, ...CARE_STEPS].map(
                   ({ icon: Icon, label, hint }, index) => (
                     <div
@@ -278,7 +297,7 @@ export default function Home() {
             <Link to="/consultations/new" className="home-cta-primary">
               ابدأ استشارة <ArrowLeft aria-hidden="true" />
             </Link>
-            <Link to="/training" className="home-cta-secondary">
+            <Link to="/courses" className="home-cta-secondary">
               استكشف التدريب
             </Link>
           </div>

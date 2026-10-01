@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ReactNode } from "react"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Layout from "@/components/layout/Layout"
 import Home from "@/pages/Home"
 import PreviewNotice from "@/components/PreviewNotice"
@@ -7,9 +7,10 @@ import { LoadingState } from "@/components/system/AsyncState"
 import RouteAnnouncer from "@/components/system/RouteAnnouncer"
 import RequireRole from "@/features/auth/RequireRole"
 
-const LabHub = lazy(() => import("@/pages/labs/LabHub"))
-const Training = lazy(() => import("@/pages/training/Training"))
 const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
+const ContentDetail = lazy(() => import("@/features/content/ContentDetail"))
+const ContentEditor = lazy(() => import("@/features/content/ContentEditor"))
+const ContentManage = lazy(() => import("@/features/content/ContentManage"))
 const Login = lazy(() => import("@/pages/auth/Login"))
 const Signup = lazy(() => import("@/pages/auth/Signup"))
 const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"))
@@ -115,30 +116,42 @@ export default function App() {
                   <Route path="/articles/new" element={<ArticleEditor />} />
                   <Route path="/courses" element={<CourseList />} />
                   <Route
+                    path="/courses/manage"
+                    element={<ContentManage kind="course" />}
+                  />
+                  <Route
+                    path="/courses/new"
+                    element={<ContentEditor kind="course" />}
+                  />
+                  <Route
+                    path="/courses/:id/edit"
+                    element={<ContentEditor kind="course" />}
+                  />
+                  <Route
+                    path="/courses/:id"
+                    element={<ContentDetail kind="course" />}
+                  />
+                  <Route
                     path="/training"
-                    element={
-                      <LazyRoute label="جارٍ تحميل مسار التدريب…">
-                        <Training />
-                      </LazyRoute>
-                    }
-                  />
-                  <Route
-                    path="/labs"
-                    element={
-                      <LazyRoute label="جارٍ تحميل مختبر التعلم…">
-                        <LabHub />
-                      </LazyRoute>
-                    }
-                  />
-                  <Route
-                    path="/labs/:moduleId"
-                    element={
-                      <LazyRoute label="جارٍ تحميل الوحدة التدريبية…">
-                        <LabHub />
-                      </LazyRoute>
-                    }
+                    element={<Navigate to="/courses" replace />}
                   />
                   <Route path="/library" element={<LibraryList />} />
+                  <Route
+                    path="/library/manage"
+                    element={<ContentManage kind="library" />}
+                  />
+                  <Route
+                    path="/library/new"
+                    element={<ContentEditor kind="library" />}
+                  />
+                  <Route
+                    path="/library/:id/edit"
+                    element={<ContentEditor kind="library" />}
+                  />
+                  <Route
+                    path="/library/:id"
+                    element={<ContentDetail kind="library" />}
+                  />
 
                   {/* Legal */}
                   <Route

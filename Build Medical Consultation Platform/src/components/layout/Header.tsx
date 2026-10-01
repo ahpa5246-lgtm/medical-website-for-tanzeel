@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react"
+
 import { Link, useLocation } from "react-router-dom"
+
 import { Menu, X, Stethoscope, ShieldCheck } from "lucide-react"
+
 import Button from "@/components/ui/Button"
 
 const NAV_LINKS = [
   { to: "/consultations", label: "استشاراتي" },
-  { to: "/doctors", label: "الأطباء" },
-  { to: "/articles", label: "المعرفة الصحية" },
-  { to: "/training", label: "تدريب" },
-  { to: "/labs", label: "المختبرات" },
-]
 
-const LATER_LINKS = [
+  { to: "/doctors", label: "الأطباء" },
+
+  { to: "/articles", label: "المعرفة الصحية" },
+
   { to: "/courses", label: "الأكاديمية" },
   { to: "/library", label: "المكتبة" },
 ]
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+
   const location = useLocation()
 
   useEffect(() => setMobileOpen(false), [location.pathname])
@@ -66,19 +68,6 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <span className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />
-            {LATER_LINKS.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="nav-link group gap-1.5 text-slate-400"
-              >
-                {link.label}
-                <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[8px] font-bold text-slate-500 transition group-hover:bg-primary-50 group-hover:text-primary-700">
-                  لاحقًا
-                </span>
-              </Link>
-            ))}
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
@@ -117,7 +106,7 @@ export default function Header() {
       {mobileOpen && (
         <div id="mobile-menu" className="mobile-menu md:hidden">
           <div className="mx-auto max-w-6xl space-y-1 px-4 py-4">
-            {[...NAV_LINKS, ...LATER_LINKS].map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
@@ -128,11 +117,6 @@ export default function Header() {
                 }`}
               >
                 {link.label}
-                {LATER_LINKS.some((later) => later.to === link.to) && (
-                  <span className="text-[10px] font-medium text-slate-400">
-                    المرحلة الثانية
-                  </span>
-                )}
               </Link>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4">

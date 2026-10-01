@@ -1,17 +1,5 @@
-import PhasePreview from "@/components/PhasePreview"
+import ContentList from "@/features/content/ContentList"
 
 export default function CourseList() {
-  return (
-    <PhasePreview
-      eyebrow="المرحلة الثانية"
-      title="الأكاديمية مؤجلة عمدًا حتى يكتمل مسار الثقة."
-      description="لن نفتح شراء الدورات أو تتبع التقدم قبل اكتمال الاستشارات والتحقق والمراجعة الطبية في بيئة إنتاج حقيقية."
-      items={[
-        "منشئ دورات منظم إلى وحدات ودروس واختبارات.",
-        "مراجعة طبية إلزامية قبل النشر.",
-        "الدفع غير موجود في النموذج؛ أي تنفيذ مستقبلي يحتاج تحققًا من الخادم.",
-        "تتبع تقدم وشهادات بعد اجتياز معيار الإنجاز.",
-      ]}
-    />
-  )
+  return <ContentList kind="course" />
 }

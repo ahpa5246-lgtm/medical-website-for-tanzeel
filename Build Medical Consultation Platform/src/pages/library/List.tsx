@@ -1,17 +1,5 @@
-import PhasePreview from "@/components/PhasePreview"
+import ContentList from "@/features/content/ContentList"
 
 export default function LibraryList() {
-  return (
-    <PhasePreview
-      eyebrow="المرحلة الثانية"
-      title="المكتبة ستُفتح بعد بناء مسار حقوق النشر."
-      description="إتاحة مرجع طبي بلا إثبات حقوق قد تضر المشروع وصاحب الحق؛ لذلك صُممت الصفحة كالتزام واضح قبل أن تكون فهرس تنزيل."
-      items={[
-        "إقرار حقوق أو ترخيص إلزامي لكل ملف.",
-        "تخزين خاص وروابط تنزيل موقّتة.",
-        "مراجعة إدارية وزر إزالة سريع.",
-        "ملخصات أصلية قصيرة لا تستبدل المرجع التجاري.",
-      ]}
-    />
-  )
+  return <ContentList kind="library" />
 }

@@ -53,6 +53,9 @@ jobs:
       - name: Run browser smoke tests
         run: pnpm exec playwright test -c playwright.config.mjs
 
+      - name: Run academy and library publishing journeys
+        run: pnpm exec playwright test -c playwright.prototype.config.mjs
+
       - name: Enforce JavaScript transfer budget
         run: pnpm exec size-limit
 

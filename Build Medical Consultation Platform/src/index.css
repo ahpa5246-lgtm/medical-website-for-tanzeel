@@ -786,16 +786,12 @@ h1, h2, h3, .font-display {
 .care-flight-shell { position:relative; z-index:3; border-block:1px solid rgba(8,127,140,.12); background:rgba(255,255,255,.82); backdrop-filter:blur(12px); }
 .care-flight-window { overflow:hidden; flex:1; padding-block:1rem; mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); }
 .care-flight-track { display:flex; width:max-content; animation:care-flight 28s linear infinite; }
-.care-flight-track.is-paused,.care-flight-window:hover .care-flight-track,.care-flight-window:focus-within .care-flight-track { animation-play-state:paused; }
-.care-flight-item { display:flex; align-items:center; gap:.75rem; width:15.5rem; padding-inline:1.1rem; border-inline-start:1px solid #d7e8e7; }
-.care-flight-item>span { display:grid; place-items:center; width:2.65rem; height:2.65rem; flex:0 0 auto; color:var(--home-teal); background:var(--home-mint); transform:rotate(3deg); }
-.care-flight-item svg { width:1.15rem; }
+.care-flight-item { display:flex; align-items:center; gap:1rem; width:21rem; padding-inline:1.35rem; border-inline-start:1px solid #d7e8e7; }
+.care-flight-item>span { display:grid; place-items:center; width:3.25rem; height:3.25rem; flex:0 0 auto; color:var(--home-teal); background:var(--home-mint); transform:rotate(3deg); }
+.care-flight-item svg { width:1.45rem; }
 .care-flight-item strong,.care-flight-item small { display:block; }
-.care-flight-item strong { font-size:.78rem; }
-.care-flight-item small { margin-top:.22rem; color:#789093; font-size:.62rem; }
-.care-flight-toggle { display:grid; place-items:center; width:2.9rem; height:2.9rem; flex:0 0 auto; border:1px solid #cfe3e1; background:white; color:var(--home-teal); cursor:pointer; transition:background .2s,color .2s; }
-.care-flight-toggle:hover,.care-flight-toggle:focus-visible { color:white; background:var(--home-teal); outline:3px solid rgba(8,127,140,.2); outline-offset:2px; }
-.care-flight-toggle svg { width:1.25rem; }
+.care-flight-item strong { font-size:1.05rem; line-height:1.4; }
+.care-flight-item small { margin-top:.22rem; color:#526d71; font-size:.875rem; line-height:1.4; }
 
 .home-section { padding-block:clamp(5rem,9vw,8rem); }
 .home-section-heading { display:grid; grid-template-columns:.55fr 1.3fr .55fr; align-items:end; gap:2rem; border-bottom:1px solid #dce9e8; padding-bottom:2.2rem; }
