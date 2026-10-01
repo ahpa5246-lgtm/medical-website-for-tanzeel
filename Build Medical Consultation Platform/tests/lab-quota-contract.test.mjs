@@ -23,10 +23,7 @@ test("fresh databases receive only the minimal relational lab foundation", () =>
     foundation,
     /create table if not exists public\.learning_modules/i,
   )
-  assert.match(
-    foundation,
-    /create table if not exists public\.subscriptions/i,
-  )
+  assert.match(foundation, /create table if not exists public\.subscriptions/i)
   assert.match(
     foundation,
     /create table if not exists public\.daily_lab_usage/i,
