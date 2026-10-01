@@ -35,8 +35,13 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Install exact Playwright test runner for CI only
-        run: pnpm add -D @playwright/test@1.63.0 --lockfile=false
+      - name: Install exact CI-only browser and bundle tools
+        run: >
+          pnpm add -D
+          @playwright/test@1.63.0
+          size-limit@14.0.0
+          @size-limit/file@14.0.0
+          --lockfile=false
 
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
@@ -45,11 +50,7 @@ jobs:
         run: pnpm exec playwright test -c playwright.config.mjs
 
       - name: Enforce JavaScript transfer budget
-        run: >
-          npx -y
-          -p size-limit@14.0.0
-          -p @size-limit/file@14.0.0
-          size-limit --limit "400 kB" "dist/assets/*.js"
+        run: pnpm exec size-limit --limit "400 kB" "dist/assets/*.js"
 
       - name: Run Lighthouse CI
         run: npx -y @lhci/cli@0.15.1 autorun --config=lighthouserc.cjs
