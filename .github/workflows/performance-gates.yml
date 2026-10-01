@@ -50,7 +50,7 @@ jobs:
         run: pnpm exec playwright test -c playwright.config.mjs
 
       - name: Enforce JavaScript transfer budget
-        run: pnpm exec size-limit --limit "400 kB" "dist/assets/*.js"
+        run: pnpm exec size-limit
 
       - name: Run Lighthouse CI
         run: npx -y @lhci/cli@0.15.1 autorun --config=lighthouserc.cjs
