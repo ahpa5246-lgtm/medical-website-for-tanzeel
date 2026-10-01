@@ -1,29 +1,41 @@
 import { EMERGENCY_CONTENT } from "@/lib/emergency"
+
 import { Link } from "react-router-dom"
+
 import { AlertTriangle, ShieldCheck, Stethoscope } from "lucide-react"
 
 const groups = [
   {
     title: "الرعاية",
+
     links: [
       ["/consultations/new", "استشارة جديدة"],
+
       ["/consultations", "استشاراتي"],
+
       ["/doctors", "دليل الأطباء"],
     ],
   },
+
   {
     title: "المعرفة",
+
     links: [
       ["/articles", "المقالات الصحية"],
-      ["/courses", "الأكاديمية — لاحقًا"],
-      ["/library", "المكتبة — لاحقًا"],
+
+      ["/courses", "الأكاديمية"],
+      ["/library", "المكتبة"],
     ],
   },
+
   {
     title: "الثقة والقانون",
+
     links: [
       ["/legal/disclaimer", "التنويه الطبي"],
+
       ["/legal/privacy", "سياسة الخصوصية"],
+
       ["/legal/terms", "شروط الاستخدام"],
     ],
   },
