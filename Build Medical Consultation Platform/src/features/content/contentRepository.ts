@@ -210,12 +210,10 @@ export async function completeLesson(
   }
   const { data: auth } = await supabase.auth.getUser()
   if (!auth.user) throw new Error("سجّلي الدخول لحفظ التقدم.")
-  const { error } = await supabase
-    .from("lesson_progress")
-    .upsert({
-      user_id: auth.user.id,
-      content_id: contentId,
-      lesson_index: lessonIndex,
-    })
+  const { error } = await supabase.from("lesson_progress").upsert({
+    user_id: auth.user.id,
+    content_id: contentId,
+    lesson_index: lessonIndex,
+  })
   if (error) throw error
 }
