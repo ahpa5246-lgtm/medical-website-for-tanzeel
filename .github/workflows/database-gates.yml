@@ -1,0 +1,40 @@
+name: Supabase Database Gates
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "supabase/**"
+      - ".github/workflows/database-gates.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v2
+        with:
+          version: latest
+
+      - name: Initialize local Supabase config when absent
+        run: |
+          if [ ! -f supabase/config.toml ]; then
+            supabase init
+          fi
+
+      - name: Start local Supabase stack and replay migrations
+        run: supabase start
+
+      - name: Run consultation RLS pgTAP tests
+        run: supabase test db supabase/tests/database/consultations_rls.test.sql
+
+      - name: Stop local stack
+        if: always()
+        run: supabase stop --no-backup || true
