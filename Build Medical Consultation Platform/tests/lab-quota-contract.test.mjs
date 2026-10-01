@@ -32,10 +32,7 @@ test("fresh databases receive only the minimal relational lab foundation", () =>
     /create table if not exists public\.daily_lab_usage/i,
   )
   assert.match(foundation, /references auth\.users\(id\)/i)
-  assert.doesNotMatch(
-    foundation,
-    /create table if not exists public\.users/i,
-  )
+  assert.doesNotMatch(foundation, /create table if not exists public\.users/i)
 })
 
 test("quota migration extends existing relational storage without creating a parallel store", () => {
