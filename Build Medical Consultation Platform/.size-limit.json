@@ -1,0 +1,7 @@
+[
+  {
+    "name": "Total built JavaScript",
+    "path": "dist/assets/*.js",
+    "limit": "400 kB"
+  }
+]
