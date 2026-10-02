@@ -233,6 +233,40 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["content_entries"]["Insert"]>
         Relationships: []
       }
+      tanzeel_space_entries: {
+        Row: {
+          id: string
+          kind: "book_review" | "article" | "achievement" | "course"
+          title: string
+          summary: string
+          body: string
+          rating: number | null
+          link_url: string
+          author_id: string
+          status: "draft" | "review" | "published" | "archived"
+          revision: number
+          published_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          kind: "book_review" | "article" | "achievement" | "course"
+          title: string
+          summary: string
+          body: string
+          rating?: number | null
+          link_url?: string
+          author_id: string
+          status?: "draft" | "review" | "published" | "archived"
+          revision?: number
+          published_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["tanzeel_space_entries"]["Insert"]>
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           user_id: string

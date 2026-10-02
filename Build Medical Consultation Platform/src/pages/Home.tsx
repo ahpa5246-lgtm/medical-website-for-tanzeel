@@ -135,6 +135,18 @@ export default function Home() {
               </span>
               منصة رعاية رقمية متكاملة
             </p>
+            <Link
+              to="/tanzeel"
+              className="home-tanzeel-teaser"
+              aria-label="تعرفي إلى د. تنزيل ومساحتها الشخصية"
+            >
+              <span className="home-tanzeel-avatar" aria-hidden="true" />
+              <span>
+                <strong>تعرّفي إلى د. تنزيل</strong>
+                <small>قراءاتها · مقالاتها · دوراتها</small>
+              </span>
+              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+            </Link>
             <h1
               aria-label="الرعاية تبدأ بخطوة أوضح"
               className="home-display mx-auto mt-6 max-w-3xl lg:mx-0"

@@ -22,6 +22,7 @@ const groups = [
 
     links: [
       ["/articles", "المقالات الصحية"],
+      ["/tanzeel", "مساحة تنزيل"],
 
       ["/courses", "الأكاديمية"],
       ["/library", "المكتبة"],

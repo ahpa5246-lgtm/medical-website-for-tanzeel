@@ -108,3 +108,57 @@ test("academy and library stay usable on a narrow phone", async ({ page }) => {
     expect(horizontalOverflow, `${route} overflows the viewport`).toBe(false)
   }
 })
+
+test("tanzeel space shows the supplied image and four clearly labeled sample sections", async ({
+  page,
+}) => {
+  await page.goto("/tanzeel")
+  await expect(page.getByRole("heading", { name: "مساحة تنزيل" })).toBeVisible()
+  await expect(page.getByRole("img", { name: /ملصق بصمة طبية/ })).toBeVisible()
+  for (const title of [
+    "من رفّ الكتب",
+    "مقالات بصوتها",
+    "محطات وإنجازات",
+    "دورات د. تنزيل",
+  ]) {
+    await expect(page.getByRole("heading", { name: title })).toBeVisible()
+  }
+  await expect(page.getByText("مثال تجريبي")).toHaveCount(4)
+})
+
+test("a new personal article is saved and published", async ({ page }) => {
+  await page.goto("/tanzeel/manage")
+  await page.getByRole("button", { name: "منشور جديد" }).click()
+  await page.getByLabel("القسم").selectOption("article")
+  await page.getByLabel("العنوان").fill("مقال جديد للدكتورة")
+  await page
+    .getByLabel("الملخص الظاهر في البطاقة")
+    .fill("هذا ملخص اختباري لمقال يظهر في مساحة تنزيل بعد نشره.")
+  await page
+    .getByLabel("النص الكامل")
+    .fill(
+      "هذا نص اختباري كامل يثبت أن المقال يمكن حفظه ونشره ثم قراءته في الصفحة العامة.",
+    )
+  await page.getByRole("button", { name: "حفظ المسودة" }).click()
+  await expect(
+    page.getByText("حُفظت المسودة. انشريها بعد مراجعتها لتظهر للقراء."),
+  ).toBeVisible()
+  await page.getByRole("button", { name: "نشر الآن" }).click()
+  await expect(page.getByText("نُشر المنشور في مساحة تنزيل.")).toBeVisible()
+  await page.goto("/tanzeel")
+  await expect(
+    page.getByRole("heading", { name: "مقال جديد للدكتورة" }),
+  ).toBeVisible()
+})
+
+test("tanzeel space and editor fit a narrow phone", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 })
+  for (const route of ["/tanzeel", "/tanzeel/manage"]) {
+    await page.goto(route)
+    await expect(page.locator("#main-content")).toBeVisible()
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth + 1,
+    )
+    expect(overflow, `${route} overflows`).toBe(false)
+  }
+})

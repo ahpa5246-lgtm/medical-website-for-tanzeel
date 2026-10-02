@@ -11,6 +11,8 @@ const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
 const ContentDetail = lazy(() => import("@/features/content/ContentDetail"))
 const ContentEditor = lazy(() => import("@/features/content/ContentEditor"))
 const ContentManage = lazy(() => import("@/features/content/ContentManage"))
+const TanzeelSpace = lazy(() => import("@/features/tanzeel/TanzeelSpace"))
+const TanzeelManage = lazy(() => import("@/features/tanzeel/TanzeelManage"))
 const Login = lazy(() => import("@/pages/auth/Login"))
 const Signup = lazy(() => import("@/pages/auth/Signup"))
 const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"))
@@ -94,6 +96,8 @@ export default function App() {
               <Layout>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/tanzeel" element={<TanzeelSpace />} />
+                  <Route path="/tanzeel/manage" element={<TanzeelManage />} />
 
                   {/* Consultations */}
                   <Route path="/consultations" element={<ConsultationList />} />

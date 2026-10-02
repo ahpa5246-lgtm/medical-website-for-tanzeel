@@ -1,11 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import "./styles/tokens.css";
 @import "./styles/foundation.css";
 
+/* The published Thmanyah site serves these WOFF2 files from its own CDN. */
+@font-face { font-family: "Thmanyah Sans"; src: url("https://framerusercontent.com/assets/Lh8puxCFq405qBv7dKpg9NsHZNk.woff2") format("woff2"); font-style: normal; font-weight: 300; font-display: swap; }
+@font-face { font-family: "Thmanyah Sans"; src: url("https://framerusercontent.com/assets/x6EBzvXf1Fi35XhsRoHxePDVo.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Thmanyah Sans"; src: url("https://framerusercontent.com/assets/oE98mOPE28KTzUeptOLRIaqW1I.woff2") format("woff2"); font-style: normal; font-weight: 500; font-display: swap; }
+@font-face { font-family: "Thmanyah Sans"; src: url("https://framerusercontent.com/assets/LZvgFRUsP7pGWYj3tKxMUrKuhSY.woff2") format("woff2"); font-style: normal; font-weight: 700; font-display: swap; }
+@font-face { font-family: "Thmanyah Sans"; src: url("https://framerusercontent.com/assets/ulQLGTktcl2Qq4AmD6RuVgELZKg.woff2") format("woff2"); font-style: normal; font-weight: 900; font-display: swap; }
 @theme {
-  --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Alexandria", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Thmanyah Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Thmanyah Sans", ui-sans-serif, system-ui, sans-serif;
   --color-ink: #102a43;
 
   --color-primary-50: #edfafa;
@@ -82,7 +87,7 @@
 }
 
 html {
-  font-family: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Thmanyah Sans", ui-sans-serif, system-ui, sans-serif;
   background-color: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
@@ -492,7 +497,7 @@ body {
 }
 
 h1, h2, h3, .font-display {
-  font-family: "Alexandria", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Thmanyah Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 .preview-notice {
@@ -571,6 +576,26 @@ h1, h2, h3, .font-display {
   background: #edfafa;
 }
 
+.tanzeel-nav-link {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: .35rem;
+  border: 1px solid #f3c8dd;
+  border-radius: 999px;
+  padding: .55rem .85rem;
+  color: #913d70;
+  background: #fff1f7;
+  font-size: .82rem;
+  font-weight: 800;
+  transition: background-color .18s ease, color .18s ease;
+}
+
+.tanzeel-nav-link:hover, .tanzeel-nav-link-active {
+  color: #fff;
+  background: #a7467d;
+}
+
 .mobile-menu {
   border-top: 1px solid #edf1f5;
   background: rgba(255, 255, 255, .985);
@@ -599,7 +624,7 @@ h1, h2, h3, .font-display {
 
 .hero-title {
   color: #102a43;
-  font-family: "Alexandria", "IBM Plex Sans Arabic", sans-serif;
+  font-family: "Thmanyah Sans", sans-serif;
   font-weight: 900;
   letter-spacing: -.045em;
 }
@@ -758,7 +783,14 @@ h1, h2, h3, .font-display {
 .home-eyebrow { display:inline-flex; align-items:center; gap:.65rem; color:var(--home-teal-dark); font-size:.78rem; font-weight:850; letter-spacing:.02em; }
 .home-eyebrow span { display:grid; place-items:center; width:2rem; height:2rem; border-radius:50%; color:white; background:var(--home-teal); box-shadow:0 8px 22px rgba(8,127,140,.2); }
 .home-eyebrow svg { width:1rem; }
-.home-display { font-family:"Alexandria","IBM Plex Sans Arabic",system-ui,sans-serif; font-size:clamp(3.2rem,7vw,6.7rem); font-weight:950; line-height:.98; letter-spacing:-.065em; color:var(--home-ink); }
+.home-tanzeel-teaser { display:flex; align-items:center; gap:.85rem; width:max-content; margin:1.1rem auto 0; max-width:100%; border:1px solid #eec8df; border-radius:999px; padding:.4rem .9rem .4rem .45rem; background:#fff5fa; color:#73325e; box-shadow:0 8px 25px #86356d12; text-align:right; }
+.home-tanzeel-teaser:hover { background:#ffeaf5; }
+.home-tanzeel-teaser strong, .home-tanzeel-teaser small { display:block; line-height:1.4; }
+.home-tanzeel-teaser strong { font-size:.95rem; font-weight:900; }
+.home-tanzeel-teaser small { color:#865e7a; font-size:.8rem; }
+.home-tanzeel-avatar { display:block; flex:0 0 3.8rem; width:3.8rem; height:3.8rem; border:2px solid #fff; border-radius:50%; background:#4d3172 url('/tanzeel/podcast-cover.png') 72% 62% / 320% auto no-repeat; }
+@media (min-width: 1024px) { .home-tanzeel-teaser { margin-right:0; margin-left:auto; } }
+.home-display { font-family:"Thmanyah Sans",system-ui,sans-serif; font-size:clamp(3.2rem,7vw,6.7rem); font-weight:950; line-height:.98; letter-spacing:-.065em; color:var(--home-ink); }
 .home-display span { display:block; color:var(--home-teal); }
 .home-search { position:relative; display:flex; align-items:center; max-width:41rem; min-height:4.7rem; padding:.55rem; border:1px solid rgba(8,127,140,.15); background:white; box-shadow:0 24px 60px rgba(8,47,53,.1); }
 .home-search-icon { position:absolute; right:1.4rem; width:1.2rem; color:var(--home-teal); }
@@ -772,7 +804,7 @@ h1, h2, h3, .font-display {
 .home-visual::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 20% 15%,rgba(45,201,190,.2),transparent 35%),linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px); background-size:auto,38px 38px,38px 38px; }
 .home-visual-copy { position:relative; z-index:1; max-width:23rem; }
 .home-visual-copy>span { color:#82ded7; font-size:.72rem; font-weight:800; }
-.home-visual-copy strong { display:block; margin-top:.8rem; font-family:"Alexandria",system-ui,sans-serif; font-size:2.2rem; line-height:1.35; }
+.home-visual-copy strong { display:block; margin-top:.8rem; font-family:"Thmanyah Sans",system-ui,sans-serif; font-size:2.2rem; line-height:1.35; }
 .home-visual-copy p { margin-top:1rem; color:#b7cacc; font-size:.85rem; line-height:1.9; }
 .home-vital { position:absolute; right:8%; left:5%; top:50%; }
 .home-vital path { stroke:#64d4cb; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:620; animation:vital-draw 3.4s ease-in-out infinite alternate; filter:drop-shadow(0 0 8px rgba(100,212,203,.36)); }
@@ -796,7 +828,7 @@ h1, h2, h3, .font-display {
 .home-section { padding-block:clamp(5rem,9vw,8rem); }
 .home-section-heading { display:grid; grid-template-columns:.55fr 1.3fr .55fr; align-items:end; gap:2rem; border-bottom:1px solid #dce9e8; padding-bottom:2.2rem; }
 .home-section-heading>p,.home-kicker { color:var(--home-coral); font-size:.72rem; font-weight:850; }
-.home-section-heading h2,.home-specialties h2 { font-family:"Alexandria",system-ui,sans-serif; font-size:clamp(2rem,4vw,3.5rem); font-weight:900; line-height:1.25; letter-spacing:-.04em; }
+.home-section-heading h2,.home-specialties h2 { font-family:"Thmanyah Sans",system-ui,sans-serif; font-size:clamp(2rem,4vw,3.5rem); font-weight:900; line-height:1.25; letter-spacing:-.04em; }
 .home-section-heading>a,.home-inline-link { display:inline-flex; align-items:center; justify-content:flex-end; gap:.3rem; color:var(--home-teal-dark); font-size:.78rem; font-weight:800; }
 .home-section-heading svg,.home-inline-link svg { width:1rem; }
 .home-capabilities { display:grid; grid-template-columns:repeat(3,1fr); }
@@ -804,7 +836,7 @@ h1, h2, h3, .font-display {
 .home-capability:first-child { border-inline-start:0; }
 .home-capability-number { position:absolute; top:1.8rem; left:2rem; color:#a8babc; font:700 .72rem/1 ui-monospace,monospace; }
 .home-capability>svg { width:2rem; height:2rem; color:var(--home-teal); }
-.home-capability h3 { margin-top:5rem; font:850 1.35rem/1.5 "Alexandria",system-ui,sans-serif; }
+.home-capability h3 { margin-top:5rem; font:850 1.35rem/1.5 "Thmanyah Sans",system-ui,sans-serif; }
 .home-capability p { margin-top:1rem; max-width:19rem; color:#62777a; font-size:.82rem; line-height:1.9; }
 .home-capability-link { position:absolute; right:2.4rem; bottom:2.2rem; display:inline-flex; align-items:center; gap:.35rem; font-size:.72rem; font-weight:800; }
 .home-capability-link svg { width:.9rem; transition:transform .2s; }
@@ -827,7 +859,7 @@ h1, h2, h3, .font-display {
 .home-cta-wrap { padding:5rem 1rem; background:white; }
 .home-cta { display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:3.5rem; color:white; background:var(--home-ink); }
 .home-cta p { color:#7ddbd3; font-size:.72rem; font-weight:800; }
-.home-cta h2 { margin-top:.65rem; font:900 clamp(1.8rem,3vw,2.8rem)/1.35 "Alexandria",system-ui,sans-serif; }
+.home-cta h2 { margin-top:.65rem; font:900 clamp(1.8rem,3vw,2.8rem)/1.35 "Thmanyah Sans",system-ui,sans-serif; }
 .home-cta div>span { display:block; margin-top:.7rem; color:#b5c9cb; font-size:.78rem; }
 .home-cta-primary,.home-cta-secondary { display:inline-flex; min-height:3.2rem; align-items:center; justify-content:center; gap:.45rem; padding:.8rem 1.2rem; font-size:.76rem; font-weight:850; }
 .home-cta-primary { color:var(--home-ink); background:white; }

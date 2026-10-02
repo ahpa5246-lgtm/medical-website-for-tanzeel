@@ -2,11 +2,13 @@ import { useEffect, useState } from "react"
 
 import { Link, useLocation } from "react-router-dom"
 
-import { Menu, X, Stethoscope, ShieldCheck } from "lucide-react"
+import { Menu, X, Stethoscope, ShieldCheck, Sparkles } from "lucide-react"
 
 import Button from "@/components/ui/Button"
 
 const NAV_LINKS = [
+  { to: "/", label: "الرئيسية" },
+  { to: "/tanzeel", label: "مساحة تنزيل" },
   { to: "/consultations", label: "استشاراتي" },
 
   { to: "/doctors", label: "الأطباء" },
@@ -25,7 +27,9 @@ export default function Header() {
   useEffect(() => setMobileOpen(false), [location.pathname])
 
   function isActive(path: string) {
-    return location.pathname.startsWith(path)
+    return path === "/"
+      ? location.pathname === "/"
+      : location.pathname.startsWith(path)
   }
 
   return (
@@ -54,23 +58,30 @@ export default function Header() {
           </Link>
 
           <nav
-            className="hidden items-center gap-1 lg:flex"
+            className="hidden items-center gap-1 xl:flex"
             aria-label="التنقل الرئيسي"
           >
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`nav-link ${
-                  isActive(link.to) ? "nav-link-active" : ""
-                }`}
+                className={
+                  link.to === "/tanzeel"
+                    ? `tanzeel-nav-link ${
+                        isActive(link.to) ? "tanzeel-nav-link-active" : ""
+                      }`
+                    : `nav-link ${isActive(link.to) ? "nav-link-active" : ""}`
+                }
               >
+                {link.to === "/tanzeel" && (
+                  <Sparkles aria-hidden="true" className="h-4 w-4" />
+                )}
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 xl:flex">
             <Link to="/auth/login">
               <Button variant="ghost" size="sm">
                 دخول
@@ -88,7 +99,7 @@ export default function Header() {
 
           <button
             type="button"
-            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 md:hidden"
+            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 xl:hidden"
             onClick={() => setMobileOpen((value) => !value)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
@@ -104,19 +115,26 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div id="mobile-menu" className="mobile-menu md:hidden">
+        <div id="mobile-menu" className="mobile-menu xl:hidden">
           <div className="mx-auto max-w-6xl space-y-1 px-4 py-4">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 className={`flex min-h-11 items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-bold ${
-                  isActive(link.to)
-                    ? "bg-primary-50 text-primary-800"
-                    : "text-slate-700"
+                  link.to === "/tanzeel"
+                    ? "bg-pink-50 text-[#963b71]"
+                    : isActive(link.to)
+                      ? "bg-primary-50 text-primary-800"
+                      : "text-slate-700"
                 }`}
               >
-                {link.label}
+                <span className="inline-flex items-center gap-2">
+                  {link.to === "/tanzeel" && (
+                    <Sparkles aria-hidden="true" className="h-4 w-4" />
+                  )}
+                  {link.label}
+                </span>
               </Link>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4">
