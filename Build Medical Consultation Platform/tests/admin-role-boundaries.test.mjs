@@ -6,13 +6,19 @@ test("administrator cannot create an owner or administrator through a crafted re
   for (const role of ["owner", "admin", "unknown", null]) {
     assert.ok(validateAccountChange("admin", "member", "set_role", role))
   }
-  assert.equal(validateAccountChange("admin", "member", "set_role", "editor"), null)
+  assert.equal(
+    validateAccountChange("admin", "member", "set_role", "editor"),
+    null,
+  )
 })
 
 test("owner creation is forbidden even to existing owners; owner accounts are protected", () => {
   assert.ok(validateAccountChange("owner", "member", "set_role", "owner"))
   assert.ok(validateAccountChange("owner", "owner", "disable"))
-  assert.equal(validateAccountChange("owner", "member", "set_role", "admin"), null)
+  assert.equal(
+    validateAccountChange("owner", "member", "set_role", "admin"),
+    null,
+  )
 })
 
 test("administrators cannot disable other administrators and members cannot manage accounts", () => {
