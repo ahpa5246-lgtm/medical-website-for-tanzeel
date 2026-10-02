@@ -1,32 +1,38 @@
 import { lazy, Suspense, type ReactNode } from "react"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Layout from "@/components/layout/Layout"
 import Home from "@/pages/Home"
-import Login from "@/pages/auth/Login"
-import Signup from "@/pages/auth/Signup"
-import ForgotPassword from "@/pages/auth/ForgotPassword"
-import ConsultationList from "@/pages/consultations/List"
-import SubmitConsultation from "@/pages/consultations/Submit"
-import ConsultationThread from "@/pages/consultations/Thread"
-import DoctorDirectory from "@/pages/doctors/Directory"
-import DoctorProfile from "@/pages/doctors/Profile"
-import ArticleList from "@/pages/articles/List"
-import ArticleDetail from "@/pages/articles/Detail"
-import ArticleEditor from "@/pages/articles/Editor"
-import CourseList from "@/pages/courses/List"
-import LibraryList from "@/pages/library/List"
-import MedicalDisclaimer from "@/pages/legal/Disclaimer"
-import Terms from "@/pages/legal/Terms"
-import Privacy from "@/pages/legal/Privacy"
-import VerificationApplication from "@/pages/verification/Application"
 import PreviewNotice from "@/components/PreviewNotice"
 import { LoadingState } from "@/components/system/AsyncState"
 import RouteAnnouncer from "@/components/system/RouteAnnouncer"
 import RequireRole from "@/features/auth/RequireRole"
+import ConsultationGate from "@/features/consultations/ConsultationGate"
 
-const LabHub = lazy(() => import("@/pages/labs/LabHub"))
-const Training = lazy(() => import("@/pages/training/Training"))
 const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
+const ContentDetail = lazy(() => import("@/features/content/ContentDetail"))
+const ContentEditor = lazy(() => import("@/features/content/ContentEditor"))
+const ContentManage = lazy(() => import("@/features/content/ContentManage"))
+const TanzeelSpace = lazy(() => import("@/features/tanzeel/TanzeelSpace"))
+const TanzeelManage = lazy(() => import("@/features/tanzeel/TanzeelManage"))
+const Login = lazy(() => import("@/pages/auth/Login"))
+const Signup = lazy(() => import("@/pages/auth/Signup"))
+const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"))
+const ConsultationList = lazy(() => import("@/pages/consultations/List"))
+const SubmitConsultation = lazy(() => import("@/pages/consultations/Submit"))
+const ConsultationThread = lazy(() => import("@/pages/consultations/Thread"))
+const DoctorDirectory = lazy(() => import("@/pages/doctors/Directory"))
+const DoctorProfile = lazy(() => import("@/pages/doctors/Profile"))
+const ArticleList = lazy(() => import("@/pages/articles/List"))
+const ArticleDetail = lazy(() => import("@/pages/articles/Detail"))
+const ArticleEditor = lazy(() => import("@/pages/articles/Editor"))
+const CourseList = lazy(() => import("@/pages/courses/List"))
+const LibraryList = lazy(() => import("@/pages/library/List"))
+const MedicalDisclaimer = lazy(() => import("@/pages/legal/Disclaimer"))
+const Terms = lazy(() => import("@/pages/legal/Terms"))
+const Privacy = lazy(() => import("@/pages/legal/Privacy"))
+const VerificationApplication = lazy(
+  () => import("@/pages/verification/Application"),
+)
 
 interface LazyRouteProps {
   children: ReactNode
@@ -66,96 +72,127 @@ export default function App() {
   return (
     <BrowserRouter>
       <PreviewNotice />
-      <Routes>
-        {/* Auth routes — no layout header/footer */}
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<Signup />} />
-        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+      <Suspense fallback={<LoadingState label="جارٍ تحميل الصفحة…" />}>
+        <Routes>
+          {/* Auth routes — no layout header/footer */}
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/signup" element={<Signup />} />
+          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
 
-        <Route
-          path="/admin/*"
-          element={
-            <RequireRole allow={["owner", "admin", "editor"]}>
-              <LazyRoute label="جارٍ تحميل مساحة الإدارة…">
-                <AdminLayout />
-              </LazyRoute>
-            </RequireRole>
-          }
-        />
+          <Route
+            path="/admin/*"
+            element={
+              <RequireRole allow={["owner", "admin", "editor"]}>
+                <LazyRoute label="جارٍ تحميل مساحة الإدارة…">
+                  <AdminLayout />
+                </LazyRoute>
+              </RequireRole>
+            }
+          />
 
-        {/* Main layout routes */}
-        <Route
-          path="/*"
-          element={
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Home />} />
+          {/* Main layout routes */}
+          <Route
+            path="/*"
+            element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/tanzeel" element={<TanzeelSpace />} />
+                  <Route path="/tanzeel/manage" element={<TanzeelManage />} />
 
-                {/* Consultations */}
-                <Route path="/consultations" element={<ConsultationList />} />
-                <Route
-                  path="/consultations/new"
-                  element={<SubmitConsultation />}
-                />
-                <Route
-                  path="/consultations/:id"
-                  element={<ConsultationThread />}
-                />
+                  {/* Consultations */}
+                  <Route
+                    path="/consultations"
+                    element={
+                      <ConsultationGate>
+                        <ConsultationList />
+                      </ConsultationGate>
+                    }
+                  />
+                  <Route
+                    path="/consultations/new"
+                    element={
+                      <ConsultationGate>
+                        <SubmitConsultation />
+                      </ConsultationGate>
+                    }
+                  />
+                  <Route
+                    path="/consultations/:id"
+                    element={
+                      <ConsultationGate>
+                        <ConsultationThread />
+                      </ConsultationGate>
+                    }
+                  />
 
-                {/* Doctors */}
-                <Route path="/doctors" element={<DoctorDirectory />} />
-                <Route path="/doctors/:id" element={<DoctorProfile />} />
+                  {/* Doctors */}
+                  <Route path="/doctors" element={<DoctorDirectory />} />
+                  <Route path="/doctors/:id" element={<DoctorProfile />} />
 
-                {/* Articles, courses & library */}
-                <Route path="/articles" element={<ArticleList />} />
-                <Route path="/articles/:id" element={<ArticleDetail />} />
-                <Route path="/articles/new" element={<ArticleEditor />} />
-                <Route path="/courses" element={<CourseList />} />
-                <Route
-                  path="/training"
-                  element={
-                    <LazyRoute label="جارٍ تحميل مسار التدريب…">
-                      <Training />
-                    </LazyRoute>
-                  }
-                />
-                <Route
-                  path="/labs"
-                  element={
-                    <LazyRoute label="جارٍ تحميل مختبر التعلم…">
-                      <LabHub />
-                    </LazyRoute>
-                  }
-                />
-                <Route
-                  path="/labs/:moduleId"
-                  element={
-                    <LazyRoute label="جارٍ تحميل الوحدة التدريبية…">
-                      <LabHub />
-                    </LazyRoute>
-                  }
-                />
-                <Route path="/library" element={<LibraryList />} />
+                  {/* Articles, courses & library */}
+                  <Route path="/articles" element={<ArticleList />} />
+                  <Route path="/articles/:id" element={<ArticleDetail />} />
+                  <Route path="/articles/new" element={<ArticleEditor />} />
+                  <Route path="/courses" element={<CourseList />} />
+                  <Route
+                    path="/courses/manage"
+                    element={<ContentManage kind="course" />}
+                  />
+                  <Route
+                    path="/courses/new"
+                    element={<ContentEditor kind="course" />}
+                  />
+                  <Route
+                    path="/courses/:id/edit"
+                    element={<ContentEditor kind="course" />}
+                  />
+                  <Route
+                    path="/courses/:id"
+                    element={<ContentDetail kind="course" />}
+                  />
+                  <Route
+                    path="/training"
+                    element={<Navigate to="/courses" replace />}
+                  />
+                  <Route path="/library" element={<LibraryList />} />
+                  <Route
+                    path="/library/manage"
+                    element={<ContentManage kind="library" />}
+                  />
+                  <Route
+                    path="/library/new"
+                    element={<ContentEditor kind="library" />}
+                  />
+                  <Route
+                    path="/library/:id/edit"
+                    element={<ContentEditor kind="library" />}
+                  />
+                  <Route
+                    path="/library/:id"
+                    element={<ContentDetail kind="library" />}
+                  />
 
-                {/* Legal */}
-                <Route
-                  path="/legal/disclaimer"
-                  element={<MedicalDisclaimer />}
-                />
-                <Route path="/legal/terms" element={<Terms />} />
-                <Route path="/legal/privacy" element={<Privacy />} />
-                <Route
-                  path="/verification/apply"
-                  element={<VerificationApplication />}
-                />
+                  {/* Legal */}
+                  <Route
+                    path="/legal/disclaimer"
+                    element={<MedicalDisclaimer />}
+                  />
+                  <Route path="/legal/terms" element={<Terms />} />
+                  <Route path="/legal/privacy" element={<Privacy />} />
+                  <Route
+                    path="/verification/apply"
+                    element={<VerificationApplication />}
+                  />
 
-                {/* Catch-all */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Layout>
-          }
-        />
-      </Routes>
+                  {/* Catch-all */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Layout>
+            }
+          />
+        </Routes>
+      </Suspense>
       <RouteAnnouncer />
     </BrowserRouter>
   )

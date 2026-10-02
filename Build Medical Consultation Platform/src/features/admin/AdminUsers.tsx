@@ -1,39 +1,58 @@
 import { useEffect, useState, type FormEvent } from "react"
+
 import Button from "@/components/ui/Button"
+
 import { ErrorState, LoadingState } from "@/components/system/AsyncState"
+
 import { useAuth } from "@/features/auth/AuthProvider"
+
 import {
   inviteAdminUser,
   listAdminUsers,
   updateAdminUser,
 } from "./userAdminRepository"
+import ContentApprovals from "./ContentApprovals"
 
 type Users = Awaited<ReturnType<typeof listAdminUsers>>
 
 export default function AdminUsers() {
   const { profile } = useAuth()
+
   const [users, setUsers] = useState<Users | null>(null)
+
   const [email, setEmail] = useState("")
+
   const [role, setRole] = useState<"admin" | "editor">("editor")
+
   const [message, setMessage] = useState("")
+
   const [busy, setBusy] = useState(false)
+
   const isOwner = profile?.role === "owner"
 
   const load = () =>
     listAdminUsers()
+
       .then(setUsers)
+
       .catch(() => setMessage("تعذر تحميل المستخدمين."))
+
   useEffect(() => {
     void load()
   }, [])
 
   const invite = async (event: FormEvent) => {
     event.preventDefault()
+
     setBusy(true)
+
     setMessage("")
+
     try {
       const result = await inviteAdminUser(email, role)
+
       setMessage(result.message)
+
       setEmail("")
     } catch {
       setMessage("تعذر إرسال الدعوة. تحقق من البريد والصلاحية ثم حاول مجددًا.")
@@ -43,7 +62,9 @@ export default function AdminUsers() {
   }
 
   if (!users && !message) return <LoadingState label="جارٍ تحميل المستخدمين…" />
+
   if (!users) return <ErrorState description={message} onRetry={load} />
+
   return (
     <div>
       <h1 className="text-3xl font-black text-slate-900">
@@ -108,11 +129,14 @@ export default function AdminUsers() {
                       variant={user.status === "active" ? "danger" : "outline"}
                       onClick={async () => {
                         setBusy(true)
+
                         try {
                           await updateAdminUser(
                             user.id,
+
                             user.status === "active" ? "disable" : "enable",
                           )
+
                           await load()
                         } catch {
                           setMessage("تعذر تعديل الحساب.")
@@ -130,6 +154,7 @@ export default function AdminUsers() {
           </tbody>
         </table>
       </div>
+      {isOwner && <ContentApprovals />}
     </div>
   )
 }

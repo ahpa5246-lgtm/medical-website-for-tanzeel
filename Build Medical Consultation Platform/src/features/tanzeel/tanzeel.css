@@ -1,0 +1,55 @@
+.tanzeel-page { --rose: #ef8fba; --plum: #40245f; --ink: #281c37; background: #fffafc; color: var(--ink); min-height: 100vh; }
+.tanzeel-shell { width: min(100% - 2.5rem, 1180px); margin-inline: auto; }
+.tanzeel-hero { position: relative; overflow: hidden; background: radial-gradient(circle at 16% 16%, #744b9d 0, transparent 27rem), linear-gradient(125deg, #2e1a50 0%, #4d2f78 54%, #32204e 100%); color: #fff; }
+.tanzeel-hero::after { content: ""; position: absolute; inset: auto -8% -10rem auto; width: 42rem; aspect-ratio: 1; border: 1px solid #ffffff18; border-radius: 50%; pointer-events: none; }
+.tanzeel-hero-orbit { position: absolute; width: 28rem; aspect-ratio: 1; border: 1px solid #ffffff14; border-radius: 50%; inset: -13rem auto auto -6rem; }
+.tanzeel-hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: clamp(2rem, 6vw, 5rem); min-height: 36rem; padding-block: clamp(3rem, 7vw, 6rem); }
+.tanzeel-hero-copy { max-width: 35rem; }
+.tanzeel-kicker { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid #f2b8d972; background: #ffffff15; border-radius: 999px; padding: .55rem .9rem; color: #ffe0ee; font-weight: 800; font-size: .82rem; }
+.tanzeel-kicker svg { width: 1rem; height: 1rem; }
+.tanzeel-overline { margin-top: 2.5rem; color: #efb4d5; font-size: .86rem; font-weight: 800; letter-spacing: .04em; }
+.tanzeel-hero h1 { margin: .45rem 0 0; font-size: clamp(3.3rem, 7vw, 6.4rem); line-height: 1.11; letter-spacing: -.055em; font-weight: 900; }
+.tanzeel-hero h1 em { font-style: normal; color: #f491bf; }
+.tanzeel-hero-lede { max-width: 34rem; margin-top: 1.5rem; color: #f3e8fb; font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 2; }
+.tanzeel-hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.2rem; }
+.tanzeel-primary-action, .tanzeel-secondary-action { display: inline-flex; align-items: center; justify-content: center; gap: .7rem; min-height: 3rem; border-radius: 999px; padding: .65rem 1.35rem; font-size: .92rem; font-weight: 800; transition: transform .18s ease, background-color .18s ease; }
+.tanzeel-primary-action { background: var(--rose); color: #311945; }
+.tanzeel-primary-action:hover { background: #ffc0dc; transform: translateY(-2px); }
+.tanzeel-primary-action svg { width: 1rem; height: 1rem; }
+.tanzeel-secondary-action { border: 1px solid #ffffff90; color: white; }
+.tanzeel-secondary-action:hover { background: #ffffff20; }
+.tanzeel-prototype-note { margin-top: 1.7rem; max-width: 34rem; color: #e4d8f0; font-size: .85rem; line-height: 1.8; }
+.tanzeel-portrait-frame { position: relative; width: min(100%, 29rem); justify-self: center; padding: .55rem; border: 1px solid #ffc2e46b; background: #ffffff12; border-radius: 2.2rem; box-shadow: 0 28px 75px #17092375; transform: rotate(-2deg); }
+.tanzeel-portrait-frame img { display: block; width: 100%; height: auto; border-radius: 1.7rem; }
+.tanzeel-portrait-frame figcaption { position: absolute; bottom: 1.5rem; left: 1.5rem; right: 1.5rem; width: fit-content; max-width: calc(100% - 3rem); border-radius: 999px; background: #241337da; padding: .45rem .75rem; color: #fff; font-size: .72rem; line-height: 1.5; }
+.tanzeel-sections { padding-block: clamp(3rem, 7vw, 6rem) 6rem; }
+.tanzeel-intro { max-width: 43rem; margin-bottom: 4rem; }
+.tanzeel-intro > span { color: #a53f77; font-size: .8rem; font-weight: 900; }
+.tanzeel-intro h2 { margin-top: .6rem; color: #301e43; font-size: clamp(2.3rem, 4.5vw, 4rem); line-height: 1.2; font-weight: 900; }
+.tanzeel-intro p { margin-top: 1rem; color: #62556d; line-height: 1.9; }
+.tanzeel-section { border-top: 1px solid #eadde9; padding-block: 2.6rem 3rem; }
+.tanzeel-section-heading { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 1.7rem; }
+.tanzeel-section-icon { display: grid; flex: 0 0 3.4rem; width: 3.4rem; height: 3.4rem; place-items: center; border-radius: 1.1rem; background: #f9e5ef; color: #a03d75; }
+.tanzeel-section-icon svg { width: 1.5rem; height: 1.5rem; }
+.tanzeel-section-heading p { color: #a8497c; font-size: .78rem; font-weight: 900; }
+.tanzeel-section-heading h2 { margin-top: .1rem; color: #301e43; font-size: clamp(1.55rem, 2.8vw, 2.15rem); font-weight: 900; }
+.tanzeel-section-heading span:not(.tanzeel-section-icon) { display: block; margin-top: .35rem; color: #75667c; font-size: .91rem; line-height: 1.8; }
+.tanzeel-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; }
+.tanzeel-card { min-width: 0; border: 1px solid #eadce7; border-radius: 1.5rem; background: #fff; padding: clamp(1.2rem, 2.5vw, 1.7rem); box-shadow: 0 12px 30px #4c255c0b; }
+.tanzeel-card-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.tanzeel-card-mark { display: grid; width: 2rem; height: 2rem; place-items: center; border-radius: .65rem; background: #fbeaf2; color: #a54379; font-size: 1.3rem; }
+.tanzeel-demo-label { color: #8a4974; font-size: .72rem; font-weight: 800; }
+.tanzeel-card h3 { margin-top: 1.5rem; color: #321e43; font-size: 1.24rem; line-height: 1.55; font-weight: 900; }
+.tanzeel-card > p { margin-top: .6rem; color: #63566c; line-height: 1.85; font-size: .92rem; }
+.tanzeel-rating { display: flex; gap: .15rem; margin-top: 1rem; color: #d3c5d4; }
+.tanzeel-rating svg { width: 1.05rem; height: 1.05rem; }
+.tanzeel-rating .filled { fill: #e8a64b; stroke: #e8a64b; }
+.tanzeel-card-details { margin-top: 1.15rem; border-top: 1px solid #f0e5ed; padding-top: 1rem; }
+.tanzeel-card-details summary { width: fit-content; color: #873562; cursor: pointer; font-size: .86rem; font-weight: 800; }
+.tanzeel-card-details p { white-space: pre-wrap; margin-top: .85rem; color: #50435a; font-size: .9rem; line-height: 1.9; }
+.tanzeel-card-link { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.75rem; margin-top: .8rem; color: #873562; font-size: .88rem; font-weight: 800; }
+.tanzeel-card-link:hover { text-decoration: underline; }
+.tanzeel-card-link svg { width: 1rem; height: 1rem; }
+.tanzeel-empty { border: 1px dashed #d8bfd0; border-radius: 1.2rem; padding: 2rem; background: #fff; color: #75677a; }
+@media (max-width: 760px) { .tanzeel-hero-grid { grid-template-columns: 1fr; padding-block: 3rem 4rem; gap: 2.5rem; } .tanzeel-hero-copy { max-width: none; } .tanzeel-portrait-frame { width: min(100%, 24rem); transform: none; } .tanzeel-overline { margin-top: 1.7rem; } .tanzeel-hero h1 { font-size: clamp(3rem, 12vw, 4.7rem); } .tanzeel-intro { margin-bottom: 2.8rem; } }
+@media (prefers-reduced-motion: reduce) { .tanzeel-primary-action, .tanzeel-secondary-action { transition: none; } }

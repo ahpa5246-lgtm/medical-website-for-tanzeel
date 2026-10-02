@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="رسم توضيحي لطبيب">
+  <rect width="640" height="480" fill="#e4f3f2"/>
+  <circle cx="320" cy="194" r="72" fill="#8cc9c5"/>
+  <path d="M150 480c9-111 75-180 170-180s161 69 170 180" fill="#60aaa6"/>
+  <path d="M280 307l40 75 40-75" fill="#fff" opacity=".9"/>
+</svg>

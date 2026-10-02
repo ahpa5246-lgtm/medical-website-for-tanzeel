@@ -8,7 +8,10 @@ const read = (path) =>
 test("preview status remains backend-aware", () => {
   const app = read("src/App.tsx")
   const notice = read("src/components/PreviewNotice.tsx")
-  assert.match(app, /<BrowserRouter>\s*<PreviewNotice \/>\s*<Routes>/)
+  assert.match(
+    app,
+    /<BrowserRouter>\s*<PreviewNotice \/>\s*<Suspense[\s\S]*?<Routes>/,
+  )
   assert.match(notice, /isSupabaseConfigured/)
 })
 

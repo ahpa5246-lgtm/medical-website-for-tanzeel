@@ -1,4 +1,5 @@
 import { NavLink, Route, Routes } from "react-router-dom"
+
 import {
   LayoutDashboard,
   LogOut,
@@ -6,22 +7,34 @@ import {
   Stethoscope,
   Users,
 } from "lucide-react"
+
 import { useAuth } from "@/features/auth/AuthProvider"
+
 import RequireRole from "@/features/auth/RequireRole"
+
 import AdminDashboard from "./AdminDashboard"
+
 import AdminDoctors from "./AdminDoctors"
+
 import DoctorEditor from "./DoctorEditor"
+
 import AdminUsers from "./AdminUsers"
+
 import AdminConsultations from "./AdminConsultations"
+import ConsultationGate from "@/features/consultations/ConsultationGate"
 
 export default function AdminLayout() {
   const { profile, signOut } = useAuth()
+
   const links = [
     ["/admin", "لوحة التحكم", LayoutDashboard] as const,
+
     ["/admin/doctors", "إدارة الأطباء", Stethoscope] as const,
+
     ...(profile?.role === "owner" || profile?.role === "admin"
       ? [["/admin/consultations", "الاستشارات", MessageSquareText] as const]
       : []),
+
     ["/admin/users", "المستخدمون", Users] as const,
   ]
 
@@ -76,7 +89,9 @@ export default function AdminLayout() {
             path="consultations"
             element={
               <RequireRole allow={["owner", "admin"]}>
-                <AdminConsultations />
+                <ConsultationGate>
+                  <AdminConsultations />
+                </ConsultationGate>
               </RequireRole>
             }
           />

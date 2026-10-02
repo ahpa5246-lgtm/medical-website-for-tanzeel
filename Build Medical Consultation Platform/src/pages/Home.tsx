@@ -1,13 +1,12 @@
 import { useState, type ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
+
 import {
   ArrowLeft,
   BookOpenText,
   Brain,
   CheckCircle2,
   ChevronLeft,
-  CirclePause,
-  CirclePlay,
   GraduationCap,
   HeartPulse,
   LockKeyhole,
@@ -18,70 +17,114 @@ import {
   Sparkles,
   Stethoscope,
 } from "lucide-react"
+
 import Button from "@/components/ui/Button"
+
 import { SPECIALTIES } from "@/data/specialties"
+import { consultationsEnabled } from "@/lib/featureFlags.mjs"
+
+const medicalServiceEnabled = consultationsEnabled(import.meta.env)
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
+
 const specialtyIcons: ReactNode[] = [
   <Stethoscope aria-hidden="true" />,
+
   <Microscope aria-hidden="true" />,
+
   <Brain aria-hidden="true" />,
+
   <HeartPulse aria-hidden="true" />,
+
   <MessageCircle aria-hidden="true" />,
+
   <Sparkles aria-hidden="true" />,
 ]
 
 const CARE_STEPS = [
   { icon: Search, label: "اختيار التخصص", hint: "وصول أسرع للمسار المناسب" },
+
   {
     icon: MessageCircle,
-    label: "إرسال الاستشارة",
-    hint: "تفاصيل منظّمة وواضحة",
+
+    label: medicalServiceEnabled ? "إرسال الاستشارة" : "الاستشارات قيد التطوير",
+
+    hint: medicalServiceEnabled
+      ? "تفاصيل منظّمة وواضحة"
+      : "نجهّزها مع أطباء موثوقين",
   },
+
   {
     icon: ShieldCheck,
+
     label: "مراجعة المختص",
+
     hint: "إدارة الاعتماد من المنصة",
   },
+
   {
     icon: BookOpenText,
+
     label: "محتوى صحي",
+
     hint: "مكتبة قابلة للتحرير والنشر",
   },
-  { icon: GraduationCap, label: "تدريب تفاعلي", hint: "مراحل ومستويات عملية" },
+
+  {
+    icon: GraduationCap,
+    label: "الأكاديمية",
+    hint: "دروس قابلة للتحرير والنشر",
+  },
 ]
 
 const CAPABILITIES = [
   {
     icon: MessageCircle,
+
     number: "01",
-    title: "استشارة مرتّبة",
-    text: "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة.",
+
+    title: medicalServiceEnabled ? "استشارة مرتّبة" : "استشارات قيد التطوير",
+
+    text: medicalServiceEnabled
+      ? "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة."
+      : "نجهّز قسم الاستشارات قبل إتاحته بالتعاون مع أطباء موثوقين.",
+
     to: "/consultations/new",
   },
+
   {
     icon: Stethoscope,
+
     number: "02",
+
     title: "دليل الأطباء",
+
     text: "ملفات يمكن إدارتها ونشرها بعد استكمال بيانات واعتماد كل طبيب.",
+
     to: "/doctors",
   },
+
   {
     icon: GraduationCap,
+
     number: "03",
+
     title: "أكاديمية تدريب",
+
     text: "مسارات تعليمية متدرّجة بتجربة بصرية تفاعلية ونتائج قابلة للمتابعة.",
-    to: "/training",
+
+    to: "/courses",
   },
 ]
 
 export default function Home() {
   const [query, setQuery] = useState("")
-  const [isMotionPaused, setIsMotionPaused] = useState(false)
+
   const navigate = useNavigate()
 
   function startConsultation(event: React.FormEvent) {
     event.preventDefault()
+
     navigate("/consultations/new", { state: { initialQuestion: query.trim() } })
   }
 
@@ -99,6 +142,18 @@ export default function Home() {
               </span>
               منصة رعاية رقمية متكاملة
             </p>
+            <Link
+              to="/tanzeel"
+              className="home-tanzeel-teaser"
+              aria-label="تعرفي إلى د. تنزيل ومساحتها الشخصية"
+            >
+              <span className="home-tanzeel-avatar" aria-hidden="true" />
+              <span>
+                <strong>تعرّفي إلى د. تنزيل</strong>
+                <small>قراءاتها · مقالاتها · دوراتها</small>
+              </span>
+              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+            </Link>
             <h1
               aria-label="الرعاية تبدأ بخطوة أوضح"
               className="home-display mx-auto mt-6 max-w-3xl lg:mx-0"
@@ -111,25 +166,43 @@ export default function Home() {
               التفاعلي؛ صُمّم ليجعل الوصول إلى الخدمة أبسط وأكثر تنظيمًا.
             </p>
 
-            <form
-              onSubmit={startConsultation}
-              className="home-search mx-auto mt-9 lg:mx-0"
-            >
-              <label htmlFor="home-question" className="sr-only">
-                ما الخدمة التي تبحث عنها؟
-              </label>
-              <Search aria-hidden="true" className="home-search-icon" />
-              <input
-                id="home-question"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="اكتب سؤالك أو ابحث عن تخصص"
-              />
-              <Button type="submit" size="lg" className="home-search-button">
-                ابدأ الآن{" "}
-                <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
-              </Button>
-            </form>
+            {medicalServiceEnabled ? (
+              <form
+                onSubmit={startConsultation}
+                className="home-search mx-auto mt-9 lg:mx-0"
+              >
+                <label htmlFor="home-question" className="sr-only">
+                  ما الخدمة التي تبحث عنها؟
+                </label>
+                <Search aria-hidden="true" className="home-search-icon" />
+                <input
+                  id="home-question"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="اكتب سؤالك أو ابحث عن تخصص"
+                />
+                <Button type="submit" size="lg" className="home-search-button">
+                  ابدأ الآن{" "}
+                  <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
+                </Button>
+              </form>
+            ) : (
+              <div className="home-deferred-note">
+                <p>الاستشارات الطبية قيد التطوير</p>
+                <span>
+                  حتى نجهّز الخدمة مع أطباء موثوقين، اكتشفي الكورسات والملخصات
+                  الطبية.
+                </span>
+                <div className="deferred-actions">
+                  <Link to="/courses" className="deferred-primary">
+                    استكشف الأكاديمية
+                  </Link>
+                  <Link to="/library" className="deferred-secondary">
+                    تصفح المكتبة
+                  </Link>
+                </div>
+              </div>
+            )}
 
             <div className="home-assurances" aria-label="مزايا المنصة">
               <span>
@@ -169,25 +242,8 @@ export default function Home() {
 
         <div className="care-flight-shell">
           <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-            <button
-              type="button"
-              className="care-flight-toggle"
-              onClick={() => setIsMotionPaused((value) => !value)}
-              aria-pressed={isMotionPaused}
-              aria-label={isMotionPaused ? "تشغيل الحركة" : "إيقاف الحركة"}
-            >
-              {isMotionPaused ? (
-                <CirclePlay aria-hidden="true" />
-              ) : (
-                <CirclePause aria-hidden="true" />
-              )}
-            </button>
             <div className="care-flight-window">
-              <div
-                className={`care-flight-track${
-                  isMotionPaused ? " is-paused" : ""
-                }`}
-              >
+              <div className="care-flight-track">
                 {[...CARE_STEPS, ...CARE_STEPS].map(
                   ({ icon: Icon, label, hint }, index) => (
                     <div
@@ -276,9 +332,12 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Link to="/consultations/new" className="home-cta-primary">
-              ابدأ استشارة <ArrowLeft aria-hidden="true" />
+              {medicalServiceEnabled
+                ? "ابدأ استشارة"
+                : "الاستشارات قيد التطوير"}{" "}
+              <ArrowLeft aria-hidden="true" />
             </Link>
-            <Link to="/training" className="home-cta-secondary">
+            <Link to="/courses" className="home-cta-secondary">
               استكشف التدريب
             </Link>
           </div>

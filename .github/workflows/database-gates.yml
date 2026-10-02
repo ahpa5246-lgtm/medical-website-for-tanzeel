@@ -39,6 +39,12 @@ jobs:
       - name: Run consultation RLS pgTAP tests
         run: supabase test db supabase/tests/database/consultations_rls.test.sql
 
+      - name: Run content publishing RLS pgTAP tests
+        run: supabase test db supabase/tests/database/content_rls.test.sql
+
+      - name: Run personal space RLS pgTAP tests
+        run: supabase test db supabase/tests/database/tanzeel_space_rls.test.sql
+
       - name: Stop local stack
         if: always()
         run: supabase stop --no-backup || true

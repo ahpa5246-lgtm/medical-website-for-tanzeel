@@ -1,0 +1,79 @@
+/* Zain is bundled under the SIL Open Font License. Thmanyah is served
+   from the publisher's CDN; its display family matches the supplied reference. */
+@font-face { font-family: "Zain"; src: url("/fonts/zain/Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Zain"; src: url("/fonts/zain/Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Zain"; src: url("/fonts/zain/ExtraBold.woff2") format("woff2"); font-weight: 800 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Thmanyah Display"; src: url("https://framerusercontent.com/assets/s1q2LvVNWBbqzMxMBxsexY73tE.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Thmanyah Display"; src: url("https://framerusercontent.com/assets/AAY5hsAWwWmVC7qlScZUGjzCgE8.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Thmanyah Display"; src: url("https://framerusercontent.com/assets/a9r2dKNoQcqFiTkwxTUnXgAfjws.woff2") format("woff2"); font-weight: 800 950; font-style: normal; font-display: swap; }
+
+:root { --font-sans: "Zain", system-ui, sans-serif; --font-display: "Thmanyah Display", "Zain", serif; }
+html, body { font-family: var(--font-sans); }
+body { font-size: 1.125rem; line-height: 1.7; }
+.page-enter { animation: none; }
+button, input, select, textarea { font-family: inherit; }
+#root :is(h1, h2, h3, h4, h5, h6, .font-display, .home-visual-copy strong) { font-family: var(--font-display); letter-spacing: 0; }
+#root :is(h1, h2, h3) { line-height: 1.45; }
+.site-header { border-bottom: 1px solid #dce5e5; box-shadow: none; }
+.brand-mark { box-shadow: none; border-radius: 50%; }
+.nav-link, .tanzeel-nav-link { font-size: 1rem; gap: .4rem; }
+.nav-link { padding-inline: .7rem; }
+.development-badge { display: inline-block; white-space: nowrap; font-family: "Zain", sans-serif; font-size: .75rem; font-weight: 700; line-height: 1.45; padding: .1rem .4rem; border-radius: 4px; background: #f1ece1; color: #675022; }
+.home-premium { --home-ink: #163c42; --home-teal: #287c7e; --home-coral: #c95f91; }
+.home-hero { background: #f4f8f7; }
+.home-orbit { display: none; }
+.home-eyebrow { font-size: 1rem; letter-spacing: 0; }
+#root .home-display { font-size: clamp(3rem, 5.5vw, 5.5rem); line-height: 1.35; letter-spacing: 0; font-weight: 900; }
+.home-display span { color: inherit; }
+.home-tanzeel-teaser { border-radius: 14px; box-shadow: none; background: #fff4f9; }
+.home-tanzeel-teaser strong { font-size: 1.1rem; }
+.home-tanzeel-teaser small { font-size: 1rem; }
+.home-visual { clip-path: none; border-radius: 16px; box-shadow: none; min-height: 34rem; background: #163c42; }
+.home-visual::before { background: none; }
+.home-visual-copy>span { font-size: 1rem; }
+.home-visual-copy p { font-size: 1.125rem; }
+.home-visual-seal { border: 0; background: #244d53; backdrop-filter: none; border-radius: 8px; }
+.home-visual-seal :is(small, strong) { font-size: 1rem; }
+.home-vital path { animation: none; stroke-dasharray: none; filter: none; }
+.home-assurances { font-size: 1rem; }
+.care-flight-shell { background: #fff; backdrop-filter: none; }
+.care-flight-item strong { font-size: 1.2rem; }
+.care-flight-item small { font-size: 1rem; }
+.care-flight-item>span { transform: none; background: transparent; }
+.home-section-heading { grid-template-columns: 1fr auto; }
+.home-section-heading>p, .home-kicker { display: none; }
+.home-section-heading>a, .home-inline-link { font-size: 1.05rem; }
+.home-capability { min-height: 22rem; padding: 2.5rem 2rem; }
+.home-capability-number { display: none; }
+.home-capability h3 { margin-top: 2.5rem; font-size: 1.5rem; }
+.home-capability p { font-size: 1.125rem; line-height: 1.8; }
+.home-capability-link { font-size: 1rem; right: 2rem; }
+.home-specialty>span { box-shadow: none; }
+.home-specialty h3 { font-size: 1.05rem; }
+.home-cta { border-radius: 16px; }
+.home-cta p { display: none; }
+.home-cta div>span, .home-cta-primary, .home-cta-secondary { font-size: 1rem; }
+.home-deferred-note { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid #cfdfdc; }
+.home-deferred-note>p { color: #675022; font-size: 1.15rem; font-weight: 700; }
+.home-deferred-note>span { display: block; margin-top: .3rem; color: #52676b; font-size: 1.05rem; }
+.deferred-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.25rem; }
+.deferred-primary, .deferred-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .6rem 1.25rem; font-size: 1.125rem; font-weight: 700; border-radius: 8px; }
+.deferred-primary { background: #17666e; color: #fff; }
+.deferred-primary:hover { background: #124e55; }
+.deferred-secondary { color: #17666e; border: 1px solid #a8c3c3; background: #fff; }
+.deferred-secondary:hover { background: #edf6f5; }
+.consultation-deferred { display: grid; grid-template-columns: 1.4fr 1fr; align-items: center; gap: 3rem; max-width: 1152px; margin-inline: auto; padding: clamp(3rem, 8vw, 7rem) 1.5rem; min-height: 65vh; }
+.consultation-deferred-content>svg { color: #9c7590; margin-bottom: 1.5rem; }
+.consultation-deferred h1 { font-size: clamp(2rem, 4vw, 3.5rem); color: #163c42; }
+.consultation-deferred p { margin-top: 1.5rem; max-width: 38rem; color: #52676b; line-height: 1.9; }
+.deferred-word { font-family: var(--font-display); font-size: clamp(5rem, 10vw, 9rem); color: #b66b94; text-align: center; }
+@media (max-width: 767px) {
+  .home-section-heading { grid-template-columns: 1fr; }
+  .home-section-heading>a { justify-content: flex-start; }
+  #root .home-display { font-size: clamp(2.6rem, 11vw, 4rem); }
+  .home-visual { min-height: 28rem; padding: 2rem; }
+  .home-visual-seal { right: 2rem; bottom: 2rem; }
+  .home-cta { padding: 2rem 1.5rem; }
+  .consultation-deferred { grid-template-columns: 1fr; gap: 1rem; }
+  .deferred-word { font-size: 5rem; text-align: right; }
+}

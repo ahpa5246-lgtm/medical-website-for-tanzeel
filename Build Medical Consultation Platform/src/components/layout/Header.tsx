@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react"
+
 import { Link, useLocation } from "react-router-dom"
-import { Menu, X, Stethoscope, ShieldCheck } from "lucide-react"
+
+import { Menu, X, Stethoscope, ShieldCheck, Sparkles } from "lucide-react"
+
 import Button from "@/components/ui/Button"
+import { consultationsEnabled } from "@/lib/featureFlags.mjs"
+
+const medicalServiceEnabled = consultationsEnabled(import.meta.env)
 
 const NAV_LINKS = [
-  { to: "/consultations", label: "استشاراتي" },
-  { to: "/doctors", label: "الأطباء" },
-  { to: "/articles", label: "المعرفة الصحية" },
-  { to: "/training", label: "تدريب" },
-  { to: "/labs", label: "المختبرات" },
-]
+  { to: "/", label: "الرئيسية" },
+  { to: "/tanzeel", label: "مساحة تنزيل" },
+  { to: "/consultations", label: "الاستشارات" },
 
-const LATER_LINKS = [
+  { to: "/doctors", label: "الأطباء" },
+
+  { to: "/articles", label: "المعرفة الصحية" },
+
   { to: "/courses", label: "الأكاديمية" },
   { to: "/library", label: "المكتبة" },
 ]
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+
   const location = useLocation()
 
   useEffect(() => setMobileOpen(false), [location.pathname])
 
   function isActive(path: string) {
-    return location.pathname.startsWith(path)
+    return path === "/"
+      ? location.pathname === "/"
+      : location.pathname.startsWith(path)
   }
 
   return (
@@ -45,61 +54,60 @@ export default function Header() {
               <span className="block text-lg font-black leading-5 tracking-tight text-ink">
                 ميدكونكت
               </span>
-              <span className="block text-[9px] font-semibold tracking-[0.08em] text-slate-400">
+              <span className="block text-xs font-semibold text-slate-500">
                 اسم تجريبي · صحة بثقة
               </span>
             </span>
           </Link>
 
           <nav
-            className="hidden items-center gap-1 lg:flex"
+            className="hidden items-center gap-1 xl:flex"
             aria-label="التنقل الرئيسي"
           >
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`nav-link ${
-                  isActive(link.to) ? "nav-link-active" : ""
-                }`}
+                className={
+                  link.to === "/tanzeel"
+                    ? `tanzeel-nav-link ${
+                        isActive(link.to) ? "tanzeel-nav-link-active" : ""
+                      }`
+                    : `nav-link ${isActive(link.to) ? "nav-link-active" : ""}`
+                }
               >
+                {link.to === "/tanzeel" && (
+                  <Sparkles aria-hidden="true" className="h-4 w-4" />
+                )}
                 {link.label}
-              </Link>
-            ))}
-            <span className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />
-            {LATER_LINKS.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="nav-link group gap-1.5 text-slate-400"
-              >
-                {link.label}
-                <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[8px] font-bold text-slate-500 transition group-hover:bg-primary-50 group-hover:text-primary-700">
-                  لاحقًا
-                </span>
+                {link.to === "/consultations" && !medicalServiceEnabled && (
+                  <small className="development-badge">قيد التطوير</small>
+                )}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 xl:flex">
             <Link to="/auth/login">
               <Button variant="ghost" size="sm">
                 دخول
               </Button>
             </Link>
-            <Link to="/consultations/new">
+            <Link
+              to={medicalServiceEnabled ? "/consultations/new" : "/courses"}
+            >
               <Button
                 size="sm"
                 className="rounded-full px-4 shadow-[0_8px_22px_rgba(8,126,139,.18)]"
               >
-                اسأل طبيبًا
+                {medicalServiceEnabled ? "اسأل طبيبًا" : "ابدأ التعلم"}
               </Button>
             </Link>
           </div>
 
           <button
             type="button"
-            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 md:hidden"
+            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 xl:hidden"
             onClick={() => setMobileOpen((value) => !value)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
@@ -115,24 +123,29 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div id="mobile-menu" className="mobile-menu md:hidden">
+        <div id="mobile-menu" className="mobile-menu xl:hidden">
           <div className="mx-auto max-w-6xl space-y-1 px-4 py-4">
-            {[...NAV_LINKS, ...LATER_LINKS].map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 className={`flex min-h-11 items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-bold ${
-                  isActive(link.to)
-                    ? "bg-primary-50 text-primary-800"
-                    : "text-slate-700"
+                  link.to === "/tanzeel"
+                    ? "bg-pink-50 text-[#963b71]"
+                    : isActive(link.to)
+                      ? "bg-primary-50 text-primary-800"
+                      : "text-slate-700"
                 }`}
               >
-                {link.label}
-                {LATER_LINKS.some((later) => later.to === link.to) && (
-                  <span className="text-[10px] font-medium text-slate-400">
-                    المرحلة الثانية
-                  </span>
-                )}
+                <span className="inline-flex items-center gap-2">
+                  {link.to === "/tanzeel" && (
+                    <Sparkles aria-hidden="true" className="h-4 w-4" />
+                  )}
+                  {link.label}
+                  {link.to === "/consultations" && !medicalServiceEnabled && (
+                    <small className="development-badge">قيد التطوير</small>
+                  )}
+                </span>
               </Link>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4">
@@ -141,8 +154,12 @@ export default function Header() {
                   دخول
                 </Button>
               </Link>
-              <Link to="/consultations/new">
-                <Button className="w-full">اسأل طبيبًا</Button>
+              <Link
+                to={medicalServiceEnabled ? "/consultations/new" : "/courses"}
+              >
+                <Button className="w-full">
+                  {medicalServiceEnabled ? "اسأل طبيبًا" : "ابدأ التعلم"}
+                </Button>
               </Link>
             </div>
             <Link
