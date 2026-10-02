@@ -5,11 +5,14 @@ import { Link, useLocation } from "react-router-dom"
 import { Menu, X, Stethoscope, ShieldCheck, Sparkles } from "lucide-react"
 
 import Button from "@/components/ui/Button"
+import { consultationsEnabled } from "@/lib/featureFlags.mjs"
+
+const medicalServiceEnabled = consultationsEnabled(import.meta.env)
 
 const NAV_LINKS = [
   { to: "/", label: "الرئيسية" },
   { to: "/tanzeel", label: "مساحة تنزيل" },
-  { to: "/consultations", label: "استشاراتي" },
+  { to: "/consultations", label: "الاستشارات" },
 
   { to: "/doctors", label: "الأطباء" },
 
@@ -51,7 +54,7 @@ export default function Header() {
               <span className="block text-lg font-black leading-5 tracking-tight text-ink">
                 ميدكونكت
               </span>
-              <span className="block text-[9px] font-semibold tracking-[0.08em] text-slate-400">
+              <span className="block text-xs font-semibold text-slate-500">
                 اسم تجريبي · صحة بثقة
               </span>
             </span>
@@ -77,6 +80,9 @@ export default function Header() {
                   <Sparkles aria-hidden="true" className="h-4 w-4" />
                 )}
                 {link.label}
+                {link.to === "/consultations" && !medicalServiceEnabled && (
+                  <small className="development-badge">قيد التطوير</small>
+                )}
               </Link>
             ))}
           </nav>
@@ -87,12 +93,14 @@ export default function Header() {
                 دخول
               </Button>
             </Link>
-            <Link to="/consultations/new">
+            <Link
+              to={medicalServiceEnabled ? "/consultations/new" : "/courses"}
+            >
               <Button
                 size="sm"
                 className="rounded-full px-4 shadow-[0_8px_22px_rgba(8,126,139,.18)]"
               >
-                اسأل طبيبًا
+                {medicalServiceEnabled ? "اسأل طبيبًا" : "ابدأ التعلم"}
               </Button>
             </Link>
           </div>
@@ -134,6 +142,9 @@ export default function Header() {
                     <Sparkles aria-hidden="true" className="h-4 w-4" />
                   )}
                   {link.label}
+                  {link.to === "/consultations" && !medicalServiceEnabled && (
+                    <small className="development-badge">قيد التطوير</small>
+                  )}
                 </span>
               </Link>
             ))}
@@ -143,8 +154,12 @@ export default function Header() {
                   دخول
                 </Button>
               </Link>
-              <Link to="/consultations/new">
-                <Button className="w-full">اسأل طبيبًا</Button>
+              <Link
+                to={medicalServiceEnabled ? "/consultations/new" : "/courses"}
+              >
+                <Button className="w-full">
+                  {medicalServiceEnabled ? "اسأل طبيبًا" : "ابدأ التعلم"}
+                </Button>
               </Link>
             </div>
             <Link

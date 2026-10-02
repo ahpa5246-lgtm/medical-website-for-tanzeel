@@ -11,7 +11,7 @@ export default function PreviewNotice() {
         <Info className="h-4 w-4 shrink-0" aria-hidden="true" />
         <p className="flex-1 text-xs leading-5">
           <strong>نسخة تجربة:</strong> المحتوى تجريبي، وتعديلاته تُحفظ في هذا
-          المتصفح فقط. الحسابات والاستشارات تحتاج اتصال قاعدة البيانات.
+          المتصفح فقط. الحسابات تحتاج اتصال قاعدة البيانات.
         </p>
       </div>
     </div>

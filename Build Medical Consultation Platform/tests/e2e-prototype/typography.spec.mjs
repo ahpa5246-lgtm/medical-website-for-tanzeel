@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test"
 
-test("Thmanyah renders all text including controls and home numbers", async ({
+test("Zain renders body text and Thmanyah Display renders headings", async ({
   page,
 }) => {
   for (const route of [
@@ -12,6 +12,7 @@ test("Thmanyah renders all text including controls and home numbers", async ({
     "/auth/login",
   ]) {
     await page.goto(route)
+    await expect(page.locator("h1").first()).toBeVisible()
     await page.evaluate(() => document.fonts.ready)
     const exceptions = await page.evaluate(() =>
       [...document.querySelectorAll("body *")]
@@ -23,14 +24,15 @@ test("Thmanyah renders all text including controls and home numbers", async ({
         .filter((element) => element.getBoundingClientRect().height > 0)
         .filter(
           (element) =>
-            !getComputedStyle(element).fontFamily.startsWith('"Thmanyah Sans"'),
+            !getComputedStyle(element).fontFamily.includes("Zain") &&
+            !getComputedStyle(element).fontFamily.includes("Thmanyah Display"),
         )
         .map((element) => element.textContent.slice(0, 60)),
     )
     expect(exceptions, route).toEqual([])
     const loaded = await page.evaluate(() =>
       [...document.fonts].some(
-        (face) => face.family === "Thmanyah Sans" && face.status === "loaded",
+        (face) => face.family === "Zain" && face.status === "loaded",
       ),
     )
     expect(loaded, route).toBe(true)
@@ -52,7 +54,22 @@ test("Thmanyah renders all text including controls and home numbers", async ({
     fonts.some(
       (font) =>
         font.isCustomFont &&
-        /thmanyah/i.test(font.familyName) &&
+        /thmanyah serif display/i.test(font.familyName) &&
+        font.glyphCount > 0,
+    ),
+  ).toBe(true)
+  const paragraph = await session.send("DOM.querySelector", {
+    nodeId: root.nodeId,
+    selector: "p",
+  })
+  const bodyFonts = await session.send("CSS.getPlatformFontsForNode", {
+    nodeId: paragraph.nodeId,
+  })
+  expect(
+    bodyFonts.fonts.some(
+      (font) =>
+        font.isCustomFont &&
+        /zain/i.test(font.familyName) &&
         font.glyphCount > 0,
     ),
   ).toBe(true)

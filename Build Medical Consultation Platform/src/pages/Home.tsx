@@ -21,6 +21,9 @@ import {
 import Button from "@/components/ui/Button"
 
 import { SPECIALTIES } from "@/data/specialties"
+import { consultationsEnabled } from "@/lib/featureFlags.mjs"
+
+const medicalServiceEnabled = consultationsEnabled(import.meta.env)
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
 
@@ -44,9 +47,11 @@ const CARE_STEPS = [
   {
     icon: MessageCircle,
 
-    label: "إرسال الاستشارة",
+    label: medicalServiceEnabled ? "إرسال الاستشارة" : "الاستشارات قيد التطوير",
 
-    hint: "تفاصيل منظّمة وواضحة",
+    hint: medicalServiceEnabled
+      ? "تفاصيل منظّمة وواضحة"
+      : "نجهّزها مع أطباء موثوقين",
   },
 
   {
@@ -78,9 +83,11 @@ const CAPABILITIES = [
 
     number: "01",
 
-    title: "استشارة مرتّبة",
+    title: medicalServiceEnabled ? "استشارة مرتّبة" : "استشارات قيد التطوير",
 
-    text: "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة.",
+    text: medicalServiceEnabled
+      ? "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة."
+      : "نجهّز قسم الاستشارات قبل إتاحته بالتعاون مع أطباء موثوقين.",
 
     to: "/consultations/new",
   },
@@ -159,25 +166,43 @@ export default function Home() {
               التفاعلي؛ صُمّم ليجعل الوصول إلى الخدمة أبسط وأكثر تنظيمًا.
             </p>
 
-            <form
-              onSubmit={startConsultation}
-              className="home-search mx-auto mt-9 lg:mx-0"
-            >
-              <label htmlFor="home-question" className="sr-only">
-                ما الخدمة التي تبحث عنها؟
-              </label>
-              <Search aria-hidden="true" className="home-search-icon" />
-              <input
-                id="home-question"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="اكتب سؤالك أو ابحث عن تخصص"
-              />
-              <Button type="submit" size="lg" className="home-search-button">
-                ابدأ الآن{" "}
-                <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
-              </Button>
-            </form>
+            {medicalServiceEnabled ? (
+              <form
+                onSubmit={startConsultation}
+                className="home-search mx-auto mt-9 lg:mx-0"
+              >
+                <label htmlFor="home-question" className="sr-only">
+                  ما الخدمة التي تبحث عنها؟
+                </label>
+                <Search aria-hidden="true" className="home-search-icon" />
+                <input
+                  id="home-question"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="اكتب سؤالك أو ابحث عن تخصص"
+                />
+                <Button type="submit" size="lg" className="home-search-button">
+                  ابدأ الآن{" "}
+                  <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
+                </Button>
+              </form>
+            ) : (
+              <div className="home-deferred-note">
+                <p>الاستشارات الطبية قيد التطوير</p>
+                <span>
+                  حتى نجهّز الخدمة مع أطباء موثوقين، اكتشفي الكورسات والملخصات
+                  الطبية.
+                </span>
+                <div className="deferred-actions">
+                  <Link to="/courses" className="deferred-primary">
+                    استكشف الأكاديمية
+                  </Link>
+                  <Link to="/library" className="deferred-secondary">
+                    تصفح المكتبة
+                  </Link>
+                </div>
+              </div>
+            )}
 
             <div className="home-assurances" aria-label="مزايا المنصة">
               <span>
@@ -307,7 +332,10 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Link to="/consultations/new" className="home-cta-primary">
-              ابدأ استشارة <ArrowLeft aria-hidden="true" />
+              {medicalServiceEnabled
+                ? "ابدأ استشارة"
+                : "الاستشارات قيد التطوير"}{" "}
+              <ArrowLeft aria-hidden="true" />
             </Link>
             <Link to="/courses" className="home-cta-secondary">
               استكشف التدريب

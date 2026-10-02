@@ -6,6 +6,7 @@ import PreviewNotice from "@/components/PreviewNotice"
 import { LoadingState } from "@/components/system/AsyncState"
 import RouteAnnouncer from "@/components/system/RouteAnnouncer"
 import RequireRole from "@/features/auth/RequireRole"
+import ConsultationGate from "@/features/consultations/ConsultationGate"
 
 const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
 const ContentDetail = lazy(() => import("@/features/content/ContentDetail"))
@@ -100,14 +101,29 @@ export default function App() {
                   <Route path="/tanzeel/manage" element={<TanzeelManage />} />
 
                   {/* Consultations */}
-                  <Route path="/consultations" element={<ConsultationList />} />
+                  <Route
+                    path="/consultations"
+                    element={
+                      <ConsultationGate>
+                        <ConsultationList />
+                      </ConsultationGate>
+                    }
+                  />
                   <Route
                     path="/consultations/new"
-                    element={<SubmitConsultation />}
+                    element={
+                      <ConsultationGate>
+                        <SubmitConsultation />
+                      </ConsultationGate>
+                    }
                   />
                   <Route
                     path="/consultations/:id"
-                    element={<ConsultationThread />}
+                    element={
+                      <ConsultationGate>
+                        <ConsultationThread />
+                      </ConsultationGate>
+                    }
                   />
 
                   {/* Doctors */}
