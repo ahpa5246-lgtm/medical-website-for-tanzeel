@@ -2,6 +2,7 @@ import { authorize, json } from "../_shared/authorize.ts"
 
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return json({}, 200)
+  if (request.method !== "POST") return json({ error: "METHOD_NOT_ALLOWED" }, 405)
   try {
     const { admin, caller } = await authorize(request, ["owner", "admin"])
     const { email, role } = await request.json()
