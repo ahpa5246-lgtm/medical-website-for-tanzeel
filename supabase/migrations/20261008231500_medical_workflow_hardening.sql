@@ -55,6 +55,18 @@ create trigger consultation_doctor_update_guard
 before update on public.consultations
 for each row execute function public.guard_doctor_consultation_update();
 
+-- New consultations must begin unassigned and open. The browser
+-- must not be able to insert a fabricated doctor assignment or completed case.
+drop policy if exists "patients create consultations" on public.consultations;
+create policy "patients create consultations" on public.consultations
+for insert to authenticated
+with check (
+  patient_id = auth.uid()
+  and doctor_id is null
+  and status = 'open'
+  and closed_at is null
+);
+
 drop policy if exists "participants send messages" on public.consultation_messages;
 create policy "participants send messages" on public.consultation_messages
 for insert to authenticated
