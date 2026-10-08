@@ -102,7 +102,7 @@ begin
   select * into v_invitation
   from public.invitations
   where lower(email) = v_email
-    and token_hash = encode(digest(p_token, 'sha256'), 'hex')
+    and token_hash = encode(sha256(convert_to(p_token, 'UTF8')), 'hex')
     and accepted_at is null and expires_at > now()
   order by created_at desc
   limit 1
