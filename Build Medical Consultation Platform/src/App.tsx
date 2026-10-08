@@ -5,6 +5,8 @@ import Home from "@/pages/Home"
 import Login from "@/pages/auth/Login"
 import Signup from "@/pages/auth/Signup"
 import ForgotPassword from "@/pages/auth/ForgotPassword"
+import UpdatePassword from "@/pages/auth/UpdatePassword"
+import AcceptInvitation from "@/pages/auth/AcceptInvitation"
 import ConsultationList from "@/pages/consultations/List"
 import SubmitConsultation from "@/pages/consultations/Submit"
 import ConsultationThread from "@/pages/consultations/Thread"
@@ -71,6 +73,8 @@ export default function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+        <Route path="/auth/update-password" element={<UpdatePassword />} />
+        <Route path="/auth/accept-invite" element={<AcceptInvitation />} />
 
         <Route
           path="/admin/*"

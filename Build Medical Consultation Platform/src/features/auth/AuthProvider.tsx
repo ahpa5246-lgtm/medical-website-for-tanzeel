@@ -9,6 +9,7 @@ import {
 } from "react"
 import type { Session } from "@supabase/supabase-js"
 import { supabase } from "@/lib/supabase"
+import { registerLabAccessTokenProvider } from "@/pages/labs/labQuotaClient"
 import {
   getProfile,
   signOut as performSignOut,
@@ -29,6 +30,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const [loading, setLoading] = useState(true)
+
+  // Obtain a fresh access token for every quota RPC rather than capturing a
+  // token that becomes stale after an authentication refresh.
+  useEffect(() => registerLabAccessTokenProvider(async () => {
+    const { data, error } = await supabase.auth.getSession()
+    return error ? null : data.session?.access_token ?? null
+  }), [])
 
   const refreshProfile = useCallback(async () => {
     if (!session?.user.id) {

@@ -86,7 +86,7 @@ export default function Home() {
   }
 
   return (
-    <main dir="rtl" className="home-premium overflow-x-hidden">
+    <div dir="rtl" className="home-premium overflow-x-hidden">
       <section className="home-hero">
         <div className="home-orbit home-orbit-one" aria-hidden="true" />
         <div className="home-orbit home-orbit-two" aria-hidden="true" />
@@ -284,6 +284,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }
