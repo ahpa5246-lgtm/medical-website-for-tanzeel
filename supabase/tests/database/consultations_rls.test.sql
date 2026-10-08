@@ -2,7 +2,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(12);
+select plan(14);
 
 select ok(
   (select relrowsecurity from pg_class where oid = 'public.consultations'::regclass),
@@ -153,22 +153,22 @@ select is(
 select set_config('request.jwt.claim.sub', '33333333-3333-4333-8333-333333333333', true);
 
 select throws_ok(
-  $ update public.consultations set patient_id = '22222222-2222-4222-8222-222222222222'
-     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $,
+  $sql$ update public.consultations set patient_id = '22222222-2222-4222-8222-222222222222'
+     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $sql$,
   '42501',
   'doctor_update_forbidden',
   'doctor cannot reassign a consultation to another patient'
 );
 
 select lives_ok(
-  $ update public.consultations set status = 'answered'
+  $sql$ update public.consultations set status = 'answered'
      where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $,
   'assigned doctor can mark a consultation as answered'
 );
 
 select throws_ok(
   $ update public.consultations set status = 'open'
-     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $,
+     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $sql$,
   '42501',
   'doctor_status_transition_forbidden',
   'doctor cannot regress the consultation workflow'
@@ -180,11 +180,43 @@ where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
 select set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
 
 select throws_ok(
-  $ insert into public.consultation_messages (consultation_id, sender_id, sender_kind, body)
-     values ('cccccccc-cccc-4ccc-8ccc-cccccccccccc', '11111111-1111-4111-8111-111111111111', 'patient', 'should not be sent') $,
+  $sql$ insert into public.consultation_messages (consultation_id, sender_id, sender_kind, body)
+     values ('cccccccc-cccc-4ccc-8ccc-cccccccccccc', '11111111-1111-4111-8111-111111111111', 'patient', 'should not be sent') $sql$,
   '42501',
   'new row violates row-level security policy for table "consultation_messages"',
   'closed consultations reject new messages on the server'
+);
+
+-- A new patient cannot insert a pre-answered consultation or
+-- assign an unsuspecting physician directly via the browser API.
+select throws_ok(
+  $sql$ insert into public.consultations
+    (patient_id, specialty_id, subject, body, status)
+    values (
+      '11111111-1111-4111-8111-111111111111',
+      'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+      'Illegal status',
+      'A long enough example body to pass the minimum constraint.',
+      'answered'
+    ) $sql$,
+  '42501',
+  'new row violates row-level security policy for table "consultations"',
+  'patient cannot insert an answered consultation'
+);
+
+select throws_ok(
+  $sql$ insert into public.consultations
+    (patient_id, specialty_id, subject, body, doctor_id)
+    values (
+      '11111111-1111-4111-8111-111111111111',
+      'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+      'Illegal doctor',
+      'A long enough example body to pass the minimum constraint.',
+      'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'
+    ) $sql$,
+  '42501',
+  'new row violates row-level security policy for table "consultations"',
+  'patient cannot pre-assign the consultation to a doctor'
 );
 
 select * from finish();
