@@ -25,7 +25,9 @@ const LibraryList = lazy(() => import("@/pages/library/List"))
 const MedicalDisclaimer = lazy(() => import("@/pages/legal/Disclaimer"))
 const Terms = lazy(() => import("@/pages/legal/Terms"))
 const Privacy = lazy(() => import("@/pages/legal/Privacy"))
-const VerificationApplication = lazy(() => import("@/pages/verification/Application"))
+const VerificationApplication = lazy(
+  () => import("@/pages/verification/Application"),
+)
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
 const Training = lazy(() => import("@/pages/training/Training"))
 const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
@@ -68,100 +70,100 @@ export default function App() {
   return (
     <Suspense fallback={<LoadingState label="جارٍ تحميل الصفحة…" />}>
       <BrowserRouter>
-      <PreviewNotice />
-      <Routes>
-        {/* Auth routes — no layout header/footer */}
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<Signup />} />
-        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-        <Route path="/auth/update-password" element={<UpdatePassword />} />
-        <Route path="/auth/accept-invite" element={<AcceptInvitation />} />
+        <PreviewNotice />
+        <Routes>
+          {/* Auth routes — no layout header/footer */}
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/signup" element={<Signup />} />
+          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+          <Route path="/auth/update-password" element={<UpdatePassword />} />
+          <Route path="/auth/accept-invite" element={<AcceptInvitation />} />
 
-        <Route
-          path="/admin/*"
-          element={
-            <RequireRole allow={["owner", "admin", "editor"]}>
-              <LazyRoute label="جارٍ تحميل مساحة الإدارة…">
-                <AdminLayout />
-              </LazyRoute>
-            </RequireRole>
-          }
-        />
+          <Route
+            path="/admin/*"
+            element={
+              <RequireRole allow={["owner", "admin", "editor"]}>
+                <LazyRoute label="جارٍ تحميل مساحة الإدارة…">
+                  <AdminLayout />
+                </LazyRoute>
+              </RequireRole>
+            }
+          />
 
-        {/* Main layout routes */}
-        <Route
-          path="/*"
-          element={
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Home />} />
+          {/* Main layout routes */}
+          <Route
+            path="/*"
+            element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
 
-                {/* Consultations */}
-                <Route path="/consultations" element={<ConsultationList />} />
-                <Route
-                  path="/consultations/new"
-                  element={<SubmitConsultation />}
-                />
-                <Route
-                  path="/consultations/:id"
-                  element={<ConsultationThread />}
-                />
+                  {/* Consultations */}
+                  <Route path="/consultations" element={<ConsultationList />} />
+                  <Route
+                    path="/consultations/new"
+                    element={<SubmitConsultation />}
+                  />
+                  <Route
+                    path="/consultations/:id"
+                    element={<ConsultationThread />}
+                  />
 
-                {/* Doctors */}
-                <Route path="/doctors" element={<DoctorDirectory />} />
-                <Route path="/doctors/:id" element={<DoctorProfile />} />
+                  {/* Doctors */}
+                  <Route path="/doctors" element={<DoctorDirectory />} />
+                  <Route path="/doctors/:id" element={<DoctorProfile />} />
 
-                {/* Articles, courses & library */}
-                <Route path="/articles" element={<ArticleList />} />
-                <Route path="/articles/:id" element={<ArticleDetail />} />
-                <Route path="/articles/new" element={<ArticleEditor />} />
-                <Route path="/courses" element={<CourseList />} />
-                <Route
-                  path="/training"
-                  element={
-                    <LazyRoute label="جارٍ تحميل مسار التدريب…">
-                      <Training />
-                    </LazyRoute>
-                  }
-                />
-                <Route
-                  path="/labs"
-                  element={
-                    <LazyRoute label="جارٍ تحميل مختبر التعلم…">
-                      <LabHub />
-                    </LazyRoute>
-                  }
-                />
-                <Route
-                  path="/labs/:moduleId"
-                  element={
-                    <LazyRoute label="جارٍ تحميل الوحدة التدريبية…">
-                      <LabHub />
-                    </LazyRoute>
-                  }
-                />
-                <Route path="/library" element={<LibraryList />} />
+                  {/* Articles, courses & library */}
+                  <Route path="/articles" element={<ArticleList />} />
+                  <Route path="/articles/:id" element={<ArticleDetail />} />
+                  <Route path="/articles/new" element={<ArticleEditor />} />
+                  <Route path="/courses" element={<CourseList />} />
+                  <Route
+                    path="/training"
+                    element={
+                      <LazyRoute label="جارٍ تحميل مسار التدريب…">
+                        <Training />
+                      </LazyRoute>
+                    }
+                  />
+                  <Route
+                    path="/labs"
+                    element={
+                      <LazyRoute label="جارٍ تحميل مختبر التعلم…">
+                        <LabHub />
+                      </LazyRoute>
+                    }
+                  />
+                  <Route
+                    path="/labs/:moduleId"
+                    element={
+                      <LazyRoute label="جارٍ تحميل الوحدة التدريبية…">
+                        <LabHub />
+                      </LazyRoute>
+                    }
+                  />
+                  <Route path="/library" element={<LibraryList />} />
 
-                {/* Legal */}
-                <Route
-                  path="/legal/disclaimer"
-                  element={<MedicalDisclaimer />}
-                />
-                <Route path="/legal/terms" element={<Terms />} />
-                <Route path="/legal/privacy" element={<Privacy />} />
-                <Route
-                  path="/verification/apply"
-                  element={<VerificationApplication />}
-                />
+                  {/* Legal */}
+                  <Route
+                    path="/legal/disclaimer"
+                    element={<MedicalDisclaimer />}
+                  />
+                  <Route path="/legal/terms" element={<Terms />} />
+                  <Route path="/legal/privacy" element={<Privacy />} />
+                  <Route
+                    path="/verification/apply"
+                    element={<VerificationApplication />}
+                  />
 
-                {/* Catch-all */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Layout>
-          }
-        />
-      </Routes>
-      <RouteAnnouncer />
+                  {/* Catch-all */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Layout>
+            }
+          />
+        </Routes>
+        <RouteAnnouncer />
       </BrowserRouter>
     </Suspense>
   )
