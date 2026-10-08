@@ -162,12 +162,12 @@ select throws_ok(
 
 select lives_ok(
   $sql$ update public.consultations set status = 'answered'
-     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $,
+     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $sql$,
   'assigned doctor can mark a consultation as answered'
 );
 
 select throws_ok(
-  $ update public.consultations set status = 'open'
+  $sql$ update public.consultations set status = 'open'
      where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $sql$,
   '42501',
   'doctor_status_transition_forbidden',
