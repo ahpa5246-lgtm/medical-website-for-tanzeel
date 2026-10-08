@@ -2,6 +2,10 @@ module.exports = {
   ci: {
     collect: {
       staticDistDir: "./dist",
+      isSinglePageApplication: true,
+      // LHCI auto-discovers /index.html without this setting. For a
+      // BrowserRouter SPA that URL renders NotFound rather than the homepage.
+      url: ["http://localhost/"],
       numberOfRuns: 3,
       settings: {
         chromeFlags: "--no-sandbox",
