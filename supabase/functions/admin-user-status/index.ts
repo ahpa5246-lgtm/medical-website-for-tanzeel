@@ -10,6 +10,10 @@ Deno.serve(async (request) => {
       !["enable", "disable", "set_role"].includes(operation)
     )
       return json({ error: "INVALID_INPUT" }, 400)
+    // The service-role client bypasses RLS: explicitly constrain every
+    // permitted role value before issuing a privileged write.
+    if (operation === "set_role" && !["admin", "editor"].includes(role))
+      return json({ error: "INVALID_ROLE" }, 400)
     if (targetId === caller.id)
       return json({ error: "SELF_CHANGE_DENIED" }, 400)
     const { data: target, error: targetError } = await admin
