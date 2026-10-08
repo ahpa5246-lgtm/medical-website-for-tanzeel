@@ -24,6 +24,22 @@ export default {
       },
     },
     {
+      name: "desktop-firefox",
+      use: {
+        browserName: "firefox",
+        viewport: { width: 1366, height: 768 },
+      },
+    },
+    {
+      name: "tablet-webkit",
+      use: {
+        browserName: "webkit",
+        viewport: { width: 768, height: 1024 },
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
+    {
       name: "weak-mobile-chromium",
       use: {
         browserName: "chromium",

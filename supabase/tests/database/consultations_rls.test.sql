@@ -2,7 +2,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(8);
+select plan(12);
 
 select ok(
   (select relrowsecurity from pg_class where oid = 'public.consultations'::regclass),
@@ -147,6 +147,44 @@ select is(
    where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'),
   'assigned',
   'patient cannot change consultation status'
+);
+
+-- Test the database policy, not just the visibility of UI controls.
+select set_config('request.jwt.claim.sub', '33333333-3333-4333-8333-333333333333', true);
+
+select throws_ok(
+  $ update public.consultations set patient_id = '22222222-2222-4222-8222-222222222222'
+     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $,
+  '42501',
+  'doctor_update_forbidden',
+  'doctor cannot reassign a consultation to another patient'
+);
+
+select lives_ok(
+  $ update public.consultations set status = 'answered'
+     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $,
+  'assigned doctor can mark a consultation as answered'
+);
+
+select throws_ok(
+  $ update public.consultations set status = 'open'
+     where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' $,
+  '42501',
+  'doctor_status_transition_forbidden',
+  'doctor cannot regress the consultation workflow'
+);
+
+update public.consultations set status = 'closed'
+where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
+
+select set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);
+
+select throws_ok(
+  $ insert into public.consultation_messages (consultation_id, sender_id, sender_kind, body)
+     values ('cccccccc-cccc-4ccc-8ccc-cccccccccccc', '11111111-1111-4111-8111-111111111111', 'patient', 'should not be sent') $,
+  '42501',
+  'new row violates row-level security policy for table "consultation_messages"',
+  'closed consultations reject new messages on the server'
 );
 
 select * from finish();

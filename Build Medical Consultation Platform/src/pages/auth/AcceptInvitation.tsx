@@ -13,7 +13,6 @@ export default function AcceptInvitation() {
   useEffect(() => {
     if (loading || !session || attempted.current === session.user.id) return
     attempted.current = session.user.id
-    let cancelled = false
     const accept = async () => {
       try {
         // Retrieve invitation metadata from authenticated Supabase, not a
@@ -27,13 +26,12 @@ export default function AcceptInvitation() {
         await refreshProfile()
         // The role grant is already committed; cleanup is best-effort.
         await supabase.auth.updateUser({ data: { invitation_token: null } })
-        if (!cancelled) setResult("success")
+        setResult("success")
       } catch {
-        if (!cancelled) setResult("error")
+        setResult("error")
       }
     }
     void accept()
-    return () => { cancelled = true }
   }, [session?.user.id, loading, refreshProfile])
 
   return (
