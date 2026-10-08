@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import { AlertTriangle, Upload } from "lucide-react"
 import Button from "@/components/ui/Button"
 import EmergencyBanner from "@/components/EmergencyBanner"
@@ -20,8 +25,10 @@ export default function SubmitConsultation() {
   const location = useLocation()
   const [params] = useSearchParams()
   const state = location.state as { initialQuestion?: unknown } | null
-  const initialQuestion = typeof state?.initialQuestion === "string"
-    ? state.initialQuestion.slice(0, MAX_CHARS) : ""
+  const initialQuestion =
+    typeof state?.initialQuestion === "string"
+      ? state.initialQuestion.slice(0, MAX_CHARS)
+      : ""
   const [form, setForm] = useState({
     title: "",
     description: initialQuestion,
@@ -30,7 +37,9 @@ export default function SubmitConsultation() {
   const [files, setFiles] = useState<File[]>([])
   // Once the consultation exists, retries resume uploads instead of
   // creating duplicate medical records after a partial network failure.
-  const [savedConsultationId, setSavedConsultationId] = useState<string | null>(null)
+  const [savedConsultationId, setSavedConsultationId] = useState<string | null>(
+    null,
+  )
   const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const [specialties, setSpecialties] = useState<SpecialtyOption[]>([])
   const [error, setError] = useState("")
@@ -94,7 +103,9 @@ export default function SubmitConsultation() {
     } catch {
       if (consultationId) {
         setPendingFiles([...remaining])
-        setError("حُفظت الاستشارة بالفعل، لكن تعذر رفع بعض المرفقات. يمكنك إعادة محاولة الرفع دون إنشاء استشارة جديدة.")
+        setError(
+          "حُفظت الاستشارة بالفعل، لكن تعذر رفع بعض المرفقات. يمكنك إعادة محاولة الرفع دون إنشاء استشارة جديدة.",
+        )
       } else {
         setError("تعذر إنشاء الاستشارة. تحققي من الاتصال ثم أعيدي المحاولة.")
       }
@@ -136,9 +147,18 @@ export default function SubmitConsultation() {
       )}
 
       {savedConsultationId && (
-        <div role="status" className="mb-4 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900">
-          الاستشارة محفوظة. {pendingFiles.length ? `تبقى ${pendingFiles.length} مرفقات للرفع.` : ""}
-          <Link className="mr-2 font-bold underline" to={`/consultations/${savedConsultationId}`}>
+        <div
+          role="status"
+          className="mb-4 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900"
+        >
+          الاستشارة محفوظة.{" "}
+          {pendingFiles.length
+            ? `تبقى ${pendingFiles.length} مرفقات للرفع.`
+            : ""}
+          <Link
+            className="mr-2 font-bold underline"
+            to={`/consultations/${savedConsultationId}`}
+          >
             عرض الاستشارة المحفوظة
           </Link>
         </div>
@@ -231,7 +251,9 @@ export default function SubmitConsultation() {
           loading={loading}
           disabled={!session}
         >
-          {savedConsultationId ? "إعادة رفع المرفقات المتبقية" : "حفظ وإرسال الاستشارة"}
+          {savedConsultationId
+            ? "إعادة رفع المرفقات المتبقية"
+            : "حفظ وإرسال الاستشارة"}
         </Button>
       </form>
     </div>

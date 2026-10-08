@@ -2,7 +2,8 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 
-const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
+const read = (path) =>
+  readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
 
 test("password recovery and invitation acceptance are routed", () => {
   const app = read("src/App.tsx")
@@ -17,7 +18,9 @@ test("password recovery and invitation acceptance are routed", () => {
 })
 
 test("medical database restricts doctor edits, closed messages, and invite acceptance", () => {
-  const sql = read("../supabase/migrations/20261008231500_medical_workflow_hardening.sql")
+  const sql = read(
+    "../supabase/migrations/20261008231500_medical_workflow_hardening.sql",
+  )
   assert.match(sql, /guard_doctor_consultation_update/)
   assert.match(sql, /doctor_update_forbidden/)
   assert.match(sql, /c\.status <> 'closed'/)

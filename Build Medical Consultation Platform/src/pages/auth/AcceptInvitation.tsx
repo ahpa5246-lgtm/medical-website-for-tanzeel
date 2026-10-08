@@ -21,7 +21,9 @@ export default function AcceptInvitation() {
         if (userError) throw userError
         const token = data.user?.user_metadata?.invitation_token
         if (typeof token !== "string") throw new Error("missing invitation")
-        const { error } = await supabase.rpc("accept_admin_invitation", { p_token: token })
+        const { error } = await supabase.rpc("accept_admin_invitation", {
+          p_token: token,
+        })
         if (error) throw error
         await refreshProfile()
         // The role grant is already committed; cleanup is best-effort.
@@ -35,27 +37,48 @@ export default function AcceptInvitation() {
   }, [session?.user.id, loading, refreshProfile])
 
   return (
-    <main dir="rtl" className="grid min-h-screen place-items-center bg-slate-50 p-4">
+    <main
+      dir="rtl"
+      className="grid min-h-screen place-items-center bg-slate-50 p-4"
+    >
       <section className="w-full max-w-lg rounded-3xl bg-white p-8 shadow-sm">
         <h1 className="text-2xl font-black">قبول دعوة فريق الإدارة</h1>
-        {loading ? <p className="mt-5" role="status">جارٍ التحقق من الحساب…</p>
-          : !session ? (
-            <div className="mt-5 space-y-4">
-              <p>سجّلي الدخول بالبريد الذي وصلته الدعوة حتى نتحقق من صلاحيتها.</p>
-              <Link className="font-bold text-primary-700 underline" to="/auth/login?returnTo=%2Fauth%2Faccept-invite">تسجيل الدخول</Link>
-            </div>
-          ) : result === "pending" ? <p className="mt-5" role="status">جارٍ التحقق من الدعوة وتفعيل الدور…</p>
-          : result === "success" ? (
-            <div className="mt-5 space-y-4" role="status">
-              <p>تم قبول الدعوة وتحديث صلاحيات الحساب.</p>
-              <Link className="font-bold text-primary-700 underline" to="/admin">فتح لوحة الإدارة</Link>
-            </div>
-          ) : (
-            <div className="mt-5 space-y-4" role="alert">
-              <p>تعذر قبول الدعوة. تحققي من البريد أو مدة صلاحيتها أو تواصلي مع مالكة المنصة.</p>
-              <Link className="font-bold text-primary-700 underline" to="/">العودة للرئيسية</Link>
-            </div>
-          )}
+        {loading ? (
+          <p className="mt-5" role="status">
+            جارٍ التحقق من الحساب…
+          </p>
+        ) : !session ? (
+          <div className="mt-5 space-y-4">
+            <p>سجّلي الدخول بالبريد الذي وصلته الدعوة حتى نتحقق من صلاحيتها.</p>
+            <Link
+              className="font-bold text-primary-700 underline"
+              to="/auth/login?returnTo=%2Fauth%2Faccept-invite"
+            >
+              تسجيل الدخول
+            </Link>
+          </div>
+        ) : result === "pending" ? (
+          <p className="mt-5" role="status">
+            جارٍ التحقق من الدعوة وتفعيل الدور…
+          </p>
+        ) : result === "success" ? (
+          <div className="mt-5 space-y-4" role="status">
+            <p>تم قبول الدعوة وتحديث صلاحيات الحساب.</p>
+            <Link className="font-bold text-primary-700 underline" to="/admin">
+              فتح لوحة الإدارة
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-5 space-y-4" role="alert">
+            <p>
+              تعذر قبول الدعوة. تحققي من البريد أو مدة صلاحيتها أو تواصلي مع
+              مالكة المنصة.
+            </p>
+            <Link className="font-bold text-primary-700 underline" to="/">
+              العودة للرئيسية
+            </Link>
+          </div>
+        )}
       </section>
     </main>
   )

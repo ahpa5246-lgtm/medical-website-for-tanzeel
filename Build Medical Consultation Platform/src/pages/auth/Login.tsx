@@ -6,7 +6,11 @@ import Input from "@/components/ui/Input"
 import { signIn } from "@/features/auth/authRepository"
 
 function safeReturnPath(value: string | null) {
-  return value?.startsWith("/") && !value.startsWith("//") && !value.startsWith("/\\") ? value : "/"
+  return value?.startsWith("/") &&
+    !value.startsWith("//") &&
+    !value.startsWith("/\\")
+    ? value
+    : "/"
 }
 
 export default function Login() {

@@ -33,10 +33,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Obtain a fresh access token for every quota RPC rather than capturing a
   // token that becomes stale after an authentication refresh.
-  useEffect(() => registerLabAccessTokenProvider(async () => {
-    const { data, error } = await supabase.auth.getSession()
-    return error ? null : data.session?.access_token ?? null
-  }), [])
+  useEffect(
+    () =>
+      registerLabAccessTokenProvider(async () => {
+        const { data, error } = await supabase.auth.getSession()
+        return error ? null : (data.session?.access_token ?? null)
+      }),
+    [],
+  )
 
   const refreshProfile = useCallback(async () => {
     if (!session?.user.id) {
