@@ -223,6 +223,10 @@ export interface Database {
     }
     Views: Record<string, never>
     Functions: {
+      accept_admin_invitation: {
+        Args: { p_token: string }
+        Returns: AppRole
+      }
       can_access_consultation: {
         Args: { target: string }
         Returns: boolean
