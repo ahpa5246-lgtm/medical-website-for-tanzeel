@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate, useSearchParams } from "react-router-dom"
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import { AlertTriangle, Upload } from "lucide-react"
 import Button from "@/components/ui/Button"
 import EmergencyBanner from "@/components/EmergencyBanner"
@@ -17,13 +22,25 @@ const MAX_CHARS = 5000
 export default function SubmitConsultation() {
   const { session } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [params] = useSearchParams()
+  const state = location.state as { initialQuestion?: unknown } | null
+  const initialQuestion =
+    typeof state?.initialQuestion === "string"
+      ? state.initialQuestion.slice(0, MAX_CHARS)
+      : ""
   const [form, setForm] = useState({
     title: "",
-    description: "",
+    description: initialQuestion,
     specialty: "",
   })
   const [files, setFiles] = useState<File[]>([])
+  // Once the consultation exists, retries resume uploads instead of
+  // creating duplicate medical records after a partial network failure.
+  const [savedConsultationId, setSavedConsultationId] = useState<string | null>(
+    null,
+  )
+  const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const [specialties, setSpecialties] = useState<SpecialtyOption[]>([])
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -62,20 +79,36 @@ export default function SubmitConsultation() {
 
     setLoading(true)
     setError("")
+    let consultationId = savedConsultationId
+    const remaining = savedConsultationId ? [...pendingFiles] : [...files]
     try {
-      const consultation = await createConsultation({
-        patientId: session.user.id,
-        specialtyId: form.specialty,
-        subject: form.title,
-        body: form.description,
-        emergencyFlag: emergency,
-      })
-      for (const file of files) await uploadAttachment(consultation.id, file)
-      navigate(`/consultations/${consultation.id}`)
+      if (!consultationId) {
+        const consultation = await createConsultation({
+          patientId: session.user.id,
+          specialtyId: form.specialty,
+          subject: form.title,
+          body: form.description,
+          emergencyFlag: emergency,
+        })
+        consultationId = consultation.id
+        setSavedConsultationId(consultationId)
+        setPendingFiles(remaining)
+      }
+      for (const file of [...remaining]) {
+        await uploadAttachment(consultationId, file)
+        remaining.shift()
+        setPendingFiles([...remaining])
+      }
+      navigate(`/consultations/${consultationId}`)
     } catch {
-      setError(
-        "تعذر حفظ الاستشارة. تحقق من اتصال قاعدة البيانات ثم أعد المحاولة.",
-      )
+      if (consultationId) {
+        setPendingFiles([...remaining])
+        setError(
+          "حُفظت الاستشارة بالفعل، لكن تعذر رفع بعض المرفقات. يمكنك إعادة محاولة الرفع دون إنشاء استشارة جديدة.",
+        )
+      } else {
+        setError("تعذر إنشاء الاستشارة. تحققي من الاتصال ثم أعيدي المحاولة.")
+      }
     } finally {
       setLoading(false)
     }
@@ -113,10 +146,28 @@ export default function SubmitConsultation() {
         </div>
       )}
 
+      {savedConsultationId && (
+        <div
+          role="status"
+          className="mb-4 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900"
+        >
+          الاستشارة محفوظة.{" "}
+          {pendingFiles.length
+            ? `تبقى ${pendingFiles.length} مرفقات للرفع.`
+            : ""}
+          <Link
+            className="mr-2 font-bold underline"
+            to={`/consultations/${savedConsultationId}`}
+          >
+            عرض الاستشارة المحفوظة
+          </Link>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         <label className="block text-sm font-bold text-slate-700">
           التخصص
           <select
+            disabled={Boolean(savedConsultationId)}
             value={form.specialty}
             onChange={(event) =>
               setForm((value) => ({
@@ -138,6 +189,7 @@ export default function SubmitConsultation() {
         <label className="block text-sm font-bold text-slate-700">
           عنوان الاستشارة
           <input
+            disabled={Boolean(savedConsultationId)}
             value={form.title}
             onChange={(event) =>
               setForm((value) => ({ ...value, title: event.target.value }))
@@ -151,6 +203,7 @@ export default function SubmitConsultation() {
         <label className="block text-sm font-bold text-slate-700">
           وصف الحالة
           <textarea
+            disabled={Boolean(savedConsultationId)}
             value={form.description}
             onChange={(event) =>
               setForm((value) => ({
@@ -173,6 +226,7 @@ export default function SubmitConsultation() {
             مرفقات اختيارية
           </span>
           <input
+            disabled={Boolean(savedConsultationId)}
             type="file"
             multiple
             accept=".jpg,.jpeg,.png,.webp,.pdf"
@@ -197,7 +251,9 @@ export default function SubmitConsultation() {
           loading={loading}
           disabled={!session}
         >
-          حفظ وإرسال الاستشارة
+          {savedConsultationId
+            ? "إعادة رفع المرفقات المتبقية"
+            : "حفظ وإرسال الاستشارة"}
         </Button>
       </form>
     </div>

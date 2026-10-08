@@ -6,7 +6,11 @@ import Input from "@/components/ui/Input"
 import { signIn } from "@/features/auth/authRepository"
 
 function safeReturnPath(value: string | null) {
-  return value?.startsWith("/") && !value.startsWith("//") ? value : "/admin"
+  return value?.startsWith("/") &&
+    !value.startsWith("//") &&
+    !value.startsWith("/\\")
+    ? value
+    : "/"
 }
 
 export default function Login() {
@@ -47,10 +51,10 @@ export default function Login() {
             <Stethoscope className="h-6 w-6 text-primary-700" />
           </span>
           <h1 className="mt-4 text-2xl font-black text-slate-900">
-            دخول فريق الإدارة
+            تسجيل الدخول
           </h1>
           <p className="mt-2 text-sm leading-7 text-slate-500">
-            الحسابات الإدارية تُنشأ عبر دعوة خاصة من مالكة المنصة.
+            ادخلي إلى حسابك لمتابعة الاستشارات أو إدارة المنصة بحسب صلاحياتك.
           </p>
         </div>
 

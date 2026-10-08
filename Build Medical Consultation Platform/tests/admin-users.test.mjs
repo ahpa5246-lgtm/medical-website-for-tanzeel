@@ -29,4 +29,5 @@ test("edge functions re-authorize every request and protect privileged roles", (
   assert.match(invite, /expires_at/)
   assert.match(status, /targetId === caller\.id/)
   assert.match(status, /target\.role === "owner"/)
+  assert.match(status, /\["admin", "editor"\]\.includes\(role\)/)
 })
