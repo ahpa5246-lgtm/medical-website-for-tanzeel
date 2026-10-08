@@ -13,6 +13,17 @@ import "./index.css"
 function loadNonCriticalFonts() {
   const fontStylesheet = document.createElement("link")
   fontStylesheet.rel = "stylesheet"
+  // A print-media stylesheet can download without blocking screen painting.
+  // Switch only after its own load event; font-display=optional keeps fallback
+  // text visible if web font files are not immediately available.
+  fontStylesheet.media = "print"
+  fontStylesheet.addEventListener(
+    "load",
+    () => {
+      fontStylesheet.media = "all"
+    },
+    { once: true },
+  )
   fontStylesheet.href =
     "https://fonts.googleapis.com/css2?family=Alexandria:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=optional"
   document.head.appendChild(fontStylesheet)
