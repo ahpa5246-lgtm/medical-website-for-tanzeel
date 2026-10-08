@@ -55,7 +55,7 @@ function useLabQuota() {
       createRouteLabQuotaClient({
         accessTokenProvider: async () => {
           const { data, error } = await supabase.auth.getSession()
-          return error ? null : data.session?.access_token ?? null
+          return error ? null : (data.session?.access_token ?? null)
         },
       }),
     )
