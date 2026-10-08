@@ -26,7 +26,7 @@ jobs:
           node-version: "22"
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec oxfmt --write src/features/auth/AuthProvider.tsx src/pages/auth/AcceptInvitation.tsx src/pages/auth/Login.tsx src/pages/auth/UpdatePassword.tsx src/pages/consultations/Submit.tsx tests/e2e/smoke.spec.mjs tests/medical-hardening-contract.test.mjs
+      - run: pnpm exec oxfmt src/features/auth/AuthProvider.tsx src/pages/auth/AcceptInvitation.tsx src/pages/auth/Login.tsx src/pages/auth/UpdatePassword.tsx src/pages/consultations/Submit.tsx tests/e2e/smoke.spec.mjs tests/medical-hardening-contract.test.mjs
       - name: Commit only formatter-generated edits
         run: |
           git config user.name "github-actions[bot]"
