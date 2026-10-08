@@ -51,12 +51,14 @@ function useLabQuota() {
   })
 
   useEffect(() => {
-    const session = createLabQuotaSession(createRouteLabQuotaClient({
-      accessTokenProvider: async () => {
-        const { data, error } = await supabase.auth.getSession()
-        return error ? null : data.session?.access_token ?? null
-      },
-    }))
+    const session = createLabQuotaSession(
+      createRouteLabQuotaClient({
+        accessTokenProvider: async () => {
+          const { data, error } = await supabase.auth.getSession()
+          return error ? null : data.session?.access_token ?? null
+        },
+      }),
+    )
     sessionRef.current = session
     const unsubscribe = session.subscribe(setState)
     void session.refresh()
