@@ -2,30 +2,30 @@ import { lazy, Suspense, type ReactNode } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Layout from "@/components/layout/Layout"
 import Home from "@/pages/Home"
-import Login from "@/pages/auth/Login"
-import Signup from "@/pages/auth/Signup"
-import ForgotPassword from "@/pages/auth/ForgotPassword"
-import UpdatePassword from "@/pages/auth/UpdatePassword"
-import AcceptInvitation from "@/pages/auth/AcceptInvitation"
-import ConsultationList from "@/pages/consultations/List"
-import SubmitConsultation from "@/pages/consultations/Submit"
-import ConsultationThread from "@/pages/consultations/Thread"
-import DoctorDirectory from "@/pages/doctors/Directory"
-import DoctorProfile from "@/pages/doctors/Profile"
-import ArticleList from "@/pages/articles/List"
-import ArticleDetail from "@/pages/articles/Detail"
-import ArticleEditor from "@/pages/articles/Editor"
-import CourseList from "@/pages/courses/List"
-import LibraryList from "@/pages/library/List"
-import MedicalDisclaimer from "@/pages/legal/Disclaimer"
-import Terms from "@/pages/legal/Terms"
-import Privacy from "@/pages/legal/Privacy"
-import VerificationApplication from "@/pages/verification/Application"
 import PreviewNotice from "@/components/PreviewNotice"
 import { LoadingState } from "@/components/system/AsyncState"
 import RouteAnnouncer from "@/components/system/RouteAnnouncer"
 import RequireRole from "@/features/auth/RequireRole"
 
+const Login = lazy(() => import("@/pages/auth/Login"))
+const Signup = lazy(() => import("@/pages/auth/Signup"))
+const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"))
+const UpdatePassword = lazy(() => import("@/pages/auth/UpdatePassword"))
+const AcceptInvitation = lazy(() => import("@/pages/auth/AcceptInvitation"))
+const ConsultationList = lazy(() => import("@/pages/consultations/List"))
+const SubmitConsultation = lazy(() => import("@/pages/consultations/Submit"))
+const ConsultationThread = lazy(() => import("@/pages/consultations/Thread"))
+const DoctorDirectory = lazy(() => import("@/pages/doctors/Directory"))
+const DoctorProfile = lazy(() => import("@/pages/doctors/Profile"))
+const ArticleList = lazy(() => import("@/pages/articles/List"))
+const ArticleDetail = lazy(() => import("@/pages/articles/Detail"))
+const ArticleEditor = lazy(() => import("@/pages/articles/Editor"))
+const CourseList = lazy(() => import("@/pages/courses/List"))
+const LibraryList = lazy(() => import("@/pages/library/List"))
+const MedicalDisclaimer = lazy(() => import("@/pages/legal/Disclaimer"))
+const Terms = lazy(() => import("@/pages/legal/Terms"))
+const Privacy = lazy(() => import("@/pages/legal/Privacy"))
+const VerificationApplication = lazy(() => import("@/pages/verification/Application"))
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
 const Training = lazy(() => import("@/pages/training/Training"))
 const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
@@ -66,7 +66,8 @@ function NotFound() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <Suspense fallback={<LoadingState label="جارٍ تحميل الصفحة…" />}>
+      <BrowserRouter>
       <PreviewNotice />
       <Routes>
         {/* Auth routes — no layout header/footer */}
@@ -161,6 +162,7 @@ export default function App() {
         />
       </Routes>
       <RouteAnnouncer />
-    </BrowserRouter>
+      </BrowserRouter>
+    </Suspense>
   )
 }

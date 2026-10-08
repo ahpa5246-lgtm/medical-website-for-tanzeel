@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+/* Brand fonts are loaded after the critical page paint by main.tsx.
+   Avoid blocking CSS and first paint on network-bound external font CSS. */
 @import 'tailwindcss';
 @import "./styles/tokens.css";
 @import "./styles/foundation.css";
