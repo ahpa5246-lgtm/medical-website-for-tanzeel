@@ -29,9 +29,10 @@ test("medical database restricts doctor edits, closed messages, and invite accep
 })
 
 test("learning lab receives access tokens from authenticated sessions", () => {
-  const auth = read("src/features/auth/AuthProvider.tsx")
-  assert.match(auth, /registerLabAccessTokenProvider/)
-  assert.match(auth, /supabase\.auth\.getSession/)
+  const lab = read("src/pages/labs/LabHub.tsx")
+  assert.match(lab, /accessTokenProvider/)
+  assert.match(lab, /supabase\.auth\.getSession/)
+  assert.match(lab, /authSession\?\.user\.id/)
 })
 
 test("home question is carried to the consultation draft and upload retries reuse saved row", () => {
