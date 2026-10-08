@@ -14,6 +14,8 @@ import {
   Trophy,
 } from "lucide-react"
 import { Link, useParams } from "react-router-dom"
+import { useAuth } from "@/features/auth/AuthProvider"
+import { supabase } from "@/lib/supabase"
 import DemoLabel from "@/components/DemoLabel"
 import Badge from "@/components/ui/Badge"
 import { LAB_MODULES, labModuleById, type LabModule } from "./catalog"
@@ -40,6 +42,7 @@ function typeLabel(type: LabModule["type"]) {
 }
 
 function useLabQuota() {
+  const { session: authSession } = useAuth()
   const sessionRef = useRef<LabQuotaSession | null>(null)
   const [state, setState] = useState<LabQuotaSessionState>({
     phase: "loading",
@@ -48,7 +51,12 @@ function useLabQuota() {
   })
 
   useEffect(() => {
-    const session = createLabQuotaSession(createRouteLabQuotaClient())
+    const session = createLabQuotaSession(createRouteLabQuotaClient({
+      accessTokenProvider: async () => {
+        const { data, error } = await supabase.auth.getSession()
+        return error ? null : data.session?.access_token ?? null
+      },
+    }))
     sessionRef.current = session
     const unsubscribe = session.subscribe(setState)
     void session.refresh()
@@ -58,7 +66,7 @@ function useLabQuota() {
       session.dispose()
       if (sessionRef.current === session) sessionRef.current = null
     }
-  }, [])
+  }, [authSession?.user.id])
 
   const refresh = useCallback(() => void sessionRef.current?.refresh(), [])
   const start = useCallback(() => void sessionRef.current?.start(), [])
