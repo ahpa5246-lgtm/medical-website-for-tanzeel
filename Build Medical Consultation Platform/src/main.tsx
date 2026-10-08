@@ -6,39 +6,6 @@ import ConfigurationGate from "@/components/system/ConfigurationGate"
 import { AuthProvider } from "@/features/auth/AuthProvider"
 import "./index.css"
 
-// Keep third-party display fonts off the critical rendering path. On slow
-// connections the browser keeps the system-font fallback (font-display:
-// optional), avoiding a late layout shift. This also prevents external font
-// requests from delaying the page's first meaningful paint.
-function loadNonCriticalFonts() {
-  const fontStylesheet = document.createElement("link")
-  fontStylesheet.rel = "stylesheet"
-  // A print-media stylesheet can download without blocking screen painting.
-  // Switch only after its own load event; font-display=optional keeps fallback
-  // text visible if web font files are not immediately available.
-  fontStylesheet.media = "print"
-  fontStylesheet.addEventListener(
-    "load",
-    () => {
-      fontStylesheet.media = "all"
-    },
-    { once: true },
-  )
-  fontStylesheet.href =
-    "https://fonts.googleapis.com/css2?family=Alexandria:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=optional"
-  document.head.appendChild(fontStylesheet)
-}
-
-if (document.readyState === "complete") {
-  window.setTimeout(loadNonCriticalFonts, 0)
-} else {
-  window.addEventListener(
-    "load",
-    () => window.setTimeout(loadNonCriticalFonts, 0),
-    { once: true },
-  )
-}
-
 document.documentElement.setAttribute("dir", "rtl")
 document.documentElement.setAttribute("lang", "ar")
 

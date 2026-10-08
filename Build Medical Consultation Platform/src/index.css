@@ -1,5 +1,5 @@
-/* Brand fonts are loaded after the critical page paint by main.tsx.
-   Avoid blocking CSS and first paint on network-bound external font CSS. */
+/* Use local/system fallback fonts for fast and deterministic first render.
+   No third-party font CSS is fetched; pages remain usable on poor networks. */
 @import 'tailwindcss';
 @import "./styles/tokens.css";
 @import "./styles/foundation.css";
