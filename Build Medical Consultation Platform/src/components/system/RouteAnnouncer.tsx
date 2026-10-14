@@ -7,8 +7,6 @@ export default function RouteAnnouncer() {
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      const main = document.getElementById("main-content")
-      main?.focus({ preventScroll: true })
       setMessage(document.title || "ميدكونكت")
     })
 

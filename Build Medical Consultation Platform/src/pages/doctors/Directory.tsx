@@ -27,11 +27,15 @@ export default function DoctorDirectory() {
   useEffect(() => {
     let active = true
     setError("")
-    listPublishedDoctors({ query, page })
-      .then((data) => active && setResult(data))
-      .catch(() => active && setError("تعذر تحميل دليل الأطباء الآن."))
+    setResult(null)
+    const timer = window.setTimeout(() => {
+      listPublishedDoctors({ query, page })
+        .then((data) => active && setResult(data))
+        .catch(() => active && setError("تعذر تحميل دليل الأطباء الآن."))
+    }, 200)
     return () => {
       active = false
+      window.clearTimeout(timer)
     }
   }, [query, page, reload])
 
@@ -43,7 +47,7 @@ export default function DoctorDirectory() {
   }
 
   return (
-    <main dir="rtl" className="min-h-screen bg-slate-50 pb-16">
+    <div dir="rtl" className="min-h-screen bg-slate-50 pb-16">
       <header className="border-b border-primary-100 bg-gradient-to-l from-primary-50 to-white py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <p className="section-kicker">الدليل الطبي</p>
@@ -127,7 +131,7 @@ export default function DoctorDirectory() {
                       {doctor.bio}
                     </p>
                     <Link to={`/doctors/${doctor.slug}`} className="block">
-                      <Button className="w-full justify-center gap-2">
+                      <Button as="span" className="w-full justify-center gap-2">
                         <Stethoscope className="h-4 w-4" /> تعرّف إلى شكل الخدمة
                       </Button>
                     </Link>
@@ -157,6 +161,6 @@ export default function DoctorDirectory() {
           </>
         ) : null}
       </section>
-    </main>
+    </div>
   )
 }

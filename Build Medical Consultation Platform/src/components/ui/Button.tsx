@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils"
 import type { ButtonHTMLAttributes, ReactNode } from "react"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  as?: "button" | "span"
   variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "accent"
   size?: "sm" | "md" | "lg"
   loading?: boolean
@@ -9,6 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export default function Button({
+  as: Component = "button",
   variant = "primary",
   size = "md",
   loading = false,
@@ -42,7 +44,7 @@ export default function Button({
   }
 
   return (
-    <button
+    <Component
       className={cn(base, variants[variant], sizes[size], className)}
       disabled={disabled || loading}
       {...props}
@@ -65,6 +67,6 @@ export default function Button({
         </svg>
       )}
       {children}
-    </button>
+    </Component>
   )
 }

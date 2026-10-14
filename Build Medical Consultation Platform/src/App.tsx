@@ -4,7 +4,7 @@ import Layout from "@/components/layout/Layout"
 import Home from "@/pages/Home"
 import PreviewNotice from "@/components/PreviewNotice"
 import { LoadingState } from "@/components/system/AsyncState"
-import RouteAnnouncer from "@/components/system/RouteAnnouncer"
+import RouteSurface from "@/components/system/RouteSurface"
 import RequireRole from "@/features/auth/RequireRole"
 
 const Login = lazy(() => import("@/pages/auth/Login"))
@@ -20,6 +20,7 @@ const DoctorProfile = lazy(() => import("@/pages/doctors/Profile"))
 const ArticleList = lazy(() => import("@/pages/articles/List"))
 const ArticleDetail = lazy(() => import("@/pages/articles/Detail"))
 const ArticleEditor = lazy(() => import("@/pages/articles/Editor"))
+const ContentDetail = lazy(() => import("@/features/content/ContentDetail"))
 const CourseList = lazy(() => import("@/pages/courses/List"))
 const LibraryList = lazy(() => import("@/pages/library/List"))
 const MedicalDisclaimer = lazy(() => import("@/pages/legal/Disclaimer"))
@@ -73,11 +74,46 @@ export default function App() {
         <PreviewNotice />
         <Routes>
           {/* Auth routes — no layout header/footer */}
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/signup" element={<Signup />} />
-          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-          <Route path="/auth/update-password" element={<UpdatePassword />} />
-          <Route path="/auth/accept-invite" element={<AcceptInvitation />} />
+          <Route
+            path="/auth/login"
+            element={
+              <RouteSurface>
+                <Login />
+              </RouteSurface>
+            }
+          />
+          <Route
+            path="/auth/signup"
+            element={
+              <RouteSurface>
+                <Signup />
+              </RouteSurface>
+            }
+          />
+          <Route
+            path="/auth/forgot-password"
+            element={
+              <RouteSurface>
+                <ForgotPassword />
+              </RouteSurface>
+            }
+          />
+          <Route
+            path="/auth/update-password"
+            element={
+              <RouteSurface>
+                <UpdatePassword />
+              </RouteSurface>
+            }
+          />
+          <Route
+            path="/auth/accept-invite"
+            element={
+              <RouteSurface>
+                <AcceptInvitation />
+              </RouteSurface>
+            }
+          />
 
           <Route
             path="/admin/*"
@@ -119,6 +155,10 @@ export default function App() {
                   <Route path="/articles/new" element={<ArticleEditor />} />
                   <Route path="/courses" element={<CourseList />} />
                   <Route
+                    path="/courses/:id"
+                    element={<ContentDetail kind="course" />}
+                  />
+                  <Route
                     path="/training"
                     element={
                       <LazyRoute label="جارٍ تحميل مسار التدريب…">
@@ -143,6 +183,10 @@ export default function App() {
                     }
                   />
                   <Route path="/library" element={<LibraryList />} />
+                  <Route
+                    path="/library/:id"
+                    element={<ContentDetail kind="resource" />}
+                  />
 
                   {/* Legal */}
                   <Route
@@ -163,7 +207,6 @@ export default function App() {
             }
           />
         </Routes>
-        <RouteAnnouncer />
       </BrowserRouter>
     </Suspense>
   )

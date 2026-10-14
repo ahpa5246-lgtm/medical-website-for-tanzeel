@@ -1,5 +1,6 @@
 import Header from "./Header"
 import Footer from "./Footer"
+import RouteSurface from "../system/RouteSurface"
 import type { ReactNode } from "react"
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -9,12 +10,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         الانتقال إلى المحتوى الرئيسي
       </a>
       <Header />
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="flex-1 page-enter outline-none"
-      >
-        {children}
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+        <RouteSurface>{children}</RouteSurface>
       </main>
       <Footer />
     </div>

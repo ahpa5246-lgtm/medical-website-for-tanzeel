@@ -183,7 +183,7 @@ select throws_ok(
   $sql$ insert into public.consultation_messages (consultation_id, sender_id, sender_kind, body)
      values ('cccccccc-cccc-4ccc-8ccc-cccccccccccc', '11111111-1111-4111-8111-111111111111', 'patient', 'should not be sent') $sql$,
   '42501',
-  'new row violates row-level security policy for table "consultation_messages"',
+  'permission denied for table consultation_messages',
   'closed consultations reject new messages on the server'
 );
 
@@ -200,7 +200,7 @@ select throws_ok(
       'answered'
     ) $sql$,
   '42501',
-  'new row violates row-level security policy for table "consultations"',
+  'permission denied for table consultations',
   'patient cannot insert an answered consultation'
 );
 
@@ -215,7 +215,7 @@ select throws_ok(
       'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'
     ) $sql$,
   '42501',
-  'new row violates row-level security policy for table "consultations"',
+  'permission denied for table consultations',
   'patient cannot pre-assign the consultation to a doctor'
 );
 

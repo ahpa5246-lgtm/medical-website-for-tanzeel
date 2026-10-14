@@ -47,28 +47,29 @@ export async function createConsultation(input: {
   subject: string
   body: string
   emergencyFlag: boolean
+  operationId: string
 }) {
   const { data, error } = await supabase
-    .from("consultations")
-    .insert({
-      patient_id: input.patientId,
-      specialty_id: input.specialtyId,
-      subject: input.subject.trim(),
-      body: input.body.trim(),
-      emergency_flag: input.emergencyFlag,
+    .rpc("create_consultation", {
+      p_specialty_id: input.specialtyId,
+      p_subject: input.subject.trim(),
+      p_body: input.body.trim(),
+      p_emergency: input.emergencyFlag,
+      p_operation_id: input.operationId,
     })
-    .select("*")
     .single()
   if (error) throw error
   return data as ConsultationRecord
 }
 
-export async function listMyConsultations(patientId: string) {
+export async function listMyConsultations(patientId: string, page = 1) {
   const { data, error } = await supabase
     .from("consultations")
     .select("*")
-    .eq("patient_id", patientId)
+    // RLS returns only owned, assigned-provider or authorized staff records.
     .order("created_at", { ascending: false })
+    .order("id")
+    .range((Math.max(1, page) - 1) * 20, Math.max(1, page) * 20 - 1)
   if (error) throw error
   return (data ?? []) as ConsultationRecord[]
 }
@@ -83,12 +84,14 @@ export async function getConsultation(id: string) {
   return data as ConsultationRecord | null
 }
 
-export async function listMessages(consultationId: string) {
+export async function listMessages(consultationId: string, page = 1) {
   const { data, error } = await supabase
     .from("consultation_messages")
     .select("*")
     .eq("consultation_id", consultationId)
     .order("created_at", { ascending: true })
+    .order("id")
+    .range((Math.max(1, page) - 1) * 50, Math.max(1, page) * 50 - 1)
   if (error) throw error
   return (data ?? []) as ConsultationMessage[]
 }
@@ -97,17 +100,15 @@ export async function sendMessage(input: {
   consultationId: string
   senderId: string
   senderKind: "patient" | "doctor" | "staff"
+  operationId: string
   body: string
 }) {
   const { data, error } = await supabase
-    .from("consultation_messages")
-    .insert({
-      consultation_id: input.consultationId,
-      sender_id: input.senderId,
-      sender_kind: input.senderKind,
-      body: input.body.trim(),
+    .rpc("send_consultation_message", {
+      p_consultation_id: input.consultationId,
+      p_body: input.body.trim(),
+      p_operation_id: input.operationId,
     })
-    .select("*")
     .single()
   if (error) throw error
   return data as ConsultationMessage
@@ -129,13 +130,64 @@ export async function saveRating(input: {
 }
 
 export async function uploadAttachment(consultationId: string, file: File) {
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "-")
-  const path = `${consultationId}/${crypto.randomUUID()}-${safeName}`
+  if (
+    file.size < 1 ||
+    file.size > 10 * 1024 * 1024 ||
+    !["application/pdf", "image/jpeg", "image/png"].includes(file.type)
+  )
+    throw new Error("المرفق PDF أو صورة حتى 10 ميغابايت.")
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) throw new Error("يلزم الدخول.")
+  const safeName =
+    file.name.replace(/[^a-zA-Z0-9._-]+/g, "-").slice(0, 100) || "attachment"
+  const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer())
+  const hash = Array.from(new Uint8Array(digest), (b) =>
+    b.toString(16).padStart(2, "0"),
+  ).join("")
+  const path = `${consultationId}/${user.id}-${hash}`
   const { error } = await supabase.storage
     .from("consultation-attachments")
     .upload(path, file, { upsert: false })
-  if (error) throw error
+  if (error) {
+    const { error: missing } = await supabase.storage
+      .from("consultation-attachments")
+      .createSignedUrl(path, 60)
+    if (missing) throw error
+  }
+  const { error: metadataError } = await supabase
+    .from("consultation_attachments")
+    .upsert(
+      {
+        consultation_id: consultationId,
+        uploaded_by: user.id,
+        path,
+        file_name: safeName,
+        file_size: file.size,
+        mime_type: file.type,
+      },
+      { onConflict: "path", ignoreDuplicates: true },
+    )
+  if (metadataError) throw metadataError
   return path
+}
+export async function listAttachments(consultationId: string) {
+  const { data, error } = await supabase
+    .from("consultation_attachments")
+    .select("*")
+    .eq("consultation_id", consultationId)
+    .order("created_at")
+    .limit(50)
+  if (error) throw error
+  return data ?? []
+}
+export async function attachmentUrl(path: string, fileName: string) {
+  const { data, error } = await supabase.storage
+    .from("consultation-attachments")
+    .createSignedUrl(path, 60, { download: fileName })
+  if (error) throw error
+  return data.signedUrl
 }
 
 export async function listAdminConsultations() {

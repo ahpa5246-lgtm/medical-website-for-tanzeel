@@ -44,7 +44,7 @@ export default function PhasePreview({
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/articles">
-            <Button>استكشف المرحلة الحالية</Button>
+            <Button as="span">استكشف المرحلة الحالية</Button>
           </Link>
           <Link
             to="/"
