@@ -14,6 +14,8 @@ import {
   Trophy,
 } from "lucide-react"
 import { Link, useParams } from "react-router-dom"
+import TaskPlayer from "@/features/training/TaskPlayer"
+import { getTrainingTask } from "@/features/training/trainingRepository"
 import { useAuth } from "@/features/auth/AuthProvider"
 import { supabase } from "@/lib/supabase"
 import DemoLabel from "@/components/DemoLabel"
@@ -198,7 +200,21 @@ function LabList() {
 function LabAccessPanel({ module }: { module: LabModule }) {
   const { state, refresh, start, end } = useLabQuota()
   const enabledShell = module.status === "pilot-shell"
-  const canStart = enabledShell && state.phase === "ready"
+  const [published, setPublished] = useState(false)
+  useEffect(() => {
+    let active = true
+    getTrainingTask("chest-pain")
+      .then((task) => {
+        if (active) setPublished(Boolean(task))
+      })
+      .catch(() => {
+        if (active) setPublished(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [module.id])
+  const canStart = enabledShell && state.phase === "ready" && published
   const active = state.phase === "active"
   const busy = ["loading", "starting", "ending"].includes(state.phase)
 
@@ -230,6 +246,14 @@ function LabAccessPanel({ module }: { module: LabModule }) {
         {quotaLabel(state)}
       </div>
 
+      {active && published && (
+        <TaskPlayer stageId="chest-pain" onClose={end} onComplete={end} />
+      )}
+      {!published && (
+        <p className="mt-4 text-sm text-slate-600">
+          لا يوجد نشاط منشور لهذه الوحدة بعد؛ لا تُستهلك الحصة لعرض قالب فارغ.
+        </p>
+      )}
       {active ? (
         <button
           type="button"

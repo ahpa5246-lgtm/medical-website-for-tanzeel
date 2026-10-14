@@ -1,10 +1,11 @@
 {
-  "description": "Provides free medical consultations, educational courses, and trusted health resources in Arabic, connecting patients with verified doctors and instructors.",
+  "description": "منصة عربية للاستشارات الخاصة والمحتوى والتعلم.",
   "robots": {
     "index": false
   },
   "accessibility": {
     "addBypassLinks": false,
     "ignoreReducedMotion": false
-  }
+  },
+  "title": "ميدكونكت"
 }

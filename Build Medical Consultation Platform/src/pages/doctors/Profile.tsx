@@ -20,10 +20,19 @@ export default function DoctorProfile() {
   const [error, setError] = useState("")
 
   useEffect(() => {
+    let active = true
+    setError("")
     setDoctor(undefined)
     getPublishedDoctorBySlug(slug)
-      .then(setDoctor)
-      .catch(() => setError("تعذر تحميل الملف الآن."))
+      .then((data) => {
+        if (active) setDoctor(data)
+      })
+      .catch(() => {
+        if (active) setError("تعذر تحميل الملف الآن.")
+      })
+    return () => {
+      active = false
+    }
   }, [slug])
 
   if (error)
@@ -43,7 +52,7 @@ export default function DoctorProfile() {
     )
 
   return (
-    <main dir="rtl" className="min-h-screen bg-slate-50 py-10">
+    <div dir="rtl" className="min-h-screen bg-slate-50 py-10">
       <article className="mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
         <div className="grid md:grid-cols-[18rem_1fr]">
           <img
@@ -102,6 +111,6 @@ export default function DoctorProfile() {
           </div>
         </div>
       </article>
-    </main>
+    </div>
   )
 }

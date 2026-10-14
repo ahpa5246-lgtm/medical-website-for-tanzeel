@@ -118,6 +118,10 @@ export default function Login() {
             تسجيل الدخول
           </Button>
         </form>
+        <nav className="mt-5 flex justify-between text-sm text-primary-700">
+          <Link to="/">الرئيسية</Link>
+          <Link to="/auth/signup">إنشاء حساب</Link>
+        </nav>
       </section>
     </main>
   )

@@ -20,19 +20,33 @@ export default function ConsultationList() {
   const [items, setItems] = useState<ConsultationRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [page, setPage] = useState(1)
+  const [retry, setRetry] = useState(0)
 
   useEffect(() => {
+    let active = true
+    setItems([])
+    setError("")
+    setLoading(true)
     if (authLoading) return
     if (!session) {
       setLoading(false)
       return
     }
-
-    listMyConsultations(session.user.id)
-      .then(setItems)
-      .catch(() => setError("تعذر تحميل الاستشارات."))
-      .finally(() => setLoading(false))
-  }, [session, authLoading])
+    listMyConsultations(session.user.id, page)
+      .then((data) => {
+        if (active) setItems(data)
+      })
+      .catch(() => {
+        if (active) setError("تعذر تحميل الاستشارات.")
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [session?.user.id, authLoading, page, retry])
 
   if (!authLoading && !session)
     return (
@@ -43,7 +57,9 @@ export default function ConsultationList() {
           سجّل الدخول لعرض الاستشارات المحفوظة.
         </p>
         <Link to="/auth/login">
-          <Button className="mt-6">تسجيل الدخول</Button>
+          <Button as="span" className="mt-6">
+            تسجيل الدخول
+          </Button>
         </Link>
       </div>
     )
@@ -54,11 +70,11 @@ export default function ConsultationList() {
         <div>
           <h1 className="text-3xl font-black">استشاراتي</h1>
           <p className="mt-2 text-sm text-slate-500">
-            كل الاستشارات المحفوظة في حسابك.
+            استشاراتك والاستشارات المعيّنة لك بحسب صلاحياتك.
           </p>
         </div>
         <Link to="/consultations/new">
-          <Button className="gap-2">
+          <Button as="span" className="gap-2">
             <Plus className="h-4 w-4" />
             استشارة جديدة
           </Button>
@@ -75,6 +91,14 @@ export default function ConsultationList() {
         </div>
       )}
 
+      {error && (
+        <button
+          className="mt-3 underline"
+          onClick={() => setRetry((v) => v + 1)}
+        >
+          إعادة المحاولة
+        </button>
+      )}
       <div className="mt-8 space-y-3">
         {items.map((consultation) => (
           <Link
@@ -101,6 +125,22 @@ export default function ConsultationList() {
           </Link>
         ))}
       </div>
+      <nav aria-label="صفحات الاستشارات" className="mt-5 flex gap-3">
+        <button
+          disabled={page === 1 || loading}
+          className="rounded-xl border p-3"
+          onClick={() => setPage((v) => v - 1)}
+        >
+          السابق
+        </button>
+        <button
+          disabled={items.length < 20 || loading}
+          className="rounded-xl border p-3"
+          onClick={() => setPage((v) => v + 1)}
+        >
+          التالي
+        </button>
+      </nav>
     </div>
   )
 }

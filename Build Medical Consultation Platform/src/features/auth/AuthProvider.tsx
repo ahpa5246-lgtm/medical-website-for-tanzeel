@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useRef,
   type ReactNode,
 } from "react"
 import type { Session } from "@supabase/supabase-js"
@@ -26,32 +27,44 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const profileRequest = useRef(0)
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<AccountProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [authEpoch, setAuthEpoch] = useState(0)
+  const identity = useRef<string | undefined>(undefined)
 
   const refreshProfile = useCallback(async () => {
+    const request = ++profileRequest.current
     if (!session?.user.id) {
       setProfile(null)
       return
     }
     try {
-      setProfile(await getProfile(session.user.id))
+      const nextProfile = await getProfile(session.user.id)
+      if (request === profileRequest.current) setProfile(nextProfile)
     } catch {
-      setProfile(null)
+      if (request === profileRequest.current) setProfile(null)
     }
   }, [session?.user.id])
 
   useEffect(() => {
     let active = true
+    let eventReceived = false
     supabase.auth.getSession().then(({ data }) => {
-      if (!active) return
+      if (!active || eventReceived) return
+      identity.current = data.session?.user.id
       setSession(data.session)
       setLoading(false)
     })
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      eventReceived = true
+      ++profileRequest.current
+      if (identity.current !== nextSession?.user.id) setProfile(null)
+      identity.current = nextSession?.user.id
       setSession(nextSession)
-      if (!nextSession) setProfile(null)
+      setLoading(false)
+      setAuthEpoch((value) => value + 1)
     })
     return () => {
       active = false
@@ -61,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     void refreshProfile()
-  }, [refreshProfile])
+  }, [refreshProfile, authEpoch])
 
   useEffect(() => {
     const enforceFreshRole = () => void refreshProfile()
