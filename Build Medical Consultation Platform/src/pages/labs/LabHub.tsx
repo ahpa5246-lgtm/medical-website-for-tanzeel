@@ -157,9 +157,7 @@ function LabList() {
                   <TypeIcon type={module.type} />
                 </span>
                 <Badge
-                  variant={
-                    module.status !== "planned" ? "primary" : "muted"
-                  }
+                  variant={module.status !== "planned" ? "primary" : "muted"}
                 >
                   {module.status === "playable-demo"
                     ? "تجربة قابلة للعب"
@@ -380,7 +378,8 @@ function LabDetail({ module }: { module: LabModule }) {
           <LabAccessPanel module={module} />
         ) : (
           <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 text-sm leading-7 text-slate-700">
-            هذه تجربة خيالية محلية ولا تحتاج حسابًا. الإجابات لا تُحفظ أو تستخدم طبيًا.
+            هذه تجربة خيالية محلية ولا تحتاج حسابًا. الإجابات لا تُحفظ أو تستخدم
+            طبيًا.
           </aside>
         )}
       </section>
