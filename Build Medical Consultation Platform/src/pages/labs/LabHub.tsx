@@ -19,6 +19,7 @@ import { supabase } from "@/lib/supabase"
 import DemoLabel from "@/components/DemoLabel"
 import Badge from "@/components/ui/Badge"
 import { LAB_MODULES, labModuleById, type LabModule } from "./catalog"
+import CaseRoom from "./CaseRoom"
 import {
   createRouteLabQuotaClient,
   type LabQuotaErrorCode,
@@ -154,13 +155,13 @@ function LabList() {
                   <TypeIcon type={module.type} />
                 </span>
                 <Badge
-                  variant={
-                    module.status === "pilot-shell" ? "primary" : "muted"
-                  }
+                  variant={module.status === "planned" ? "muted" : "primary"}
                 >
-                  {module.status === "pilot-shell"
-                    ? "قالب الطيار"
-                    : "مخطط لاحقًا"}
+                  {module.status === "playable-demo"
+                    ? "قابل للعب"
+                    : module.status === "pilot-shell"
+                      ? "قالب الطيار"
+                      : "مخطط لاحقًا"}
                 </Badge>
               </div>
               <p className="mt-5 text-xs font-bold text-primary-700">
@@ -197,7 +198,7 @@ function LabList() {
 
 function LabAccessPanel({ module }: { module: LabModule }) {
   const { state, refresh, start, end } = useLabQuota()
-  const enabledShell = module.status === "pilot-shell"
+  const enabledShell = ["pilot-shell", "playable-demo"].includes(module.status)
   const canStart = enabledShell && state.phase === "ready"
   const active = state.phase === "active"
   const busy = ["loading", "starting", "ending"].includes(state.phase)
@@ -278,7 +279,7 @@ function LabAccessPanel({ module }: { module: LabModule }) {
 }
 
 function LabDetail({ module }: { module: LabModule }) {
-  const enabledShell = module.status === "pilot-shell"
+  const enabledShell = ["pilot-shell", "playable-demo"].includes(module.status)
 
   return (
     <div dir="rtl" className="min-h-[70vh] bg-slate-50">
@@ -292,7 +293,7 @@ function LabDetail({ module }: { module: LabModule }) {
           </Link>
           <div className="mt-6 flex flex-wrap items-center gap-2">
             <Badge variant={enabledShell ? "primary" : "muted"}>
-              {enabledShell ? "قالب طيار" : "مخطط لاحقًا"}
+              {enabledShell ? "تجربة قابلة للعب" : "مخطط لاحقًا"}
             </Badge>
             <DemoLabel>غير مراجع طبيًا</DemoLabel>
           </div>
@@ -323,8 +324,12 @@ function LabDetail({ module }: { module: LabModule }) {
             </div>
           </div>
 
+          {enabledShell && <CaseRoom key={module.id} moduleId={module.id} />}
+
           <div className="rounded-3xl border border-slate-200 bg-white p-6">
-            <h2 className="text-lg font-black text-ink">مسار الوحدة المخطط</h2>
+            <h2 className="text-lg font-black text-ink">
+              {enabledShell ? "خريطة المسار" : "مسار الوحدة المخطط"}
+            </h2>
             <ol className="mt-5 space-y-3">
               {module.stages.map((stage, index) => (
                 <li

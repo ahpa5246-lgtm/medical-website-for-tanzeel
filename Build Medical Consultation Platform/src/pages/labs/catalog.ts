@@ -9,7 +9,7 @@ export interface LabModule {
   difficulty: "مبتدئ" | "متوسط"
   xpReward: number
   estimatedMinutes: number
-  status: "pilot-shell" | "planned"
+  status: "pilot-shell" | "playable-demo" | "planned"
   reviewStatus: "unreviewed-placeholder"
   stages: string[]
 }
@@ -20,14 +20,28 @@ export const LAB_MODULES: LabModule[] = [
     title: "حالة ألم الصدر",
     specialty: "الطب العام والقلب",
     description:
-      "قالب حالة متفرعة يوضح بنية العرض والاختيارات والتغذية الراجعة فقط، من دون محتوى طبي معتمد.",
+      "مسار لعب خيالي قصير يدرّب فصل الملاحظة عن الافتراض وتوثيق عدم اليقين، من دون تشخيص أو علاج.",
     type: "branching-case",
     difficulty: "مبتدئ",
     xpReward: 100,
     estimatedMinutes: 10,
-    status: "pilot-shell",
+    status: "playable-demo",
     reviewStatus: "unreviewed-placeholder",
     stages: ["العرض", "التاريخ", "اختيار الفحوص", "التفسير", "النتيجة"],
+  },
+  {
+    id: "handoff-case",
+    title: "غرفة تسليم الحالة",
+    specialty: "التواصل وتوثيق الأدلة",
+    description:
+      "تحدٍ خيالي قصير لتلخيص ملف، حفظ مصدر المعلومة، وتحويل المجهول إلى سؤال مراجعة واضح.",
+    type: "branching-case",
+    difficulty: "مبتدئ",
+    xpReward: 100,
+    estimatedMinutes: 8,
+    status: "playable-demo",
+    reviewStatus: "unreviewed-placeholder",
+    stages: ["الخلاصة", "فرز المصادر", "تسمية التعارض", "بوابة المراجعة"],
   },
   {
     id: "heart-anatomy",
