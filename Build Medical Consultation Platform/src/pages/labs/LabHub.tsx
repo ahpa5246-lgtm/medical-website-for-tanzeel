@@ -317,7 +317,11 @@ function LabDetail({ module }: { module: LabModule }) {
           </Link>
           <div className="mt-6 flex flex-wrap items-center gap-2">
             <Badge variant={enabledShell ? "primary" : "muted"}>
-              {module.status === "playable-demo" ? "تجربة قابلة للعب" : enabledShell ? "قالب طيار" : "مخطط لاحقًا"}
+              {module.status === "playable-demo"
+                ? "تجربة قابلة للعب"
+                : enabledShell
+                  ? "قالب طيار"
+                  : "مخطط لاحقًا"}
             </Badge>
             <DemoLabel>غير مراجع طبيًا</DemoLabel>
           </div>
@@ -348,7 +352,8 @@ function LabDetail({ module }: { module: LabModule }) {
             </div>
           </div>
 
-          {(module.status === "playable-demo" || module.id === "chest-pain-case") && (
+          {(module.status === "playable-demo" ||
+            module.id === "chest-pain-case") && (
             <CaseRoom key={module.id} moduleId={module.id} />
           )}
           <div className="rounded-3xl border border-slate-200 bg-white p-6">
@@ -369,7 +374,9 @@ function LabDetail({ module }: { module: LabModule }) {
           </div>
         </div>
 
-        {module.status !== "playable-demo" ? <LabAccessPanel module={module} /> : (
+        {module.status !== "playable-demo" ? (
+          <LabAccessPanel module={module} />
+        ) : (
           <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 text-sm leading-7 text-slate-700">
             هذه تجربة خيالية محلية ولا تحتاج حسابًا. الإجابات لا تُحفظ أو تستخدم طبيًا.
           </aside>
