@@ -9,7 +9,7 @@ export interface LabModule {
   difficulty: "مبتدئ" | "متوسط"
   xpReward: number
   estimatedMinutes: number
-  status: "pilot-shell" | "planned"
+  status: "pilot-shell" | "playable-demo" | "planned"
   reviewStatus: "unreviewed-placeholder"
   stages: string[]
 }
@@ -28,6 +28,19 @@ export const LAB_MODULES: LabModule[] = [
     status: "pilot-shell",
     reviewStatus: "unreviewed-placeholder",
     stages: ["العرض", "التاريخ", "اختيار الفحوص", "التفسير", "النتيجة"],
+  },
+  {
+    id: "handoff-case",
+    title: "غرفة تسليم الحالة",
+    specialty: "التواصل وتوثيق الأدلة",
+    description: "تحدٍ خيالي لتلخيص ملف، حفظ مصدر المعلومات، وتحديد أسئلة المراجعة، دون استخدام بيانات مرضى.",
+    type: "branching-case",
+    difficulty: "مبتدئ",
+    xpReward: 100,
+    estimatedMinutes: 8,
+    status: "playable-demo",
+    reviewStatus: "unreviewed-placeholder",
+    stages: ["الخلاصة", "فرز المصادر", "تسمية التعارض", "بوابة المراجعة"],
   },
   {
     id: "heart-anatomy",

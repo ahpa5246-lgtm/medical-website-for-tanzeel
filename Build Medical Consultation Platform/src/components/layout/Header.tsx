@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { to: "/labs", label: "المختبرات" },
   { to: "/courses", label: "الأكاديمية" },
   { to: "/library", label: "المكتبة" },
+  { to: "/tanzeel", label: "مساحة تنزيل" },
 ]
 
 export default function Header() {

@@ -32,6 +32,8 @@ const VerificationApplication = lazy(
 const LabHub = lazy(() => import("@/pages/labs/LabHub"))
 const Training = lazy(() => import("@/pages/training/Training"))
 const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"))
+const TanzeelSpace = lazy(() => import("@/features/tanzeel/TanzeelSpace"))
+const TanzeelManage = lazy(() => import("@/features/tanzeel/TanzeelManage"))
 
 interface LazyRouteProps {
   children: ReactNode
@@ -133,6 +135,8 @@ export default function App() {
               <Layout>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/tanzeel" element={<TanzeelSpace />} />
+                  <Route path="/tanzeel/manage" element={<TanzeelManage />} />
 
                   {/* Consultations */}
                   <Route path="/consultations" element={<ConsultationList />} />

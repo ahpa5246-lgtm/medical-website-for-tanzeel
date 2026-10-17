@@ -12,7 +12,8 @@ import {
 
 export type { SpaceDraft, SpaceEntry, SpaceKind } from "./demoSpace.mjs"
 
-export const isSpaceDemo = () => !isSupabaseConfigured()
+export const isSpaceDemo = () =>
+  import.meta.env.VITE_ENABLE_PROTOTYPE === "true" || !isSupabaseConfigured()
 
 const mapEntry = (entry: {
   id: string
