@@ -33,7 +33,8 @@ export const LAB_MODULES: LabModule[] = [
     id: "handoff-case",
     title: "غرفة تسليم الحالة",
     specialty: "التواصل وتوثيق الأدلة",
-    description: "تحدٍ خيالي لتلخيص ملف، حفظ مصدر المعلومات، وتحديد أسئلة المراجعة، دون استخدام بيانات مرضى.",
+    description:
+      "تحدٍ خيالي لتلخيص ملف، حفظ مصدر المعلومات، وتحديد أسئلة المراجعة، دون استخدام بيانات مرضى.",
     type: "branching-case",
     difficulty: "مبتدئ",
     xpReward: 100,
