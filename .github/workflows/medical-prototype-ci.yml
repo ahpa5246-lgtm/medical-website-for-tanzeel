@@ -53,6 +53,12 @@ jobs:
       - name: Check formatting
         run: pnpm format:check
 
+      - name: Show formatter patch on failure
+        if: failure()
+        run: |
+          pnpm exec oxfmt --write src/pages/labs/LabHub.tsx
+          git --no-pager diff -- src/pages/labs/LabHub.tsx
+
       - name: Build production bundle
         run: pnpm build
 
