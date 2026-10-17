@@ -1,0 +1,22 @@
+# Free, nonclinical browser preview only. Does not run the PHP API or Supabase.
+services:
+  - type: web
+    name: tanzeel-medical-ui-preview-20261017
+    runtime: static
+    repo: https://github.com/ahpa5246-lgtm/medical-website-for-tanzeel
+    branch: integration/full-feature-demo-20261017
+    buildCommand: cd "Build Medical Consultation Platform" && corepack enable && pnpm install --frozen-lockfile && pnpm build
+    staticPublishPath: ./Build Medical Consultation Platform/dist
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: VITE_ENABLE_PROTOTYPE
+        value: "true"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: X-Robots-Tag
+        value: "noindex, nofollow"
