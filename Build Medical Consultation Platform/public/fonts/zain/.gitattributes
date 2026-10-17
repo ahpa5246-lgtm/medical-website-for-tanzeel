@@ -1,0 +1,2 @@
+# These small web fonts must be available to CI without Git LFS hydration.
+*.woff2 -filter -diff -merge -text
