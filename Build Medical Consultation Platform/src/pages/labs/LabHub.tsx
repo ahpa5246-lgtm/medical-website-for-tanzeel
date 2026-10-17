@@ -158,12 +158,14 @@ function LabList() {
                 </span>
                 <Badge
                   variant={
-                    module.status === "pilot-shell" ? "primary" : "muted"
+                    module.status !== "planned" ? "primary" : "muted"
                   }
                 >
-                  {module.status === "pilot-shell"
-                    ? "قالب الطيار"
-                    : "مخطط لاحقًا"}
+                  {module.status === "playable-demo"
+                    ? "تجربة قابلة للعب"
+                    : module.status === "pilot-shell"
+                      ? "قالب الطيار"
+                      : "مخطط لاحقًا"}
                 </Badge>
               </div>
               <p className="mt-5 text-xs font-bold text-primary-700">
