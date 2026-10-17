@@ -58,7 +58,7 @@ export async function getPublishedDoctorBySlug(slug: string) {
 }
 
 export function doctorImageUrl(path: string | null) {
-  if (!path) return "/doctors/placeholder.webp"
+  if (!path) return "/doctors/placeholder.svg"
   return supabase.storage.from("doctor-images").getPublicUrl(path).data
     .publicUrl
 }

@@ -1,0 +1,932 @@
+[
+  {
+    "file": "Build Medical Consultation Platform/src/components/EmergencyBanner.tsx",
+    "line": 48,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/EmergencyBanner.tsx",
+    "line": 55,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/PhasePreview.tsx",
+    "line": 46,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/PhasePreview.tsx",
+    "line": 47,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/PhasePreview.tsx",
+    "line": 49,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Footer.tsx",
+    "line": 38,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Footer.tsx",
+    "line": 51,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Footer.tsx",
+    "line": 67,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 33,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 59,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 71,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 85,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 86,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 90,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 91,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 100,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 121,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 139,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 140,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 144,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 145,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/layout/Header.tsx",
+    "line": 148,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/system/AppErrorBoundary.tsx",
+    "line": 47,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/system/AppErrorBoundary.tsx",
+    "line": 54,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/system/AsyncState.tsx",
+    "line": 88,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/ui/Button.tsx",
+    "line": 45,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/components/ui/Input.tsx",
+    "line": 41,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminConsultations.tsx",
+    "line": 115,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminConsultations.tsx",
+    "line": 129,
+    "element": "textarea",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminConsultations.tsx",
+    "line": 144,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminConsultations.tsx",
+    "line": 164,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminConsultations.tsx",
+    "line": 185,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminConsultations.tsx",
+    "line": 193,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminConsultations.tsx",
+    "line": 214,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminDoctors.tsx",
+    "line": 39,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminDoctors.tsx",
+    "line": 40,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminDoctors.tsx",
+    "line": 62,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminDoctors.tsx",
+    "line": 78,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminLayout.tsx",
+    "line": 38,
+    "element": "NavLink",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminLayout.tsx",
+    "line": 58,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminUsers.tsx",
+    "line": 52,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminUsers.tsx",
+    "line": 58,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminUsers.tsx",
+    "line": 68,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminUsers.tsx",
+    "line": 77,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/AdminUsers.tsx",
+    "line": 106,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 169,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 179,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 193,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 213,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 231,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 253,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 273,
+    "element": "textarea",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 287,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 303,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 319,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 342,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 362,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 365,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 374,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/features/admin/DoctorEditor.tsx",
+    "line": 384,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 114,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 122,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 128,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 172,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 223,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 229,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 250,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 256,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 278,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/Home.tsx",
+    "line": 281,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Detail.tsx",
+    "line": 24,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Detail.tsx",
+    "line": 25,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Detail.tsx",
+    "line": 37,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Detail.tsx",
+    "line": 102,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Detail.tsx",
+    "line": 103,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Editor.tsx",
+    "line": 48,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Editor.tsx",
+    "line": 72,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Editor.tsx",
+    "line": 89,
+    "element": "textarea",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/Editor.tsx",
+    "line": 109,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/List.tsx",
+    "line": 46,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/List.tsx",
+    "line": 57,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/List.tsx",
+    "line": 74,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/List.tsx",
+    "line": 92,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/List.tsx",
+    "line": 105,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/List.tsx",
+    "line": 169,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/articles/List.tsx",
+    "line": 170,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/AcceptInvitation.tsx",
+    "line": 53,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/AcceptInvitation.tsx",
+    "line": 67,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/AcceptInvitation.tsx",
+    "line": 77,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/ForgotPassword.tsx",
+    "line": 54,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/ForgotPassword.tsx",
+    "line": 64,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/ForgotPassword.tsx",
+    "line": 75,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Login.tsx",
+    "line": 61,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Login.tsx",
+    "line": 88,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Login.tsx",
+    "line": 111,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Login.tsx",
+    "line": 117,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 100,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 132,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 185,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 195,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 202,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 209,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 229,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/Signup.tsx",
+    "line": 236,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/UpdatePassword.tsx",
+    "line": 52,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/UpdatePassword.tsx",
+    "line": 59,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/UpdatePassword.tsx",
+    "line": 67,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/auth/UpdatePassword.tsx",
+    "line": 89,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/List.tsx",
+    "line": 45,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/List.tsx",
+    "line": 46,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/List.tsx",
+    "line": 60,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/List.tsx",
+    "line": 61,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/List.tsx",
+    "line": 80,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 142,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 158,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 166,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 169,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 191,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 205,
+    "element": "textarea",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 228,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Submit.tsx",
+    "line": 247,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Thread.tsx",
+    "line": 119,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Thread.tsx",
+    "line": 131,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Thread.tsx",
+    "line": 198,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Thread.tsx",
+    "line": 202,
+    "element": "textarea",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Thread.tsx",
+    "line": 210,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/consultations/Thread.tsx",
+    "line": 223,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/doctors/Directory.tsx",
+    "line": 60,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/doctors/Directory.tsx",
+    "line": 129,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/doctors/Directory.tsx",
+    "line": 130,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/doctors/Directory.tsx",
+    "line": 142,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/doctors/Directory.tsx",
+    "line": 149,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/doctors/Profile.tsx",
+    "line": 57,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/labs/LabHub.tsx",
+    "line": 184,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/labs/LabHub.tsx",
+    "line": 234,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/labs/LabHub.tsx",
+    "line": 242,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/labs/LabHub.tsx",
+    "line": 263,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/labs/LabHub.tsx",
+    "line": 287,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/labs/LabHub.tsx",
+    "line": 360,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/legal/Disclaimer.tsx",
+    "line": 8,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/legal/Privacy.tsx",
+    "line": 65,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/legal/Terms.tsx",
+    "line": 62,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/legal/Terms.tsx",
+    "line": 69,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/training/Training.tsx",
+    "line": 131,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/training/Training.tsx",
+    "line": 181,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/training/Training.tsx",
+    "line": 249,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/training/Training.tsx",
+    "line": 273,
+    "element": "button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 50,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 51,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 61,
+    "element": "Link",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 89,
+    "element": "form",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 115,
+    "element": "select",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 152,
+    "element": "textarea",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 176,
+    "element": "input",
+    "status": "inventory_only_requires_behavioral_check"
+  },
+  {
+    "file": "Build Medical Consultation Platform/src/pages/verification/Application.tsx",
+    "line": 191,
+    "element": "Button",
+    "status": "inventory_only_requires_behavioral_check"
+  }
+]

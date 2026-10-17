@@ -41,6 +41,12 @@ jobs:
       - name: Run prototype safety tests
         run: pnpm test
 
+      - name: Run PostgreSQL authorization and persistence integration
+        run: pnpm test:database
+
+      - name: Verify PHP HTTP contract
+        run: php ../server/tests/http_contract.php
+
       - name: Type-check
         run: pnpm typecheck
 

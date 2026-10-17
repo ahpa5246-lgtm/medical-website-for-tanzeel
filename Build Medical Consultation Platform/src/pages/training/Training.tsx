@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
   Activity,
   ArrowLeft,
@@ -16,6 +16,13 @@ import {
   TimerReset,
   Trophy,
 } from "lucide-react"
+import { Link } from "react-router-dom"
+import { useAuth } from "@/features/auth/AuthProvider"
+import TaskPlayer from "@/features/training/TaskPlayer"
+import {
+  getTrainingProgress as loadProgress,
+  resetTraining,
+} from "@/features/training/trainingRepository"
 import DemoLabel from "@/components/DemoLabel"
 import {
   ALL_STAGES,
@@ -24,8 +31,6 @@ import {
   getStageAvailability,
   getTrainingProgress,
 } from "./trainingPath.mjs"
-
-const STORAGE_KEY = "medconnect-training-progress-v1"
 
 const iconMap = {
   pulse: Activity,
@@ -39,44 +44,67 @@ const iconMap = {
   trophy: Trophy,
 }
 
-function readProgress(): string[] {
-  try {
-    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
-    return Array.isArray(value)
-      ? value.filter((id) => typeof id === "string")
-      : []
-  } catch {
-    return []
-  }
-}
-
 export default function Training() {
-  const [completed, setCompleted] = useState<string[]>(readProgress)
+  const { session } = useAuth()
+  const [completed, setCompleted] = useState<string[]>([])
+  const [player, setPlayer] = useState(false)
+  const [details, setDetails] = useState(false)
+  const [error, setError] = useState("")
+  const [busy, setBusy] = useState(false)
+  async function refreshProgress() {
+    try {
+      const records = await loadProgress()
+      setCompleted(records.map((row) => row.stage_id))
+    } catch {
+      setError("تعذر تحميل التقدم المحفوظ.")
+    }
+  }
+  useEffect(() => {
+    let active = true
+    setCompleted([])
+    if (session)
+      loadProgress()
+        .then((records) => {
+          if (active) setCompleted(records.map((row) => row.stage_id))
+        })
+        .catch(() => {
+          if (active) setError("تعذر تحميل التقدم.")
+        })
+    return () => {
+      active = false
+    }
+  }, [session?.user.id])
   const [selectedId, setSelectedId] = useState(ALL_STAGES[0].id)
   const selected = findTrainingStage(selectedId) || ALL_STAGES[0]
   const selectedState = getStageAvailability(selected.id, completed)
   const progress = useMemo(() => getTrainingProgress(completed), [completed])
 
-  function completeSelected() {
-    if (selectedState !== "active") return
-    const next = [...completed, selected.id]
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-    setCompleted(next)
-    const currentIndex = ALL_STAGES.findIndex(
-      (stage) => stage.id === selected.id,
-    )
-    const nextStage = ALL_STAGES[currentIndex + 1]
-    if (nextStage) setSelectedId(nextStage.id)
+  async function completeSelected() {
+    setPlayer(false)
+    await refreshProgress()
   }
-
-  function resetProgress() {
-    localStorage.removeItem(STORAGE_KEY)
-    setCompleted([])
-    setSelectedId(ALL_STAGES[0].id)
+  async function resetProgress() {
+    if (
+      !session ||
+      !window.confirm("هل تريدين مسح التقدم المحفوظ وإعادة المسار؟")
+    )
+      return
+    setBusy(true)
+    setError("")
+    try {
+      await resetTraining()
+      setCompleted([])
+      setSelectedId(ALL_STAGES[0].id)
+      setPlayer(false)
+    } catch {
+      setError("تعذر إعادة المسار.")
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
-    <main dir="rtl" className="training-page">
+    <div dir="rtl" className="training-page">
       <section className="training-hero">
         <div className="training-hero-grid" aria-hidden="true" />
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
@@ -130,7 +158,8 @@ export default function Training() {
                 <span>{progress.xp} نقطة خبرة</span>
                 <button
                   type="button"
-                  onClick={resetProgress}
+                  disabled={!session || busy}
+                  onClick={() => void resetProgress()}
                   className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 font-bold text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300"
                 >
                   <RotateCcw className="h-3.5 w-3.5" /> إعادة المسار
@@ -181,7 +210,11 @@ export default function Training() {
                     <button
                       key={stage.id}
                       type="button"
-                      onClick={() => setSelectedId(stage.id)}
+                      onClick={() => {
+                        setSelectedId(stage.id)
+                        setPlayer(false)
+                        setDetails(false)
+                      }}
                       className={`training-stage training-stage-${stageIndex + 1} training-stage-${state} ${
                         selected.id === stage.id ? "is-selected" : ""
                       }`}
@@ -248,13 +281,13 @@ export default function Training() {
           </div>
           <button
             type="button"
-            disabled={selectedState !== "active"}
-            onClick={completeSelected}
+            disabled={selectedState !== "active" || !session}
+            onClick={() => setPlayer(true)}
             className="training-start-button"
           >
             {selectedState === "active" ? (
               <>
-                <Play /> ابدئي المحاكاة
+                <Play /> فتح النشاط
               </>
             ) : selectedState === "complete" ? (
               <>
@@ -270,14 +303,50 @@ export default function Training() {
             السيناريو تمثيلي لأغراض عرض المنتج فقط، ولا يقدم تشخيصًا أو قرارًا
             علاجيًا.
           </p>
+          {error && (
+            <p role="alert" className="mt-4 text-red-700">
+              {error}
+            </p>
+          )}
+          {!session && (
+            <Link
+              className="mt-4 block underline"
+              to="/auth/login?returnTo=%2Ftraining"
+            >
+              سجلي الدخول لحفظ التقدم
+            </Link>
+          )}
+          {player && (
+            <TaskPlayer
+              key={selected.id}
+              stageId={selected.id}
+              onClose={() => setPlayer(false)}
+              onComplete={() => void completeSelected()}
+            />
+          )}
+          {details && (
+            <div
+              id="task-details"
+              className="mt-4 rounded-xl border p-4 text-sm leading-7"
+            >
+              {selected.brief}
+              <p>
+                لا تُمنح نقاط إلا بعد إنجاز نشاط منشور والتحقق من النتيجة على
+                الخادم.
+              </p>
+            </div>
+          )}
           <button
             type="button"
+            onClick={() => setDetails((value) => !value)}
+            aria-expanded={details}
+            aria-controls="task-details"
             className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl text-xs font-black text-primary-700 hover:bg-primary-50"
           >
             تفاصيل المهمة <ArrowLeft className="h-4 w-4" />
           </button>
         </aside>
       </section>
-    </main>
+    </div>
   )
 }

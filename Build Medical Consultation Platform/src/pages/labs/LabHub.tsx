@@ -14,11 +14,14 @@ import {
   Trophy,
 } from "lucide-react"
 import { Link, useParams } from "react-router-dom"
+import TaskPlayer from "@/features/training/TaskPlayer"
+import { getTrainingTask } from "@/features/training/trainingRepository"
 import { useAuth } from "@/features/auth/AuthProvider"
 import { supabase } from "@/lib/supabase"
 import DemoLabel from "@/components/DemoLabel"
 import Badge from "@/components/ui/Badge"
 import { LAB_MODULES, labModuleById, type LabModule } from "./catalog"
+import CaseRoom from "./CaseRoom"
 import {
   createRouteLabQuotaClient,
   type LabQuotaErrorCode,
@@ -154,13 +157,13 @@ function LabList() {
                   <TypeIcon type={module.type} />
                 </span>
                 <Badge
-                  variant={
-                    module.status === "pilot-shell" ? "primary" : "muted"
-                  }
+                  variant={module.status !== "planned" ? "primary" : "muted"}
                 >
-                  {module.status === "pilot-shell"
-                    ? "قالب الطيار"
-                    : "مخطط لاحقًا"}
+                  {module.status === "playable-demo"
+                    ? "تجربة قابلة للعب"
+                    : module.status === "pilot-shell"
+                      ? "قالب الطيار"
+                      : "مخطط لاحقًا"}
                 </Badge>
               </div>
               <p className="mt-5 text-xs font-bold text-primary-700">
@@ -198,7 +201,21 @@ function LabList() {
 function LabAccessPanel({ module }: { module: LabModule }) {
   const { state, refresh, start, end } = useLabQuota()
   const enabledShell = module.status === "pilot-shell"
-  const canStart = enabledShell && state.phase === "ready"
+  const [published, setPublished] = useState(false)
+  useEffect(() => {
+    let active = true
+    getTrainingTask("chest-pain")
+      .then((task) => {
+        if (active) setPublished(Boolean(task))
+      })
+      .catch(() => {
+        if (active) setPublished(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [module.id])
+  const canStart = enabledShell && state.phase === "ready" && published
   const active = state.phase === "active"
   const busy = ["loading", "starting", "ending"].includes(state.phase)
 
@@ -230,6 +247,14 @@ function LabAccessPanel({ module }: { module: LabModule }) {
         {quotaLabel(state)}
       </div>
 
+      {active && published && (
+        <TaskPlayer stageId="chest-pain" onClose={end} onComplete={end} />
+      )}
+      {!published && (
+        <p className="mt-4 text-sm text-slate-600">
+          لا يوجد نشاط منشور لهذه الوحدة بعد؛ لا تُستهلك الحصة لعرض قالب فارغ.
+        </p>
+      )}
       {active ? (
         <button
           type="button"
@@ -278,7 +303,7 @@ function LabAccessPanel({ module }: { module: LabModule }) {
 }
 
 function LabDetail({ module }: { module: LabModule }) {
-  const enabledShell = module.status === "pilot-shell"
+  const enabledShell = module.status !== "planned"
 
   return (
     <div dir="rtl" className="min-h-[70vh] bg-slate-50">
@@ -292,7 +317,11 @@ function LabDetail({ module }: { module: LabModule }) {
           </Link>
           <div className="mt-6 flex flex-wrap items-center gap-2">
             <Badge variant={enabledShell ? "primary" : "muted"}>
-              {enabledShell ? "قالب طيار" : "مخطط لاحقًا"}
+              {module.status === "playable-demo"
+                ? "تجربة قابلة للعب"
+                : enabledShell
+                  ? "قالب طيار"
+                  : "مخطط لاحقًا"}
             </Badge>
             <DemoLabel>غير مراجع طبيًا</DemoLabel>
           </div>
@@ -323,6 +352,10 @@ function LabDetail({ module }: { module: LabModule }) {
             </div>
           </div>
 
+          {(module.status === "playable-demo" ||
+            module.id === "chest-pain-case") && (
+            <CaseRoom key={module.id} moduleId={module.id} />
+          )}
           <div className="rounded-3xl border border-slate-200 bg-white p-6">
             <h2 className="text-lg font-black text-ink">مسار الوحدة المخطط</h2>
             <ol className="mt-5 space-y-3">
@@ -341,7 +374,14 @@ function LabDetail({ module }: { module: LabModule }) {
           </div>
         </div>
 
-        <LabAccessPanel module={module} />
+        {module.status !== "playable-demo" ? (
+          <LabAccessPanel module={module} />
+        ) : (
+          <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 text-sm leading-7 text-slate-700">
+            هذه تجربة خيالية محلية ولا تحتاج حسابًا. الإجابات لا تُحفظ أو تستخدم
+            طبيًا.
+          </aside>
+        )}
       </section>
     </div>
   )

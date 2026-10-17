@@ -43,7 +43,6 @@ jobs:
       - name: Install exact CI-only browser and bundle tools
         run: >
           pnpm add -D
-          @playwright/test@1.63.0
           size-limit@14.0.0
           @size-limit/file@14.0.0
           --lockfile=false

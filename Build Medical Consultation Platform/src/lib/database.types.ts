@@ -1,3 +1,4 @@
+import type { ContentTables } from "@/features/content/types"
 export type Json = string | number | boolean | null | {
   [key: string]: Json | undefined
 } | Json[]
@@ -9,7 +10,41 @@ type PaymentStatus = "unpaid" | "pending" | "paid" | "refunded" | "failed"
 
 export interface Database {
   public: {
-    Tables: {
+    Tables: ContentTables & {
+      tanzeel_space_entries: {
+        Row: {
+          id: string
+          kind: "book_review" | "article" | "achievement" | "course"
+          title: string
+          summary: string
+          body: string
+          rating: number | null
+          link_url: string
+          author_id: string
+          status: "draft" | "review" | "published" | "archived"
+          revision: number
+          published_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          kind: "book_review" | "article" | "achievement" | "course"
+          title: string
+          summary: string
+          body: string
+          rating?: number | null
+          link_url?: string
+          author_id: string
+          status?: "draft" | "review" | "published" | "archived"
+          revision?: number
+          published_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["tanzeel_space_entries"]["Insert"]>
+        Relationships: []
+      }
       profiles: {
         Row: {
           id: string
@@ -223,6 +258,46 @@ export interface Database {
     }
     Views: Record<string, never>
     Functions: {
+      save_training_task: {
+        Args: {
+          p_stage_id: string
+          p_title: string
+          p_instructions: string
+          p_questions: Json
+          p_answers: number[]
+          p_published: boolean
+        }
+        Returns: undefined
+      }
+      create_consultation: {
+        Args: {
+          p_specialty_id: string
+          p_subject: string
+          p_body: string
+          p_emergency: boolean
+          p_operation_id: string
+        }
+        Returns: Database["public"]["Tables"]["consultations"]["Row"]
+      }
+      send_consultation_message: {
+        Args: {
+          p_consultation_id: string
+          p_body: string
+          p_operation_id: string
+        }
+        Returns: Database["public"]["Tables"]["consultation_messages"]["Row"]
+      }
+      complete_training_stage: {
+        Args: {
+          p_stage_id: string
+          p_answers: number[]
+        }
+        Returns: boolean
+      }
+      reset_training_progress: {
+        Args: Record<string, never>
+        Returns: undefined
+      }
       accept_admin_invitation: {
         Args: { p_token: string }
         Returns: AppRole

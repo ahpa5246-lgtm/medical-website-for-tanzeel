@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Send, Star } from "lucide-react"
+import type { Attachment } from "@/features/content/types"
 import Button from "@/components/ui/Button"
 import { useAuth } from "@/features/auth/AuthProvider"
 import {
+  updateConsultationAdmin,
+  listAttachments,
+  attachmentUrl,
   getConsultation,
   listMessages,
   saveRating,
@@ -31,31 +35,52 @@ export default function ConsultationThread() {
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
   const [rating, setRating] = useState(0)
+  const messageOperation = useRef(crypto.randomUUID())
+  const request = useRef(0)
+  const [files, setFiles] = useState<Attachment[]>([])
+  const [urls, setUrls] = useState<Record<string, string>>({})
+  const [page, setPage] = useState(1)
 
   async function reload() {
     if (!id) return
 
+    const current = ++request.current
+    setConsultation(null)
+    setMessages([])
+    setFiles([])
     setLoading(true)
     setError("")
     try {
-      const [record, thread] = await Promise.all([
+      const [record, thread, attachments] = await Promise.all([
         getConsultation(id),
-        listMessages(id),
+        listMessages(id, page),
+        listAttachments(id),
       ])
+      if (current !== request.current) return
+      setFiles(attachments)
       setConsultation(record)
       setMessages(thread)
       if (!record)
         setError("الاستشارة غير موجودة أو لا تملك صلاحية الوصول إليها.")
     } catch {
-      setError("تعذر تحميل الاستشارة أو لا تملك صلاحية الوصول إليها.")
+      if (current === request.current)
+        setError("تعذر تحميل الاستشارة أو لا تملك صلاحية الوصول إليها.")
     } finally {
-      setLoading(false)
+      if (current === request.current) setLoading(false)
     }
   }
 
   useEffect(() => {
+    setDraft("")
+    setRating(0)
+    setUrls({})
+    setSending(false)
+    messageOperation.current = crypto.randomUUID()
     void reload()
-  }, [id])
+    return () => {
+      ++request.current
+    }
+  }, [id, page, session?.user.id])
 
   const senderKind = useMemo<"patient" | "doctor" | "staff">(() => {
     if (profile && ["owner", "admin"].includes(profile.role)) return "staff"
@@ -66,22 +91,30 @@ export default function ConsultationThread() {
 
   async function handleSend(event: React.FormEvent) {
     event.preventDefault()
-    if (!session || !consultation || !draft.trim()) return
+    if (sending || !session || !consultation || !draft.trim()) return
 
+    const generation = request.current
     setSending(true)
     try {
       const message = await sendMessage({
         consultationId: consultation.id,
         senderId: session.user.id,
         senderKind,
+        operationId: messageOperation.current,
         body: draft,
       })
-      setMessages((value) => [...value, message])
+      if (generation !== request.current) return
+      setMessages((value) =>
+        value.some((row) => row.id === message.id)
+          ? value
+          : [...value, message],
+      )
       setDraft("")
+      messageOperation.current = crypto.randomUUID()
     } catch {
-      setError("تعذر إرسال الرسالة.")
+      if (generation === request.current) setError("تعذر إرسال الرسالة.")
     } finally {
-      setSending(false)
+      if (generation === request.current) setSending(false)
     }
   }
 
@@ -93,15 +126,16 @@ export default function ConsultationThread() {
     )
       return
 
+    const generation = request.current
     try {
       await saveRating({
         consultationId: consultation.id,
         patientId: session.user.id,
         rating: value,
       })
-      setRating(value)
+      if (generation === request.current) setRating(value)
     } catch {
-      setError("تعذر حفظ التقييم.")
+      if (generation === request.current) setError("تعذر حفظ التقييم.")
     }
   }
 
@@ -165,6 +199,42 @@ export default function ConsultationThread() {
         </p>
       )}
 
+      {files.length > 0 && (
+        <section className="mt-6 rounded-xl border p-4">
+          <h2 className="font-bold">المرفقات الخاصة</h2>
+          {files.map((file) => (
+            <div className="mt-3" key={file.id}>
+              <button
+                type="button"
+                className="text-primary-700 underline"
+                onClick={async () => {
+                  const generation = request.current
+                  try {
+                    const url = await attachmentUrl(file.path, file.file_name)
+                    if (generation === request.current)
+                      setUrls((v) => ({ ...v, [file.id]: url }))
+                  } catch {
+                    if (generation === request.current)
+                      setError("تعذر إنشاء رابط المرفق.")
+                  }
+                }}
+              >
+                {file.file_name}
+              </button>
+              {urls[file.id] && (
+                <a
+                  href={urls[file.id]}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ms-3 underline"
+                >
+                  تنزيل — الرابط مؤقت
+                </a>
+              )}
+            </div>
+          ))}
+        </section>
+      )}
       <div className="mt-6 space-y-3">
         {messages.map((message) => (
           <div
@@ -194,12 +264,35 @@ export default function ConsultationThread() {
         ))}
       </div>
 
+      <nav aria-label="صفحات الرسائل" className="mt-4 flex gap-3">
+        <button
+          disabled={page === 1}
+          className="rounded-xl border p-3"
+          onClick={() => setPage((v) => v - 1)}
+        >
+          رسائل أقدم
+        </button>
+        <button
+          disabled={messages.length < 50}
+          className="rounded-xl border p-3"
+          onClick={() => setPage((v) => v + 1)}
+        >
+          رسائل أحدث
+        </button>
+      </nav>
       {consultation.status !== "closed" && session && (
         <form
           onSubmit={handleSend}
           className="mt-6 rounded-2xl border border-slate-200 bg-white p-4"
         >
+          <label
+            htmlFor="message-draft"
+            className="mb-2 block text-sm font-bold"
+          >
+            رسالة متابعة
+          </label>
           <textarea
+            id="message-draft"
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             maxLength={5000}
@@ -215,6 +308,48 @@ export default function ConsultationThread() {
         </form>
       )}
 
+      {!isPatient && session && consultation.status !== "closed" && (
+        <div className="mt-5 flex gap-3">
+          <button
+            type="button"
+            className="rounded-xl border p-3"
+            onClick={async () => {
+              const generation = request.current
+              try {
+                const row = await updateConsultationAdmin(consultation.id, {
+                  status: "answered",
+                })
+                if (generation === request.current) setConsultation(row)
+              } catch {
+                if (generation === request.current)
+                  setError("تعذر تحديث الحالة.")
+              }
+            }}
+          >
+            تعليمها كمجابة
+          </button>
+          <button
+            type="button"
+            className="rounded-xl border p-3"
+            onClick={async () => {
+              if (!window.confirm("إغلاق الاستشارة ومنع الرسائل الجديدة؟"))
+                return
+              const generation = request.current
+              try {
+                const row = await updateConsultationAdmin(consultation.id, {
+                  status: "closed",
+                })
+                if (generation === request.current) setConsultation(row)
+              } catch {
+                if (generation === request.current)
+                  setError("تعذر إغلاق الاستشارة.")
+              }
+            }}
+          >
+            إغلاق الاستشارة
+          </button>
+        </div>
+      )}
       {isPatient && ["answered", "closed"].includes(consultation.status) && (
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 text-center">
           <p className="text-sm font-bold">قيّم تجربتك</p>

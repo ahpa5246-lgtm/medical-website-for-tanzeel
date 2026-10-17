@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Link,
   useLocation,
@@ -62,8 +62,15 @@ export default function SubmitConsultation() {
       .catch(() => setError("تعذر تحميل التخصصات من قاعدة البيانات."))
   }, [params])
 
+  const operationId = useRef(crypto.randomUUID())
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
+    if (loading) return
+    if (emergency)
+      return setError(
+        "تظهر مؤشرات عاجلة في الوصف. لا تنتظري استشارة إلكترونية؛ اطلبي رعاية مباشرة.",
+      )
     if (!session)
       return setError("سجّل الدخول أولًا حتى تُحفظ الاستشارة باسم حسابك.")
 
@@ -89,6 +96,7 @@ export default function SubmitConsultation() {
           subject: form.title,
           body: form.description,
           emergencyFlag: emergency,
+          operationId: operationId.current,
         })
         consultationId = consultation.id
         setSavedConsultationId(consultationId)

@@ -37,7 +37,7 @@ export default function AdminDoctors() {
           </p>
         </div>
         <Link to="/admin/doctors/new">
-          <Button className="gap-2">
+          <Button as="span" className="gap-2">
             <Plus className="h-4 w-4" />
             إضافة ملف
           </Button>

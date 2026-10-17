@@ -1,3 +1,4 @@
+import RouteSurface from "@/components/system/RouteSurface"
 import { NavLink, Route, Routes } from "react-router-dom"
 import {
   LayoutDashboard,
@@ -9,6 +10,9 @@ import {
 import { useAuth } from "@/features/auth/AuthProvider"
 import RequireRole from "@/features/auth/RequireRole"
 import AdminDashboard from "./AdminDashboard"
+import AdminTraining from "./AdminTraining"
+import AdminContent from "./AdminContent"
+import AdminVerification from "./AdminVerification"
 import AdminDoctors from "./AdminDoctors"
 import DoctorEditor from "./DoctorEditor"
 import AdminUsers from "./AdminUsers"
@@ -21,6 +25,13 @@ export default function AdminLayout() {
     ["/admin/doctors", "إدارة الأطباء", Stethoscope] as const,
     ...(profile?.role === "owner" || profile?.role === "admin"
       ? [["/admin/consultations", "الاستشارات", MessageSquareText] as const]
+      : []),
+    ...(profile?.role === "owner" || profile?.role === "admin"
+      ? [["/admin/training", "الأنشطة", LayoutDashboard] as const]
+      : []),
+    ["/admin/content", "المحتوى", LayoutDashboard] as const,
+    ...(profile?.role === "owner" || profile?.role === "admin"
+      ? [["/admin/verification", "التحقق", Users] as const]
       : []),
     ["/admin/users", "المستخدمون", Users] as const,
   ]
@@ -65,22 +76,42 @@ export default function AdminLayout() {
           </button>
         </div>
       </aside>
-      <main className="p-5 sm:p-8 lg:p-10">
-        <Routes>
-          <Route index element={<AdminDashboard />} />
-          <Route path="doctors" element={<AdminDoctors />} />
-          <Route path="doctors/new" element={<DoctorEditor />} />
-          <Route path="doctors/:id" element={<DoctorEditor />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route
-            path="consultations"
-            element={
-              <RequireRole allow={["owner", "admin"]}>
-                <AdminConsultations />
-              </RequireRole>
-            }
-          />
-        </Routes>
+      <main id="main-content" tabIndex={-1} className="p-5 sm:p-8 lg:p-10">
+        <RouteSurface>
+          <Routes>
+            <Route index element={<AdminDashboard />} />
+            <Route path="doctors" element={<AdminDoctors />} />
+            <Route path="doctors/new" element={<DoctorEditor />} />
+            <Route path="doctors/:id" element={<DoctorEditor />} />
+            <Route
+              path="training"
+              element={
+                <RequireRole allow={["owner", "admin"]}>
+                  <AdminTraining />
+                </RequireRole>
+              }
+            />
+            <Route path="content" element={<AdminContent />} />
+            <Route
+              path="verification"
+              element={
+                <RequireRole allow={["owner", "admin"]}>
+                  <AdminVerification />
+                </RequireRole>
+              }
+            />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="*" element={<p role="status">الصفحة غير موجودة.</p>} />
+            <Route
+              path="consultations"
+              element={
+                <RequireRole allow={["owner", "admin"]}>
+                  <AdminConsultations />
+                </RequireRole>
+              }
+            />
+          </Routes>
+        </RouteSurface>
       </main>
     </div>
   )
