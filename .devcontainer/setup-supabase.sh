@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 APP_DIR="$REPO_ROOT/Build Medical Consultation Platform"
 ENV_FILE="$APP_DIR/.env.local"
-PROJECT_REF="${1:-enicmfiyoahlklmwdcnq}"
+PROJECT_REF="${1:-enicmfiyoalhklmwdcnq}"
 
 if [[ ! "$PROJECT_REF" =~ ^[a-z0-9]{20}$ ]]; then
   echo "Invalid Supabase project ref (expected 20 lowercase letters/digits)." >&2
