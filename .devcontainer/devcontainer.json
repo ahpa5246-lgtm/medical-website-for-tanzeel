@@ -1,14 +1,17 @@
 {
-  "name": "Medical Prototype Preview",
+  "name": "Medical Website — Supabase Connected Workspace",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
   "containerUser": "root",
   "remoteUser": "root",
   "updateRemoteUserUID": false,
-  "forwardPorts": [8443],
+  "forwardPorts": [
+    8443
+  ],
   "portsAttributes": {
     "8443": {
-      "label": "Medical prototype preview",
-      "onAutoForward": "openPreview"
+      "label": "Medical website preview (private)",
+      "onAutoForward": "openPreview",
+      "visibility": "private"
     }
   },
   "postCreateCommand": "corepack enable && corepack prepare pnpm@9.15.9 --activate && cd 'Build Medical Consultation Platform' && pnpm install --frozen-lockfile",
