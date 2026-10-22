@@ -1,0 +1,9 @@
+# Never commit credentials or local Supabase CLI connection state.
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+supabase/.profiles/
+supabase/functions/.env
+supabase/functions/.env.*
