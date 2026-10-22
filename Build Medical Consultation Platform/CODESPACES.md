@@ -36,7 +36,7 @@ bash .devcontainer/setup-supabase.sh
 ```
 
 ألصق Publishable key عندما يطلبه السكربت؛ لن يعرضه أثناء الإدخال.
-سيتعرف على Project Ref `enicmfiyoahlklmwdcnq` من مشروع Supabase الذي
+سيتعرف على Project Ref `enicmfiyoalhklmwdcnq` من مشروع Supabase الذي
 اخترته، ويكتب ملفًا محليًا خاصًا:
 
 ```text
@@ -66,7 +66,7 @@ Build Medical Consultation Platform/.env.local
 npx --yes supabase@2 init
 
 npx --yes supabase@2 login
-npx --yes supabase@2 link --project-ref enicmfiyoahlklmwdcnq
+npx --yes supabase@2 link --project-ref enicmfiyoalhklmwdcnq
 npx --yes supabase@2 db push --dry-run
 ```
 
