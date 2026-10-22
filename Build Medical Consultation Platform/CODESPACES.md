@@ -1,47 +1,115 @@
-# معاينة الموقع الطبي في GitHub Codespaces
+# تشغيل Codespace الحالي مع Supabase
 
-هذه معاينة خيالية مغلقة وليست خدمة طبية تشغيلية. لا تدخل بيانات شخصية أو طبية حقيقية.
+هذا الدليل للـCodespace الموجود باسم `potential happiness` على الفرع
+`feat/academy-library-workflow`. لا تحتاج إلى إنشاء Codespace ثانٍ.
 
-## الفتح السريع
+> نسخة التطوير ليست خدمة طبية منشورة. استخدم حسابات تجريبية وحالات وهمية فقط.
+> لا تنقل بيانات مرضى أو وثائق هوية حقيقية إلى هذه البيئة.
 
-1. افتح المستودع في GitHub Codespaces من فرع `codex/med-v1-codespaces-preview`.
-2. انتظر اكتمال `postCreateCommand`؛ يثبت pnpm 9.15.9 والاعتماديات من ملف القفل.
-3. يبدأ Vite تلقائيًا على المنفذ 8443.
-4. من تبويب **Ports** اختر **Open in Browser** أمام **Medical prototype preview**.
+## 1. تحديث Codespace الموجود
 
-المنفذ يبقى خاصًا بصاحب Codespace افتراضيًا. لا تغيّر **Port Visibility** إلى Public.
-
-## إذا لم تفتح المعاينة تلقائيًا
-
-شغّل داخل الطرفية:
+افتح Codespace من GitHub، ثم افتح Terminal **في جذر المستودع**:
 
 ```bash
-cd "Build Medical Consultation Platform"
-pnpm dev
+git branch --show-current
+git status --short
+git pull --ff-only origin feat/academy-library-workflow
 ```
 
-ثم افتح المنفذ 8443 من تبويب **Ports**.
+يجب أن يُظهر الأمر الأول الفرع `feat/academy-library-workflow`.
+إذا كانت هناك تعديلات محلية غير محفوظة، احتفظ بها أولًا؛ لا تستخدم
+`git reset --hard` أو `git clean` لإصلاح تعارض دون مراجعتها.
 
-سجل التشغيل عند البدء التلقائي موجود في:
+بعد السحب، استخدم **Codespaces: Rebuild Container** من لوحة الأوامر لتطبيق
+اسم البيئة وإعداد المنفذ. يبقى منفذ `8443` **Private**.
+
+## 2. ربط واجهة Vite بمشروع Supabase
+
+خذ **Publishable key** من مشروع Supabase
+`medical-website-for-tanzeel` في صفحة **API Keys**.
+لا تستخدم **Secret key** ولا **service_role**.
+
+من Terminal في جذر المستودع:
+
+```bash
+bash .devcontainer/setup-supabase.sh
+```
+
+ألصق Publishable key عندما يطلبه السكربت؛ لن يعرضه أثناء الإدخال.
+سيتعرف على Project Ref `enicmfiyoahlklmwdcnq` من مشروع Supabase الذي
+اخترته، ويكتب ملفًا محليًا خاصًا:
 
 ```text
-/tmp/medical-prototype-vite.log
+Build Medical Consultation Platform/.env.local
 ```
 
-## التحقق قبل العرض
+يحتوي الملف على إعدادات `VITE_SUPABASE_URL` و
+`VITE_SUPABASE_ANON_KEY`، ويضبط `VITE_ENABLE_PROTOTYPE=false`
+و`VITE_ENABLE_CONSULTATIONS=false`.
+
+بعد ذلك **أوقف Codespace ثم شغّله مرة أخرى** ليتحمّل Vite
+ملف الإعدادات الجديد. افتح **Ports → 8443 → Open in Browser**.
+إذا تعذّر التشغيل اقرأ `/tmp/medical-prototype-vite.log`.
+
+بديل: يمكن تخزين Publishable key في **GitHub Codespaces secrets**
+تحت اسم `VITE_SUPABASE_ANON_KEY`، ثم تشغيل السكربت؛
+سيستخدم قيمة المتغير دون طباعتها.
+
+## 3. تجهيز قاعدة بيانات Supabase البعيدة
+
+لا تطبّق SQL تلقائيًا مع تشغيل Codespace. المشروع في Dashboard
+موسوم Production، ولذلك يجب فحص migration plan ومحتويات القاعدة
+قبل أي كتابة. نفّذ من **جذر المستودع**، حيث يوجد `supabase/migrations`:
+
+```bash
+# فقط إذا لم يكن supabase/config.toml موجودًا
+npx --yes supabase@2 init
+
+npx --yes supabase@2 login
+npx --yes supabase@2 link --project-ref enicmfiyoahlklmwdcnq
+npx --yes supabase@2 db push --dry-run
+```
+
+يجب التأكد من أن قائمة الـmigrations مطابقة للملفات الموجودة في المستودع.
+إذا كانت القاعدة غير فارغة، أو ظهر تغيير غير متوقع، لا تُنفّذ
+الأوامر التالية قبل تحليل الفارق.
+
+بعد مراجعة ناجحة على **مشروع تجريبي**:
+
+```bash
+npx --yes supabase@2 db push --include-seed
+npx --yes supabase@2 functions deploy
+```
+
+ملف `supabase/seed.sql` يُنشئ ملفات أطباء **خيالية** للتجربة.
+تُحدَّث جداول Postgres وStorage وسياسات RLS بواسطة الـmigrations.
+راجع إعدادات **Authentication → URL Configuration** وأضف روابط
+إعادة التوجيه الخاصة بعنوان المعاينة الفعلي.
+
+**ملاحظة:** `supabase db push` ليس `db reset`.
+لا تستخدم `db reset --linked` لأنه قد يحذف بيانات القاعدة البعيدة.
+
+## 4. اختبارات قبل تفعيل الاستشارات
 
 ```bash
 cd "Build Medical Consultation Platform"
 pnpm test
 pnpm typecheck
-pnpm format:check
 pnpm build
 ```
 
-## حدود العرض
+بعد التأكد من الجداول، RLS، وتسجيل الحسابات التجريبية،
+يمكن تغيير `VITE_ENABLE_CONSULTATIONS` إلى `true` في
+`.env.local` **لهذه التجربة فقط**، ثم إعادة تشغيل Vite.
+الاستشارات مقفلة افتراضيًا حفاظًا على حدود نسخة المعاينة.
+بعض وحدات التدريب والمحتوى في هذا الفرع ما تزال تجريبية أو مؤجلة.
 
-- لا تضف متغيرات Supabase لمجرد المعاينة.
-- لا تطبق SQL أو migrations.
-- لا تستخدم بيانات مرضى، ملفات، أسماء أطباء أو حالات حقيقية.
-- التحذير الدائم ووسم البيانات الخيالية و`noindex` جزء من بوابة الأمان.
-- الأزرار المقفلة عمدًا ليست عطلًا؛ الوظائف التي تحتاج خادمًا أو مراجعة مختص تبقى مغلقة.
+## 5. العرض النهائي على Render
+
+Render Static Site مناسب للواجهة: استخدم الفرع الصحيح ومجلد
+`Build Medical Consultation Platform` كـRoot Directory، وأضف متغيرات
+`VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY` من إعدادات Render.
+لا تنشر `service_role` أو مفاتيح سرية كمتغيرات `VITE_`.
+
+الفرع الحالي غير مدمج في `main`؛ أي نشر يعتمد على `main`
+لن يتضمن تلقائيًا التحديثات الموجودة في `feat/academy-library-workflow`.
