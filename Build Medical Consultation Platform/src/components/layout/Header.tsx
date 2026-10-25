@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Menu, X, Stethoscope, ShieldCheck } from "lucide-react"
 import Button from "@/components/ui/Button"
@@ -19,8 +19,21 @@ const LATER_LINKS = [
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
+  const menuButton = useRef<HTMLButtonElement>(null)
 
   useEffect(() => setMobileOpen(false), [location.pathname])
+
+  useEffect(() => {
+    if (!mobileOpen) return
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false)
+        menuButton.current?.focus()
+      }
+    }
+    window.addEventListener("keydown", closeOnEscape)
+    return () => window.removeEventListener("keydown", closeOnEscape)
+  }, [mobileOpen])
 
   function isActive(path: string) {
     return location.pathname.startsWith(path)
@@ -59,6 +72,7 @@ export default function Header() {
               <Link
                 key={link.to}
                 to={link.to}
+                aria-current={isActive(link.to) ? "page" : undefined}
                 className={`nav-link ${
                   isActive(link.to) ? "nav-link-active" : ""
                 }`}
@@ -71,6 +85,7 @@ export default function Header() {
               <Link
                 key={link.to}
                 to={link.to}
+                aria-current={isActive(link.to) ? "page" : undefined}
                 className="nav-link group gap-1.5 text-slate-400"
               >
                 {link.label}
@@ -98,8 +113,9 @@ export default function Header() {
           </div>
 
           <button
+            ref={menuButton}
             type="button"
-            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 md:hidden"
+            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 lg:hidden"
             onClick={() => setMobileOpen((value) => !value)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
@@ -115,12 +131,13 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div id="mobile-menu" className="mobile-menu md:hidden">
+        <div id="mobile-menu" className="mobile-menu lg:hidden">
           <div className="mx-auto max-w-6xl space-y-1 px-4 py-4">
             {[...NAV_LINKS, ...LATER_LINKS].map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
+                aria-current={isActive(link.to) ? "page" : undefined}
                 className={`flex min-h-11 items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-bold ${
                   isActive(link.to)
                     ? "bg-primary-50 text-primary-800"

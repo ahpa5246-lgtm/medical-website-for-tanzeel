@@ -27,6 +27,7 @@ export default function DoctorDirectory() {
   useEffect(() => {
     let active = true
     setError("")
+    setResult(null)
     listPublishedDoctors({ query, page })
       .then((data) => active && setResult(data))
       .catch(() => active && setError("تعذر تحميل دليل الأطباء الآن."))
@@ -39,11 +40,11 @@ export default function DoctorDirectory() {
     const next = new URLSearchParams(params)
     value.trim() ? next.set("q", value) : next.delete("q")
     next.delete("page")
-    setParams(next)
+    setParams(next, { replace: true })
   }
 
   return (
-    <main dir="rtl" className="min-h-screen bg-slate-50 pb-16">
+    <div dir="rtl" className="min-h-screen bg-slate-50 pb-16">
       <header className="border-b border-primary-100 bg-gradient-to-l from-primary-50 to-white py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <p className="section-kicker">الدليل الطبي</p>
@@ -59,7 +60,7 @@ export default function DoctorDirectory() {
             <Search className="absolute start-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
             <input
               type="search"
-              defaultValue={query}
+              value={query}
               onChange={(event) => updateSearch(event.target.value)}
               placeholder="الاسم أو التخصص أو مجال الاهتمام"
               className="w-full rounded-2xl border border-slate-200 bg-white py-3 pe-4 ps-12 text-sm shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100"
@@ -157,6 +158,6 @@ export default function DoctorDirectory() {
           </>
         ) : null}
       </section>
-    </main>
+    </div>
   )
 }

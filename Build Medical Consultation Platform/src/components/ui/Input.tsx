@@ -1,3 +1,4 @@
+import { useId } from "react"
 import { cn } from "@/lib/utils"
 import type { InputHTMLAttributes, ReactNode } from "react"
 
@@ -19,7 +20,16 @@ export default function Input({
   id,
   ...props
 }: InputProps) {
-  const inputId = id || label
+  const generatedId = useId()
+  const inputId = id || generatedId
+  const descriptionId = error
+    ? `${inputId}-error`
+    : hint
+      ? `${inputId}-hint`
+      : undefined
+  const describedBy =
+    [props["aria-describedby"], descriptionId].filter(Boolean).join(" ") ||
+    undefined
 
   return (
     <div className="w-full">
@@ -53,6 +63,8 @@ export default function Input({
             className,
           )}
           {...props}
+          aria-invalid={error ? true : props["aria-invalid"]}
+          aria-describedby={describedBy}
         />
         {endIcon && (
           <span className="absolute inset-y-0 end-0 flex items-center pe-3 text-slate-400 pointer-events-none">
@@ -61,7 +73,11 @@ export default function Input({
         )}
       </div>
       {error && (
-        <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+        <p
+          id={`${inputId}-error`}
+          role="alert"
+          className="mt-1.5 text-xs text-red-600 flex items-center gap-1"
+        >
           <svg
             className="w-3.5 h-3.5 shrink-0"
             viewBox="0 0 16 16"
@@ -73,7 +89,9 @@ export default function Input({
         </p>
       )}
       {hint && !error && (
-        <p className="mt-1.5 text-xs text-slate-500">{hint}</p>
+        <p id={`${inputId}-hint`} className="mt-1.5 text-xs text-slate-500">
+          {hint}
+        </p>
       )}
     </div>
   )
