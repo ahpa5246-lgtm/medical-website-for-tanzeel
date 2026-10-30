@@ -18,9 +18,9 @@ test("editorial home has semantic CTAs and creative layer without blocking conte
   for (let i = 0; i < 3; i++) {
     const portrait = portraits.nth(i)
     await portrait.scrollIntoViewIfNeeded()
-    await expect.poll(
-      () => portrait.evaluate((image) => image.naturalWidth),
-    ).toBeGreaterThan(0)
+    await expect
+      .poll(() => portrait.evaluate((image) => image.naturalWidth))
+      .toBeGreaterThan(0)
   }
   await expect(page.getByText(/الصور تمثيلية لأغراض العرض فقط/)).toBeVisible()
   await expect(page.locator(".home-editorial-cards")).toBeVisible()

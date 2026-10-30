@@ -310,24 +310,29 @@ export default function Home() {
             </Link>
           </div>
           <div className="home-capabilities">
-            {CAPABILITIES.map(({ icon: Icon, number, title, text, to, photo }) => (
-              <Link to={to} className="home-capability" key={title}>
-                <CapabilityPhoto source={photo} icon={Icon} />
-                <div className="home-capability-body">
-                  <span className="home-capability-number">{number}</span>
-                  <span className="capability-icon" aria-hidden="true">
-                    <Icon />
-                  </span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                  <span className="home-capability-link">
-                    استكشف القسم <ArrowLeft aria-hidden="true" />
-                  </span>
-                </div>
-              </Link>
-            ))}
+            {CAPABILITIES.map(
+              ({ icon: Icon, number, title, text, to, photo }) => (
+                <Link to={to} className="home-capability" key={title}>
+                  <CapabilityPhoto source={photo} icon={Icon} />
+                  <div className="home-capability-body">
+                    <span className="home-capability-number">{number}</span>
+                    <span className="capability-icon" aria-hidden="true">
+                      <Icon />
+                    </span>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                    <span className="home-capability-link">
+                      استكشف القسم <ArrowLeft aria-hidden="true" />
+                    </span>
+                  </div>
+                </Link>
+              ),
+            )}
           </div>
-          <p className="capability-photos-disclaimer">الصور تمثيلية لأغراض العرض فقط، ولا تمثل أطباء أو أعضاء فريق تابعين للمنصة.</p>
+          <p className="capability-photos-disclaimer">
+            الصور تمثيلية لأغراض العرض فقط، ولا تمثل أطباء أو أعضاء فريق تابعين
+            للمنصة.
+          </p>
         </div>
       </section>
 
