@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase"
 import { useAuth } from "@/features/auth/AuthProvider"
 import Button from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
+import AuthShell from "@/components/auth/AuthShell"
 
 export default function UpdatePassword() {
   const { session, loading: authLoading } = useAuth()
@@ -36,11 +37,8 @@ export default function UpdatePassword() {
   }
 
   return (
-    <main
-      dir="rtl"
-      className="grid min-h-screen place-items-center bg-slate-50 p-4"
-    >
-      <section className="w-full max-w-md rounded-3xl bg-white p-8 shadow-sm">
+    <AuthShell story="استعادة الوصول إلى حسابك بطريقة واضحة، خطوة بخطوة.">
+      <section className="auth-form-panel">
         <h1 className="text-2xl font-black">تعيين كلمة مرور جديدة</h1>
         {authLoading ? (
           <p className="mt-4" role="status">
@@ -92,6 +90,6 @@ export default function UpdatePassword() {
           </form>
         )}
       </section>
-    </main>
+    </AuthShell>
   )
 }
