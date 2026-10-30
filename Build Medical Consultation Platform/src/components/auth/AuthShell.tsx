@@ -7,7 +7,7 @@ import SketchAccents from "@/components/decor/SketchAccents"
 
 export default function AuthShell({
   children,
-  story = "مساحتك الصغيرة للتعلم والمعرفة.",
+  story = "مساحتك للمعرفة والتعلّم.",
 }: {
   children: ReactNode
   story?: string
