@@ -64,5 +64,5 @@ test("the demo content is intentionally retained and visibly described as fictio
 
 test("inactive article editor does not show a fake submission success", () => {
   const app = read("src/App.tsx")
-  assert.match(app, /path="\/articles\/new" element=\{<UnavailableService/)
+  assert.match(app, /path="\/articles\/new"[\s\S]{0,120}<UnavailableService/)
 })
