@@ -6,8 +6,7 @@ const groups = [
   {
     title: "الرعاية",
     links: [
-      ["/consultations/new", "استشارة جديدة"],
-      ["/consultations", "استشاراتي"],
+      ["/consultations", "الاستشارات — قيد التطوير"],
       ["/doctors", "دليل الأطباء"],
     ],
   },
@@ -45,14 +44,14 @@ export default function Footer() {
               <span className="font-display text-lg font-black">ميدكونكت</span>
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-7 text-slate-400">
-              مشروع عربي قيد التطوير لبناء استشارات طبية أكثر وضوحًا ومسؤولية،
+              مشروع عربي تجريبي للمعرفة الصحية والتدريب. الاستشارات غير متاحة،
               بهوية مؤقتة حتى اعتماد الاسم النهائي.
             </p>
             <Link
               to="/verification/apply"
               className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary-300 hover:text-primary-200"
             >
-              <ShieldCheck className="h-4 w-4" /> التقديم للتحقق كطبيب
+              <ShieldCheck className="h-4 w-4" /> التحقق من الأطباء — نموذج تجريبي
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
