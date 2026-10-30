@@ -43,28 +43,34 @@ test("key public routes render without a blank application or horizontal overflo
   }
 })
 
-test("question from home is preserved in consultation description", async ({
+test("closed consultation routes never accept medical data", async ({
   page,
 }) => {
-  await page.goto("/")
-  await page
-    .getByLabel("ما الخدمة التي تبحث عنها؟")
-    .fill("أحتاج استشارة بشأن تعب مستمر منذ أسبوع")
-  await page.getByRole("button", { name: /ابدأ الآن/ }).click()
-  await expect(page).toHaveURL(/\/consultations\/new/)
-  await expect(
-    page.getByPlaceholder(
-      "اكتب الأعراض، مدتها، الأدوية الحالية وأي معلومات مهمة.",
-    ),
-  ).toHaveValue("أحتاج استشارة بشأن تعب مستمر منذ أسبوع")
+  for (const route of [
+    "/consultations",
+    "/consultations/new",
+    "/consultations/example",
+  ]) {
+    await page.goto(route)
+    await expect(
+      page.getByRole("heading", { name: "الاستشارات قيد التطوير" }),
+    ).toBeVisible()
+    await expect(page.locator("textarea")).toHaveCount(0)
+    await expect(page.locator('input[type="file"]')).toHaveCount(0)
+    await expect(
+      page.getByRole("button", { name: "حفظ وإرسال الاستشارة" }),
+    ).toHaveCount(0)
+  }
 })
 
-test("anonymous visitors cannot submit consultations", async ({ page }) => {
-  await page.goto("/consultations/new")
+test("home does not prompt for private medical questions", async ({ page }) => {
+  await page.goto("/")
+  await expect(page.getByPlaceholder("اكتب سؤالك أو ابحث عن تخصص")).toHaveCount(
+    0,
+  )
   await expect(
-    page.getByRole("button", { name: "حفظ وإرسال الاستشارة" }),
-  ).toBeDisabled()
-  await expect(page.getByRole("link", { name: "تسجيل الدخول" })).toBeVisible()
+    page.getByRole("link", { name: "الاستشارات قيد التطوير" }).first(),
+  ).toBeVisible()
 })
 
 test("recovery and invitation pages show a safe unauthenticated state", async ({

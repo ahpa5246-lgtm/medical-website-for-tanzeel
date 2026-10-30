@@ -9,6 +9,7 @@ import {
 } from "react"
 import type { Session } from "@supabase/supabase-js"
 import { supabase } from "@/lib/supabase"
+import { publicPreview } from "@/lib/releaseFlags"
 import {
   getProfile,
   signOut as performSignOut,
@@ -43,6 +44,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [session?.user.id])
 
   useEffect(() => {
+    if (publicPreview) {
+      setLoading(false)
+      return
+    }
     let active = true
     supabase.auth.getSession().then(({ data }) => {
       if (!active) return

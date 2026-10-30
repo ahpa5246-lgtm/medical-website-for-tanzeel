@@ -44,6 +44,7 @@ export default function ArticleList() {
         {/* Category pills */}
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
           <button
+            aria-pressed={!category}
             onClick={() => setCategory("")}
             className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all ${
               !category
@@ -56,6 +57,7 @@ export default function ArticleList() {
           {ARTICLE_CATEGORIES.map((cat) => (
             <button
               key={cat.id}
+              aria-pressed={category === cat.id}
               onClick={() => setCategory(cat.id === category ? "" : cat.id)}
               className={`shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all ${
                 category === cat.id
@@ -72,7 +74,8 @@ export default function ArticleList() {
         <div className="relative mb-8 max-w-md">
           <Search className="absolute inset-y-0 start-0 ms-3 my-auto w-4 h-4 text-slate-400 pointer-events-none" />
           <input
-            type="text"
+            type="search"
+            aria-label="ابحث في المقالات"
             placeholder="ابحث في المقالات..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -80,6 +83,9 @@ export default function ArticleList() {
           />
         </div>
 
+        <p role="status" className="mb-4 text-sm text-slate-600">
+          {filtered.length} مقالات تطابق البحث
+        </p>
         {/* Articles grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">

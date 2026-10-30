@@ -126,9 +126,9 @@ export const TRAINING_WORLDS = [
 export const ALL_STAGES = TRAINING_WORLDS.flatMap((world) => world.stages)
 
 export function getStageAvailability(stageId, completedIds) {
-  if (completedIds.includes(stageId)) return "complete"
   const index = ALL_STAGES.findIndex((stage) => stage.id === stageId)
   if (index < 0) return "locked"
+  if (completedIds.includes(stageId)) return "complete"
   if (index === 0 || completedIds.includes(ALL_STAGES[index - 1].id))
     return "active"
   return "locked"

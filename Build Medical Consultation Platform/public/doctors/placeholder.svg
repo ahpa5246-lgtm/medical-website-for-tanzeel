@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" role="img" aria-labelledby="title">
+  <title id="title">صورة تعريفية غير متاحة</title>
+  <rect width="640" height="800" fill="#e8f4f4"/>
+  <circle cx="320" cy="285" r="105" fill="#b5d4d4"/>
+  <path d="M125 640c0-124 87-208 195-208s195 84 195 208v54H125z" fill="#b5d4d4"/>
+  <path d="M240 285h160M320 205v160" stroke="#7aa7a7" stroke-width="18" opacity=".18"/>
+</svg>

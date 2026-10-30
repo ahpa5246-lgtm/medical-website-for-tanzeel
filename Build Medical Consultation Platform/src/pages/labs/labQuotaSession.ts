@@ -82,13 +82,14 @@ export function createLabQuotaSession(
   const heartbeatNow = async () => {
     if (disposed || state.phase !== "active" || heartbeatInFlight) return
     heartbeatInFlight = true
+    const version = requestVersion
     try {
       const quota = await client.heartbeat()
-      if (disposed) return
+      if (disposed || version !== requestVersion) return
       publish(stateForQuota(quota, quota.kind !== "exhausted"))
       if (quota.kind === "exhausted") stopHeartbeat()
     } catch (error) {
-      failClosed(error)
+      if (version === requestVersion) failClosed(error)
     } finally {
       heartbeatInFlight = false
     }
