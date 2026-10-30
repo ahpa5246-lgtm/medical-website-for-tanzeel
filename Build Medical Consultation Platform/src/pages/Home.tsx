@@ -1,7 +1,8 @@
-import { useState, type ReactNode } from "react"
+import { useRef, useState, type ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpenText,
   Brain,
   CheckCircle2,
@@ -92,6 +93,40 @@ const CAPABILITIES = [
 export default function Home() {
   const [query, setQuery] = useState("")
   const [isMotionPaused, setIsMotionPaused] = useState(false)
+  const [activeCapabilityIndex, setActiveCapabilityIndex] = useState(0)
+  const capabilityTrackRef = useRef<HTMLDivElement>(null)
+
+  function updateCapabilityPosition() {
+    const track = capabilityTrackRef.current
+    if (!track) return
+
+    const rightEdge = track.getBoundingClientRect().right
+    const items = Array.from(track.children) as HTMLElement[]
+    const closestIndex = items.reduce((best, item, index) => {
+      const distance = Math.abs(item.getBoundingClientRect().right - rightEdge)
+      const bestDistance = Math.abs(
+        items[best].getBoundingClientRect().right - rightEdge,
+      )
+      return distance < bestDistance ? index : best
+    }, 0)
+    setActiveCapabilityIndex(closestIndex)
+  }
+
+  function navigateCapability(index: number) {
+    const track = capabilityTrackRef.current
+    if (!track) return
+    const next = Math.max(0, Math.min(CAPABILITIES.length - 1, index))
+    const item = track.children.item(next)
+    if (!(item instanceof HTMLElement)) return
+    item.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+      block: "nearest",
+      inline: "start",
+    })
+    setActiveCapabilityIndex(next)
+  }
   const navigate = useNavigate()
 
   function startConsultation(event: React.FormEvent) {
@@ -310,7 +345,15 @@ export default function Home() {
               استكشف المعرفة <ChevronLeft aria-hidden="true" />
             </Link>
           </div>
-          <div className="home-capabilities">
+          <div
+            ref={capabilityTrackRef}
+            className="home-capabilities"
+            role="region"
+            aria-label="بطاقات خدمات المنصة، اسحب أفقيًا لاستعراض الخدمات"
+            tabIndex={0}
+            onScroll={updateCapabilityPosition}
+            data-capability-carousel
+          >
             {CAPABILITIES.map(
               ({ icon: Icon, number, title, text, to, photo }) => (
                 <Link to={to} className="home-capability" key={title}>
@@ -329,6 +372,32 @@ export default function Home() {
                 </Link>
               ),
             )}
+          </div>
+          <div className="capability-carousel-controls" aria-label="التحكم ببطاقات الخدمات">
+            <p className="capability-swipe-hint">اسحب أفقيًا لاستعراض بقية الخدمات</p>
+            <div className="capability-carousel-navigation">
+              <button
+                type="button"
+                className="capability-carousel-arrow"
+                aria-label="البطاقة السابقة"
+                disabled={activeCapabilityIndex === 0}
+                onClick={() => navigateCapability(activeCapabilityIndex - 1)}
+              >
+                <ArrowRight aria-hidden="true" />
+              </button>
+              <span className="capability-carousel-count" aria-live="polite">
+                {activeCapabilityIndex + 1} من {CAPABILITIES.length}
+              </span>
+              <button
+                type="button"
+                className="capability-carousel-arrow"
+                aria-label="البطاقة التالية"
+                disabled={activeCapabilityIndex === CAPABILITIES.length - 1}
+                onClick={() => navigateCapability(activeCapabilityIndex + 1)}
+              >
+                <ArrowLeft aria-hidden="true" />
+              </button>
+            </div>
           </div>
           <p className="capability-photos-disclaimer">
             الصور تمثيلية لأغراض العرض فقط، ولا تمثل أطباء أو أعضاء فريق تابعين
