@@ -80,6 +80,17 @@ export default function Footer() {
             ))}
           </div>
         </div>
+        <p className="mt-6 text-[11px] leading-6 text-slate-400">
+          مرجع تصميم النقاط:{" "}
+          <a
+            href="https://www.svgbackgrounds.com/tools/dot-grids/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-200 underline underline-offset-4 hover:text-white"
+          >
+            SVG Dot Grids by SVGBackgrounds.com
+          </a>
+        </p>
         <div className="mt-10 flex items-start gap-2 rounded-2xl border border-coral-500/20 bg-coral-500/5 p-4 text-xs leading-6 text-slate-400">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-coral-500" />
           <p>
