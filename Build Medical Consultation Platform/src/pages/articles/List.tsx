@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react"
 import { Search, Clock, BookOpen, ChevronLeft } from "lucide-react"
 import Badge from "@/components/ui/Badge"
 import Card from "@/components/ui/Card"
@@ -14,6 +15,7 @@ import SketchAccents from "@/components/decor/SketchAccents"
 export default function ArticleList() {
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState("")
+  const reduceMotion = Boolean(useReducedMotion())
 
   const filtered = MOCK_ARTICLES.filter((a) => {
     const matchSearch =
@@ -49,33 +51,53 @@ export default function ArticleList() {
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
         {/* Category pills */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
-          <button
-            aria-pressed={!category}
-            onClick={() => setCategory("")}
-            className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all ${
-              !category
-                ? "bg-primary-600 text-white shadow-sm"
-                : "bg-white border border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-700"
-            }`}
-          >
-            الكل
-          </button>
-          {ARTICLE_CATEGORIES.map((cat) => (
+        <LayoutGroup id="articles-category-tabs">
+          <div data-article-filters className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
             <button
-              key={cat.id}
-              aria-pressed={category === cat.id}
-              onClick={() => setCategory(cat.id === category ? "" : cat.id)}
-              className={`shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all ${
-                category === cat.id
-                  ? "bg-primary-600 text-white shadow-sm"
+              aria-pressed={!category}
+              onClick={() => setCategory("")}
+              className={`article-filter-button shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium ${
+                !category
+                  ? "text-white"
                   : "bg-white border border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-700"
               }`}
             >
-              {cat.nameAr}
+              {!category && (
+                <motion.span
+                  data-filter-indicator
+                  layoutId="selected-article-category"
+                  className="article-filter-indicator"
+                  aria-hidden="true"
+                  transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 38 }}
+                />
+              )}
+              <span className="article-filter-label">الكل</span>
             </button>
-          ))}
-        </div>
+            {ARTICLE_CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                aria-pressed={category === cat.id}
+                onClick={() => setCategory(cat.id === category ? "" : cat.id)}
+                className={`article-filter-button shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium ${
+                  category === cat.id
+                    ? "text-white"
+                    : "bg-white border border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-700"
+                }`}
+              >
+                {category === cat.id && (
+                  <motion.span
+                    data-filter-indicator
+                    layoutId="selected-article-category"
+                    className="article-filter-indicator"
+                    aria-hidden="true"
+                    transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 38 }}
+                  />
+                )}
+                <span className="article-filter-label">{cat.nameAr}</span>
+              </button>
+            ))}
+          </div>
+        </LayoutGroup>
 
         {/* Search */}
         <div className="relative mb-8 max-w-md">
@@ -114,9 +136,18 @@ export default function ArticleList() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map((article) => (
-              <Link
-                key={article.id}
+            <AnimatePresence>
+              {filtered.map((article, index) => (
+                <motion.div
+                  key={article.id}
+                  className="article-card-entry"
+                  layout={reduceMotion ? false : "position"}
+                  initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
+                  transition={reduceMotion ? { duration: 0 } : { duration: 0.2, delay: Math.min(index, 5) * 0.035 }}
+                >
+                  <Link
                 to={`/articles/${article.id}`}
                 className="group"
               >
@@ -162,8 +193,10 @@ export default function ArticleList() {
                     </div>
                   </div>
                 </Card>
-              </Link>
-            ))}
+                  </Link>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
 
