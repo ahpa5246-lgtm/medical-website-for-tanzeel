@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { BookOpenText, HeartPulse, ShieldCheck, Sparkles } from "lucide-react"
 import GrainOverlay from "@/components/decor/GrainOverlay"
-import PatternField from "@/components/decor/PatternField"
+import DotGridField from "@/components/decor/DotGridField"
 import SketchAccents from "@/components/decor/SketchAccents"
 
 export default function AuthShell({
@@ -17,7 +17,7 @@ export default function AuthShell({
       <GrainOverlay />
       <div className="auth-editorial-layout">
         <aside className="auth-story" aria-label="عن المنصة">
-          <PatternField variant="confetti" />
+          <DotGridField tone="teal" fade="center" className="auth-dot-grid" />
           <SketchAccents motif="auth" />
           <Link to="/" className="auth-brand">
             <span className="auth-brand-mark">
