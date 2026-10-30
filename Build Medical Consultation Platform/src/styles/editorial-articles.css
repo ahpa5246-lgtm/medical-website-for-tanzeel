@@ -37,7 +37,7 @@
 .editorial-articles {
   position: relative;
   isolation: isolate;
-  background: radial-gradient(circle at 0 20%, #fbe9d9, transparent 33%), #fffefa;
+  background: radial-gradient(circle at 0 20%, #e3f3f0, transparent 33%), #fffefa;
 }
 .editorial-articles > .articles-paper-pattern {
   opacity: .14;
@@ -68,7 +68,7 @@
   box-shadow: 0 20px 36px rgba(16, 82, 86, .11);
 }
 .editorial-articles .group:nth-child(3n + 2) > div {
-  background: #fdf7f2;
+  background: #eff9f5;
 }
 .editorial-articles .group:nth-child(3n + 3) > div {
   background: #f3f9f8;
