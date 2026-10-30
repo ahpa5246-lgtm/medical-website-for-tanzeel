@@ -21,7 +21,9 @@ export default function MedicalDisclaimer() {
       <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
         التنويه الطبي
       </h1>
-      <p className="text-slate-500 text-sm mb-8">هذه مسودة تنويه غير معتمدة قانونيًا أو طبيًا للنسخة التجريبية.</p>
+      <p className="text-slate-500 text-sm mb-8">
+        هذه مسودة تنويه غير معتمدة قانونيًا أو طبيًا للنسخة التجريبية.
+      </p>
 
       <div className="prose prose-slate max-w-none space-y-6 text-sm text-slate-700 leading-relaxed">
         <section>
