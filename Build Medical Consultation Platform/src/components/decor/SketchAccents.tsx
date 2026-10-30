@@ -5,8 +5,8 @@ type Motif = "hero" | "cards" | "specialties" | "auth" | "cta"
 const colors = {
   teal: "#118c98",
   ink: "#173e47",
-  coral: "#ef8d7f",
-  yellow: "#eaae4f",
+  coral: "#83bcd9",
+  yellow: "#6baeb0",
 }
 
 export default function SketchAccents({
