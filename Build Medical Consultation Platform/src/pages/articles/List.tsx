@@ -13,7 +13,7 @@ import { MOCK_ARTICLES, ARTICLE_CATEGORIES } from "@/data/mockData"
 import WaveDivider from "@/components/decorative/WaveDivider"
 import FingerprintRidges from "@/components/decorative/FingerprintRidges"
 import DemoLabel from "@/components/DemoLabel"
-import PatternField from "@/components/decor/PatternField"
+import DotGridField from "@/components/decor/DotGridField"
 import HandUnderline from "@/components/decor/HandUnderline"
 import SketchAccents from "@/components/decor/SketchAccents"
 
@@ -34,7 +34,7 @@ export default function ArticleList() {
 
   return (
     <div dir="rtl" className="editorial-articles min-h-screen">
-      <PatternField variant="grain" className="articles-paper-pattern" />
+      <DotGridField tone="sky" fade="edges" className="articles-dot-grid" />
       {/* Page hero strip */}
       <div className="relative isolate overflow-hidden border-b border-slate-100 bg-gradient-to-l from-primary-50/50 to-white py-10 pb-16">
         <FingerprintRidges className="-right-10 -top-12 z-0 h-[26rem] w-[26rem] opacity-70" />
