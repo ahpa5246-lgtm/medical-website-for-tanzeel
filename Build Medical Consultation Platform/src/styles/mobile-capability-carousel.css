@@ -8,7 +8,7 @@
   .editorial-home .home-capabilities {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: minmax(0, min(78vw, 18.5rem));
+    grid-auto-columns: min(78vw, 18.5rem);
     grid-template-columns: none;
     gap: .85rem;
     align-items: stretch;
