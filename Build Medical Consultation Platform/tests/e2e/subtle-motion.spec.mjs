@@ -48,7 +48,7 @@ test("article category switching preserves filtering and moves a single active m
   await category.click()
   await expect(category).toHaveAttribute("aria-pressed", "true")
   await expect(filters.locator("[data-filter-indicator]")).toHaveCount(1)
-  await expect(page.getByRole("status")).toContainText("مقالات تطابق البحث")
+  await expect(page.locator(".editorial-articles p[role=\"status\"]")).toContainText("مقالات تطابق البحث")
   await filters.getByRole("button", { name: "الكل" }).click()
   await expect(filters.getByRole("button", { name: "الكل" })).toHaveAttribute(
     "aria-pressed",
