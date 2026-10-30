@@ -134,8 +134,11 @@ export default function Home() {
               </form>
             ) : (
               <div className="mx-auto mt-9 flex flex-wrap justify-center gap-3 lg:mx-0 lg:justify-start">
-                <Link to="/articles">
-                  <Button size="lg">تصفح المقالات التجريبية</Button>
+                <Link
+                  to="/articles"
+                  className="inline-flex min-h-11 items-center rounded-xl bg-primary-700 px-6 py-3 text-sm font-bold text-white"
+                >
+                  تصفح المقالات التجريبية
                 </Link>
                 <Link
                   to="/consultations"
