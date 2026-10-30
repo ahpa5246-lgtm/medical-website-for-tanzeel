@@ -7,6 +7,7 @@ import { AuthProvider } from "@/features/auth/AuthProvider"
 import "./index.css"
 import "./styles/editorial-doodles.css"
 import "./styles/editorial-articles.css"
+import "./styles/blue-green-refinement.css"
 
 document.documentElement.setAttribute("dir", "rtl")
 document.documentElement.setAttribute("lang", "ar")
