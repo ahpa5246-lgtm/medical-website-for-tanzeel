@@ -218,3 +218,7 @@
 @media (prefers-reduced-motion:reduce) {
   .editorial-home .home-capability, .editorial-home .home-specialty, .editorial-home .home-hero a.bg-primary-700 { transition:none; transform:none; }
 }
+
+/* Keep the illustration panel to the left and the Arabic form to the right. */
+.auth-editorial-layout { direction:ltr; }
+.auth-story,.auth-form-wrap { direction:rtl; }
