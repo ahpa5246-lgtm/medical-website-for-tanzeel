@@ -10,6 +10,9 @@ export function readRuntimeConfig(env) {
   if (!supabaseUrl && supabaseAnonKey) issues.push(missingUrlMessage)
 
   if (!supabaseUrl && !supabaseAnonKey) {
+    if (env.VITE_PUBLIC_PREVIEW === "true") {
+      return { mode: "public-preview", issues: [] }
+    }
     if (env.VITE_ENABLE_PROTOTYPE === "true") {
       return { mode: "prototype", issues: [] }
     }
