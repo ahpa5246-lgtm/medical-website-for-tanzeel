@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Layout from "@/components/layout/Layout"
+import AnimatedPublicRoutes from "@/components/layout/AnimatedPublicRoutes"
 import Home from "@/pages/Home"
 import PreviewNotice from "@/components/PreviewNotice"
 import { LoadingState } from "@/components/system/AsyncState"
@@ -149,7 +150,7 @@ export default function App() {
             path="/*"
             element={
               <Layout>
-                <Routes>
+                <AnimatedPublicRoutes>
                   <Route path="/" element={<Home />} />
 
                   {/* Consultations */}
@@ -248,7 +249,7 @@ export default function App() {
 
                   {/* Catch-all */}
                   <Route path="*" element={<NotFound />} />
-                </Routes>
+                </AnimatedPublicRoutes>
               </Layout>
             }
           />
