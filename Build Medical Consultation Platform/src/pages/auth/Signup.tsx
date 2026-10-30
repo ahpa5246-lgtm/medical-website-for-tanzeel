@@ -89,7 +89,9 @@ export default function Signup() {
   return (
     <AuthShell story="مساحة جديدة للقراءة والتعلّم، مع طلب صلاحيات متخصصة لا تصبح فعالة إلا بعد المراجعة.">
       <section className="auth-form-panel">
-        <h1 className="text-3xl font-black text-slate-900"><HandUnderline>إنشاء حساب</HandUnderline></h1>
+        <h1 className="text-3xl font-black text-slate-900">
+          <HandUnderline>إنشاء حساب</HandUnderline>
+        </h1>
         <p className="mt-2 text-sm leading-7 text-slate-500">
           الحساب العادي يُنشأ مباشرة. طلب الطبيب أو المدرّب يبقى طلبًا فقط إلى أن
           تراجعه الإدارة.

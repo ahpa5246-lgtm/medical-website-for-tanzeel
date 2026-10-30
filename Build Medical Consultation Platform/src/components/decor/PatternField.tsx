@@ -42,16 +42,24 @@ export default function PatternField({
   const [ready, setReady] = useState(false)
   useEffect(() => {
     let active = true
-    void import("css-doodle").then(() => {
-      if (active) setReady(true)
-    }).catch(() => {})
+    void import("css-doodle")
+      .then(() => {
+        if (active) setReady(true)
+      })
+      .catch(() => {})
     return () => {
       active = false
     }
   }, [])
   return (
     <div className={`pattern-field ${className}`} aria-hidden="true">
-      {ready ? createElement("css-doodle", { className: "pattern-doodle" }, rules[variant]) : null}
+      {ready
+        ? createElement(
+            "css-doodle",
+            { className: "pattern-doodle" },
+            rules[variant],
+          )
+        : null}
     </div>
   )
 }

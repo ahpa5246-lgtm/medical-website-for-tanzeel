@@ -15,26 +15,34 @@ export default function HandUnderline({
     if (!el) return
     let active = true
     let cleanup: (() => void) | undefined
-    void import("rough-notation").then(({ annotate }) => {
-      if (!active) return
-      const motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      const annotation = annotate(el, {
-        type,
-        color,
-        strokeWidth: 2.8,
-        padding: 3,
-        multiline: true,
-        rtl: true,
-        animate: !motion,
-        animationDuration: 650,
+    void import("rough-notation")
+      .then(({ annotate }) => {
+        if (!active) return
+        const motion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches
+        const annotation = annotate(el, {
+          type,
+          color,
+          strokeWidth: 2.8,
+          padding: 3,
+          multiline: true,
+          rtl: true,
+          animate: !motion,
+          animationDuration: 650,
+        })
+        annotation.show()
+        cleanup = () => annotation.remove()
       })
-      annotation.show()
-      cleanup = () => annotation.remove()
-    }).catch(() => {})
+      .catch(() => {})
     return () => {
       active = false
       cleanup?.()
     }
   }, [color, type])
-  return <span className="hand-underlined" ref={ref}>{children}</span>
+  return (
+    <span className="hand-underlined" ref={ref}>
+      {children}
+    </span>
+  )
 }

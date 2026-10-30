@@ -53,7 +53,8 @@ export default function Login() {
             <HandUnderline>تسجيل الدخول</HandUnderline>
           </h1>
           <p className="mt-2 text-sm leading-7 text-slate-500">
-            أهلًا بعودتك. ادخلي إلى مساحتك لمتابعة المحتوى والمهام المتاحة بحسب صلاحيات حسابك.
+            أهلًا بعودتك. ادخلي إلى مساحتك لمتابعة المحتوى والمهام المتاحة بحسب
+            صلاحيات حسابك.
           </p>
         </div>
 
@@ -119,7 +120,12 @@ export default function Login() {
         </form>
         <p className="mt-6 text-center text-sm text-slate-500">
           ليس لديك حساب؟{" "}
-          <Link to="/auth/signup" className="font-bold text-primary-700 underline">أنشئ حسابًا</Link>
+          <Link
+            to="/auth/signup"
+            className="font-bold text-primary-700 underline"
+          >
+            أنشئ حسابًا
+          </Link>
         </p>
       </section>
     </AuthShell>

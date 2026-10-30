@@ -5,14 +5,22 @@ test("editorial home has semantic CTAs and creative layer without blocking conte
   page,
 }, testInfo) => {
   await page.goto("/")
-  await expect(page.getByRole("heading", { name: /الرعاية تبدأ/ })).toBeVisible()
-  await expect(page.getByRole("link", { name: /تصفح المقالات التجريبية/ })).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: /الرعاية تبدأ/ }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", { name: /تصفح المقالات التجريبية/ }),
+  ).toBeVisible()
   await expect(page.locator(".hero-illustration")).toBeVisible()
   await expect(page.locator(".home-capability")).toHaveCount(3)
   await expect(page.locator(".home-editorial-cards")).toBeVisible()
-  await expect(page.locator(".editorial-home .pattern-doodle").first()).toBeVisible()
+  await expect(
+    page.locator(".editorial-home .pattern-doodle").first(),
+  ).toBeVisible()
   const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
   )
   expect(overflow).toBeLessThanOrEqual(1)
   if (testInfo.project.name === "desktop-chromium") {

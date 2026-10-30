@@ -110,7 +110,9 @@ export default function Home() {
               <span aria-hidden="true">
                 <HeartPulse />
               </span>
-              <span className="home-tag-flower" aria-hidden="true"><Flower2 /></span>
+              <span className="home-tag-flower" aria-hidden="true">
+                <Flower2 />
+              </span>
               مساحة معرفية تنبض بالحياة
             </p>
             <h1
@@ -118,11 +120,14 @@ export default function Home() {
               className="home-display mx-auto mt-6 max-w-3xl lg:mx-0"
             >
               الرعاية تبدأ
-              <span><HandUnderline color="#eeb650">بخطوة أوضح.</HandUnderline></span>
+              <span>
+                <HandUnderline color="#eeb650">بخطوة أوضح.</HandUnderline>
+              </span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0">
-              رحلة بسيطة بين المقالات الصحية التجريبية والتعلّم التفاعلي،
-              بألوان دافئة وأفكار أوضح. الاستشارات قيد التطوير، والمقالات الحالية خيالية وغير مراجعة طبيًا.
+              رحلة بسيطة بين المقالات الصحية التجريبية والتعلّم التفاعلي، بألوان
+              دافئة وأفكار أوضح. الاستشارات قيد التطوير، والمقالات الحالية
+              خيالية وغير مراجعة طبيًا.
             </p>
 
             {consultationsEnabled ? (
@@ -187,8 +192,13 @@ export default function Home() {
               <span className="hero-blob hero-blob-one" />
               <span className="hero-blob hero-blob-two" />
               <div className="hero-medical-card">
-                <span className="hero-medical-card-top"><HeartPulse /><Star /></span>
-                <span className="hero-medical-card-icon"><BookOpenText /></span>
+                <span className="hero-medical-card-top">
+                  <HeartPulse />
+                  <Star />
+                </span>
+                <span className="hero-medical-card-icon">
+                  <BookOpenText />
+                </span>
                 <span className="hero-medical-card-rule" />
                 <span className="hero-medical-card-rule short" />
                 <span className="hero-medical-card-bottom">
@@ -196,13 +206,26 @@ export default function Home() {
                   <span>المعرفة أولًا</span>
                 </span>
               </div>
-              <div className="hero-sticky hero-sticky-one">كل سؤال يستحق<br />شرحًا واضحًا <Sparkles /></div>
-              <div className="hero-sticky hero-sticky-two"><Flower2 /> نتعلّم خطوة<br /> بخطوة</div>
-              <div className="hero-sticker-star"><Sparkles /></div>
+              <div className="hero-sticky hero-sticky-one">
+                كل سؤال يستحق
+                <br />
+                شرحًا واضحًا <Sparkles />
+              </div>
+              <div className="hero-sticky hero-sticky-two">
+                <Flower2 /> نتعلّم خطوة
+                <br /> بخطوة
+              </div>
+              <div className="hero-sticker-star">
+                <Sparkles />
+              </div>
             </div>
             <div className="home-visual-copy">
               <span>المعرفة والتدريب</span>
-              <strong>مساحة أقرب إليك،<br />كل يوم.</strong>
+              <strong>
+                مساحة أقرب إليك،
+                <br />
+                كل يوم.
+              </strong>
               <p>محتوى تعليمي تجريبي وأدوات للتعلّم ضمن واجهة عربية ذات روح.</p>
             </div>
             <div className="home-vital" aria-hidden="true">
@@ -251,7 +274,9 @@ export default function Home() {
                       aria-hidden={index >= CARE_STEPS.length}
                     >
                       <span>
-                        <span className="capability-icon"><Icon aria-hidden="true" /></span>
+                        <span className="capability-icon">
+                          <Icon aria-hidden="true" />
+                        </span>
                       </span>
                       <div>
                         <strong>{label}</strong>
@@ -284,7 +309,9 @@ export default function Home() {
           <div className="home-capabilities">
             {CAPABILITIES.map(({ icon: Icon, number, title, text, to }) => (
               <Link to={to} className="home-capability" key={title}>
-                <span className="capability-corner-art" aria-hidden="true"><Sparkles /></span>
+                <span className="capability-corner-art" aria-hidden="true">
+                  <Sparkles />
+                </span>
                 <span className="home-capability-number">{number}</span>
                 <Icon aria-hidden="true" />
                 <h3>{title}</h3>
@@ -305,7 +332,9 @@ export default function Home() {
           <div className="mb-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
             <div>
               <p className="home-kicker">الوصول السريع</p>
-              <h2><HandUnderline color="#e8aa46">اختر نقطة البداية</HandUnderline></h2>
+              <h2>
+                <HandUnderline color="#e8aa46">اختر نقطة البداية</HandUnderline>
+              </h2>
             </div>
             <Link to="/doctors" className="home-inline-link">
               عرض دليل الأطباء <ChevronLeft aria-hidden="true" />
@@ -333,7 +362,10 @@ export default function Home() {
           <SketchAccents motif="cta" className="cta-doodles" />
           <div>
             <p>ابدأ من مكان واحد</p>
-            <h2>المعرفة تبدأ <HandUnderline color="#efb84e">بخطوة صغيرة.</HandUnderline></h2>
+            <h2>
+              المعرفة تبدأ{" "}
+              <HandUnderline color="#efb84e">بخطوة صغيرة.</HandUnderline>
+            </h2>
             <span>الاستشارات والوظائف الطبية ستُفتح بعد اجتياز المراجعة.</span>
           </div>
           <div className="flex flex-wrap gap-3">

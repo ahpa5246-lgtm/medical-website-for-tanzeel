@@ -20,8 +20,12 @@ export default function AuthShell({
           <PatternField variant="confetti" />
           <SketchAccents motif="auth" />
           <Link to="/" className="auth-brand">
-            <span className="auth-brand-mark"><HeartPulse aria-hidden="true" /></span>
-            <span>ميدكونكت <small>نسخة عرض تجريبية</small></span>
+            <span className="auth-brand-mark">
+              <HeartPulse aria-hidden="true" />
+            </span>
+            <span>
+              ميدكونكت <small>نسخة عرض تجريبية</small>
+            </span>
           </Link>
           <div className="auth-story-middle">
             <div className="auth-illustration" aria-hidden="true">
@@ -29,20 +33,38 @@ export default function AuthShell({
               <div className="auth-illustration-book">
                 <BookOpenText />
               </div>
-              <div className="auth-illustration-heart"><HeartPulse /></div>
-              <div className="auth-illustration-star"><Sparkles /></div>
+              <div className="auth-illustration-heart">
+                <HeartPulse />
+              </div>
+              <div className="auth-illustration-star">
+                <Sparkles />
+              </div>
             </div>
             <p className="auth-story-eyebrow">معرفة أقرب إليك</p>
-            <h2>خطوة صغيرة،<br /><span>رحلة أجمل.</span></h2>
+            <h2>
+              خطوة صغيرة،
+              <br />
+              <span>رحلة أجمل.</span>
+            </h2>
             <p>{story}</p>
-            <div className="auth-story-check"><ShieldCheck aria-hidden="true" /> الحسابات الحقيقية متاحة فقط بعد تهيئة الخدمة واعتمادها.</div>
+            <div className="auth-story-check">
+              <ShieldCheck aria-hidden="true" /> الحسابات الحقيقية متاحة فقط بعد
+              تهيئة الخدمة واعتمادها.
+            </div>
           </div>
-          <p className="auth-story-foot">صُنعت هذه الواجهة بالعربية أولًا وبروح الرسومات اليدوية.</p>
+          <p className="auth-story-foot">
+            صُنعت هذه الواجهة بالعربية أولًا وبروح الرسومات اليدوية.
+          </p>
         </aside>
         <div className="auth-form-wrap">
-          <div className="auth-form-top"><Link to="/">العودة للرئيسية ←</Link><span>نسخة تجريبية</span></div>
+          <div className="auth-form-top">
+            <Link to="/">العودة للرئيسية ←</Link>
+            <span>نسخة تجريبية</span>
+          </div>
           {children}
-          <p className="auth-form-foot">لا تُدخل معلومات طبية أو صحية في نماذج العرض غير التشغيلية.</p>
+          <p className="auth-form-foot">
+            لا تُدخل معلومات طبية أو صحية في نماذج العرض غير التشغيلية.
+          </p>
         </div>
       </div>
     </main>
