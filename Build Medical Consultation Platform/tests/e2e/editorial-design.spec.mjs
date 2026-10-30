@@ -49,7 +49,9 @@ test("login, signup and password recovery share the same illustrated layout", as
   }
   if (testInfo.project.name === "desktop-chromium") {
     await page.goto("/auth/login")
-    await expect(page.getByRole("heading", { name: "تسجيل الدخول" })).toBeVisible()
+    await expect(
+      page.getByRole("heading", { name: "تسجيل الدخول" }),
+    ).toBeVisible()
     await page.evaluate(() => document.fonts.ready)
     mkdirSync("visual-evidence", { recursive: true })
     await page.screenshot({
