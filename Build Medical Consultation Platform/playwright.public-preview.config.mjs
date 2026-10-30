@@ -4,6 +4,9 @@ export default {
   ...base,
   testDir: "./tests/public-preview-e2e",
   reporter: process.env.CI
-    ? [["line"], ["html", { outputFolder: "playwright-preview-report", open: "never" }]]
+    ? [
+        ["line"],
+        ["html", { outputFolder: "playwright-preview-report", open: "never" }],
+      ]
     : "list",
 }
