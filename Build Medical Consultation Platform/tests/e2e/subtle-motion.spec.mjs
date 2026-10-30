@@ -2,11 +2,11 @@ import { expect, test } from "@playwright/test"
 
 test("public navigation changes page with a stable header and one active indicator", async ({
   page,
-}, testInfo) => {
+}) => {
   await page.goto("/")
   const header = page.getByRole("banner")
   await expect(header).toBeVisible()
-  const desktop = testInfo.project.name === "desktop-chromium"
+  const desktop = await page.getByRole("navigation", { name: "التنقل الرئيسي" }).isVisible()
   if (desktop) {
     await page
       .getByRole("navigation", { name: "التنقل الرئيسي" })
