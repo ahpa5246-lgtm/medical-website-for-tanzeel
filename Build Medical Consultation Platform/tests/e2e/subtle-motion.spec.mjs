@@ -6,7 +6,9 @@ test("public navigation changes page with a stable header and one active indicat
   await page.goto("/")
   const header = page.getByRole("banner")
   await expect(header).toBeVisible()
-  const desktop = await page.getByRole("navigation", { name: "التنقل الرئيسي" }).isVisible()
+  const desktop = await page
+    .getByRole("navigation", { name: "التنقل الرئيسي" })
+    .isVisible()
   if (desktop) {
     await page
       .getByRole("navigation", { name: "التنقل الرئيسي" })
