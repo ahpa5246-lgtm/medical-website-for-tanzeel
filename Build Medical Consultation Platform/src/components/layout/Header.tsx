@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
+import { LayoutGroup, motion, useReducedMotion } from "motion/react"
 import { Menu, X, Stethoscope, ShieldCheck } from "lucide-react"
 import Button from "@/components/ui/Button"
 import { publicPreview } from "@/lib/releaseFlags"
@@ -20,6 +21,7 @@ const LATER_LINKS = [
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
+  const reduceMotion = Boolean(useReducedMotion())
   const menuButton = useRef<HTMLButtonElement>(null)
 
   useEffect(() => setMobileOpen(false), [location.pathname])
@@ -65,37 +67,65 @@ export default function Header() {
             </span>
           </Link>
 
-          <nav
-            className="hidden items-center gap-1 lg:flex"
-            aria-label="التنقل الرئيسي"
-          >
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                aria-current={isActive(link.to) ? "page" : undefined}
-                className={`nav-link ${
-                  isActive(link.to) ? "nav-link-active" : ""
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <span className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />
-            {LATER_LINKS.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                aria-current={isActive(link.to) ? "page" : undefined}
-                className="nav-link group gap-1.5 text-slate-400"
-              >
-                {link.label}
-                <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[8px] font-bold text-slate-500 transition group-hover:bg-primary-50 group-hover:text-primary-700">
-                  لاحقًا
-                </span>
-              </Link>
-            ))}
-          </nav>
+          <LayoutGroup id="site-primary-navigation">
+            <nav
+              className="hidden items-center gap-1 lg:flex"
+              aria-label="التنقل الرئيسي"
+            >
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  aria-current={isActive(link.to) ? "page" : undefined}
+                  className={`nav-link nav-link-motion ${
+                    isActive(link.to) ? "nav-link-active" : ""
+                  }`}
+                >
+                  <span className="nav-link-label">{link.label}</span>
+                  {isActive(link.to) && (
+                    <motion.span
+                      data-nav-indicator
+                      layoutId="active-destination"
+                      className="nav-active-indicator"
+                      aria-hidden="true"
+                      transition={
+                        reduceMotion
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 410, damping: 37 }
+                      }
+                    />
+                  )}
+                </Link>
+              ))}
+              <span className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />
+              {LATER_LINKS.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  aria-current={isActive(link.to) ? "page" : undefined}
+                  className="nav-link nav-link-motion group gap-1.5 text-slate-400"
+                >
+                  <span className="nav-link-label">{link.label}</span>
+                  <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[8px] font-bold text-slate-500 transition group-hover:bg-primary-50 group-hover:text-primary-700">
+                    لاحقًا
+                  </span>
+                  {isActive(link.to) && (
+                    <motion.span
+                      data-nav-indicator
+                      layoutId="active-destination"
+                      className="nav-active-indicator"
+                      aria-hidden="true"
+                      transition={
+                        reduceMotion
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 410, damping: 37 }
+                      }
+                    />
+                  )}
+                </Link>
+              ))}
+            </nav>
+          </LayoutGroup>
 
           <div className="hidden items-center gap-2 md:flex">
             {!publicPreview && (
