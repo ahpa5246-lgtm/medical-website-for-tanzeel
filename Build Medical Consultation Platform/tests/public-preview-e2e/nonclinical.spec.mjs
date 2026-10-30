@@ -12,11 +12,17 @@ test("nonclinical public preview displays fictional content without medical inta
     }
   })
   await page.goto("/")
-  await expect(page.getByRole("heading", { name: /الرعاية تبدأ/ })).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: /الرعاية تبدأ/ }),
+  ).toBeVisible()
   await expect(page.getByText(/نسخة عرض غير طبية/)).toBeVisible()
-  await expect(page.getByPlaceholder("اكتب سؤالك أو ابحث عن تخصص")).toHaveCount(0)
+  await expect(page.getByPlaceholder("اكتب سؤالك أو ابحث عن تخصص")).toHaveCount(
+    0,
+  )
   await page.getByRole("link", { name: "تصفح المقالات التجريبية" }).click()
-  await expect(page.getByRole("heading", { name: /نماذج شكلية للمحتوى/ })).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: /نماذج شكلية للمحتوى/ }),
+  ).toBeVisible()
   expect(remoteMedicalRequests).toEqual([])
   expect(errors).toEqual([])
 })
