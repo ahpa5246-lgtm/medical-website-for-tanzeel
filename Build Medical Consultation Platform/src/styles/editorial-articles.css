@@ -1,0 +1,90 @@
+/* Continue the same editorial design language outside the landing page. */
+.site-shell {
+  background: #fffdfa;
+}
+.site-shell > main {
+  background: #fffdfa;
+}
+.site-header {
+  background: rgb(255 253 249 / 94%);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid #dbeae5;
+}
+.site-header .nav-link {
+  border-radius: 999px;
+}
+.site-header .nav-link:hover,
+.site-header .nav-link:focus-visible {
+  background: #e5f3ef;
+}
+.site-shell footer {
+  position: relative;
+  background: linear-gradient(125deg, #102c3f, #133c4a);
+}
+.site-shell footer::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  opacity: .2;
+  background-image: radial-gradient(#95c6bd .7px, transparent .7px);
+  background-size: 29px 29px;
+  mask-image: linear-gradient(90deg, transparent, black 60%);
+}
+.site-shell footer > div {
+  position: relative;
+}
+.editorial-articles {
+  position: relative;
+  isolation: isolate;
+  background: radial-gradient(circle at 0 20%, #fbe9d9, transparent 33%), #fffefa;
+}
+.editorial-articles > .articles-paper-pattern {
+  opacity: .14;
+  z-index: 0;
+}
+.editorial-articles > div:not(.pattern-field) {
+  position: relative;
+  z-index: 1;
+}
+.editorial-articles > div:nth-child(2) {
+  background: linear-gradient(115deg, #e8f4f0, #fffdf8 80%);
+}
+.editorial-articles .articles-hero-sketch {
+  opacity: .36;
+  z-index: 0;
+}
+.editorial-articles .group > div {
+  border-radius: 1.4rem;
+  border: 1px solid #dce9e4;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .93);
+  box-shadow: 0 12px 27px rgba(16, 82, 86, .06);
+  transition: transform .2s, box-shadow .2s;
+}
+.editorial-articles .group:hover > div,
+.editorial-articles .group:focus-visible > div {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 36px rgba(16, 82, 86, .11);
+}
+.editorial-articles .group:nth-child(3n + 2) > div {
+  background: #fdf7f2;
+}
+.editorial-articles .group:nth-child(3n + 3) > div {
+  background: #f3f9f8;
+}
+.editorial-articles .group > div img {
+  object-position: center;
+}
+.editorial-articles > div:last-child > div:last-child {
+  border-radius: 1.8rem;
+  background: linear-gradient(120deg, #104750, #0a7781);
+}
+@media (prefers-reduced-motion: reduce) {
+  .editorial-articles .group > div {
+    transition: none;
+  }
+  .editorial-articles .group:hover > div {
+    transform: none;
+  }
+}
