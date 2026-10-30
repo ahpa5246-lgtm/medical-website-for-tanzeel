@@ -5,8 +5,9 @@ export default function Privacy() {
     <div dir="rtl" className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-black text-slate-900">سياسة الخصوصية</h1>
       <p className="mt-3 text-sm leading-8 text-slate-600">
-        آخر تحديث: 29 سبتمبر 2026. هذه السياسة تصف البيانات التي تتعامل معها
-        المنصة عند تشغيلها مع قاعدة البيانات.
+        مسودة سياسة خصوصية تحتاج مراجعة قانونية قبل إطلاق الخدمات الفعلية.
+        نسخة العرض العامة لا تستقبل حسابات أو استشارات أو ملفات طبية،
+        والأقسام التفاعلية المغلقة لا تحفظ بيانات المستخدم.
       </p>
 
       <div className="mt-8 space-y-7 text-sm leading-8 text-slate-700">
