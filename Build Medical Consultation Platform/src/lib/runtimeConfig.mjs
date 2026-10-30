@@ -6,13 +6,21 @@ export function readRuntimeConfig(env) {
   const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY?.trim()
   const issues = []
 
+  // A public, nonclinical preview must never carry live backend credentials.
+  if (env.VITE_PUBLIC_PREVIEW === "true") {
+    if (supabaseUrl || supabaseAnonKey) {
+      return {
+        mode: "blocked",
+        issues: ["أزيلي إعدادات Supabase من نسخة العرض العامة."],
+      }
+    }
+    return { mode: "public-preview", issues: [] }
+  }
+
   if (supabaseUrl && !supabaseAnonKey) issues.push(missingKeyMessage)
   if (!supabaseUrl && supabaseAnonKey) issues.push(missingUrlMessage)
 
   if (!supabaseUrl && !supabaseAnonKey) {
-    if (env.VITE_PUBLIC_PREVIEW === "true") {
-      return { mode: "public-preview", issues: [] }
-    }
     if (env.VITE_ENABLE_PROTOTYPE === "true") {
       return { mode: "prototype", issues: [] }
     }
