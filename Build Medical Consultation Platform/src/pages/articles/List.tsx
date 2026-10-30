@@ -35,7 +35,7 @@ export default function ArticleList() {
         <div className="relative z-[1] mx-auto max-w-6xl px-4 sm:px-6">
           <p className="section-kicker mb-2">مقالات عرض خيالية غير مراجعة</p>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
-            <HandUnderline color="#e9b75c">
+            <HandUnderline color="#78b8d7">
               نماذج شكلية للمحتوى فقط
             </HandUnderline>
           </h1>
