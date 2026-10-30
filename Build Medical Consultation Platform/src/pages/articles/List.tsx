@@ -1,6 +1,11 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react"
+import {
+  AnimatePresence,
+  LayoutGroup,
+  motion,
+  useReducedMotion,
+} from "motion/react"
 import { Search, Clock, BookOpen, ChevronLeft } from "lucide-react"
 import Badge from "@/components/ui/Badge"
 import Card from "@/components/ui/Card"
@@ -52,7 +57,10 @@ export default function ArticleList() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
         {/* Category pills */}
         <LayoutGroup id="articles-category-tabs">
-          <div data-article-filters className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
+          <div
+            data-article-filters
+            className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none"
+          >
             <button
               aria-pressed={!category}
               onClick={() => setCategory("")}
@@ -68,7 +76,11 @@ export default function ArticleList() {
                   layoutId="selected-article-category"
                   className="article-filter-indicator"
                   aria-hidden="true"
-                  transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 38 }}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { type: "spring", stiffness: 440, damping: 38 }
+                  }
                 />
               )}
               <span className="article-filter-label">الكل</span>
@@ -90,7 +102,11 @@ export default function ArticleList() {
                     layoutId="selected-article-category"
                     className="article-filter-indicator"
                     aria-hidden="true"
-                    transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 38 }}
+                    transition={
+                      reduceMotion
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 440, damping: 38 }
+                    }
                   />
                 )}
                 <span className="article-filter-label">{cat.nameAr}</span>
@@ -145,54 +161,55 @@ export default function ArticleList() {
                   initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
-                  transition={reduceMotion ? { duration: 0 } : { duration: 0.2, delay: Math.min(index, 5) * 0.035 }}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { duration: 0.2, delay: Math.min(index, 5) * 0.035 }
+                  }
                 >
-                  <Link
-                to={`/articles/${article.id}`}
-                className="group"
-              >
-                <Card
-                  hover
-                  padding="none"
-                  className="overflow-hidden h-full flex flex-col"
-                >
-                  {/* Cover */}
-                  <div className="relative h-44 bg-primary-100 overflow-hidden">
-                    <img
-                      src={article.coverUrl}
-                      alt={article.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 start-3">
-                      <Badge
-                        variant="default"
-                        className="bg-white/90 backdrop-blur-sm text-slate-700 text-xs"
-                      >
-                        {article.category}
-                      </Badge>
-                    </div>
-                  </div>
+                  <Link to={`/articles/${article.id}`} className="group">
+                    <Card
+                      hover
+                      padding="none"
+                      className="overflow-hidden h-full flex flex-col"
+                    >
+                      {/* Cover */}
+                      <div className="relative h-44 bg-primary-100 overflow-hidden">
+                        <img
+                          src={article.coverUrl}
+                          alt={article.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 start-3">
+                          <Badge
+                            variant="default"
+                            className="bg-white/90 backdrop-blur-sm text-slate-700 text-xs"
+                          >
+                            {article.category}
+                          </Badge>
+                        </div>
+                      </div>
 
-                  {/* Content */}
-                  <div className="p-4 flex flex-col flex-1">
-                    <DemoLabel>مقال ومؤلف ومراجعة خيالية</DemoLabel>
-                    <h2 className="font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-primary-700 transition-colors text-sm mb-2">
-                      {article.title}
-                    </h2>
-                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 flex-1 mb-4">
-                      {article.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between text-xs text-slate-400 mt-auto pt-3 border-t border-slate-50">
-                      <span className="font-medium text-slate-600">
-                        {article.authorName}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        {article.readTimeMinutes} دقائق
-                      </span>
-                    </div>
-                  </div>
-                </Card>
+                      {/* Content */}
+                      <div className="p-4 flex flex-col flex-1">
+                        <DemoLabel>مقال ومؤلف ومراجعة خيالية</DemoLabel>
+                        <h2 className="font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-primary-700 transition-colors text-sm mb-2">
+                          {article.title}
+                        </h2>
+                        <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 flex-1 mb-4">
+                          {article.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between text-xs text-slate-400 mt-auto pt-3 border-t border-slate-50">
+                          <span className="font-medium text-slate-600">
+                            {article.authorName}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {article.readTimeMinutes} دقائق
+                          </span>
+                        </div>
+                      </div>
+                    </Card>
                   </Link>
                 </motion.div>
               ))}
