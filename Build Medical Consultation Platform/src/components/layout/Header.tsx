@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Menu, X, Stethoscope, ShieldCheck } from "lucide-react"
 import Button from "@/components/ui/Button"
+import { publicPreview } from "@/lib/releaseFlags"
 
 const NAV_LINKS = [
-  { to: "/consultations", label: "استشاراتي" },
-  { to: "/doctors", label: "الأطباء" },
+  { to: "/consultations", label: "الاستشارات (قريبًا)" },
+  { to: "/doctors", label: publicPreview ? "الأطباء (قريبًا)" : "الأطباء" },
   { to: "/articles", label: "المعرفة الصحية" },
   { to: "/training", label: "تدريب" },
   { to: "/labs", label: "المختبرات" },
@@ -97,17 +98,19 @@ export default function Header() {
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
-            <Link to="/auth/login">
-              <Button variant="ghost" size="sm">
-                دخول
-              </Button>
-            </Link>
-            <Link to="/consultations/new">
+            {!publicPreview && (
+              <Link to="/auth/login">
+                <Button variant="ghost" size="sm">
+                  دخول
+                </Button>
+              </Link>
+            )}
+            <Link to="/consultations">
               <Button
                 size="sm"
                 className="rounded-full px-4 shadow-[0_8px_22px_rgba(8,126,139,.18)]"
               >
-                اسأل طبيبًا
+                قيد التطوير
               </Button>
             </Link>
           </div>
@@ -153,21 +156,23 @@ export default function Header() {
               </Link>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4">
-              <Link to="/auth/login">
-                <Button variant="outline" className="w-full">
-                  دخول
-                </Button>
-              </Link>
-              <Link to="/consultations/new">
-                <Button className="w-full">اسأل طبيبًا</Button>
+              {!publicPreview && (
+                <Link to="/auth/login">
+                  <Button variant="outline" className="w-full">
+                    دخول
+                  </Button>
+                </Link>
+              )}
+              <Link to="/consultations">
+                <Button className="w-full">قيد التطوير</Button>
               </Link>
             </div>
-            <Link
+            {!publicPreview && <Link
               to="/verification/apply"
               className="mt-2 flex items-center justify-center gap-2 py-2 text-xs font-bold text-primary-700"
             >
               <ShieldCheck className="h-4 w-4" /> نموذج انضمام خيالي
-            </Link>
+            </Link>}
           </div>
         </div>
       )}
