@@ -26,6 +26,7 @@ import Button from "@/components/ui/Button"
 import { SPECIALTIES } from "@/data/specialties"
 import { consultationsEnabled } from "@/lib/releaseFlags"
 import PatternField from "@/components/decor/PatternField"
+import DotGridField from "@/components/decor/DotGridField"
 import GrainOverlay from "@/components/decor/GrainOverlay"
 import SketchAccents from "@/components/decor/SketchAccents"
 import HandUnderline from "@/components/decor/HandUnderline"
@@ -102,7 +103,7 @@ export default function Home() {
     <div dir="rtl" className="home-premium editorial-home overflow-x-hidden">
       <GrainOverlay />
       <section className="home-hero">
-        <PatternField variant="grain" className="hero-pattern" />
+        <DotGridField tone="teal" fade="left" className="hero-dot-grid" />
         <SketchAccents motif="hero" className="hero-doodles" />
         <div className="home-orbit home-orbit-one" aria-hidden="true" />
         <div className="home-orbit home-orbit-two" aria-hidden="true" />
@@ -295,7 +296,7 @@ export default function Home() {
       </section>
 
       <section className="home-section home-editorial-cards">
-        <PatternField variant="sparkles" className="editorial-cards-pattern" />
+        <DotGridField tone="sky" fade="edges" className="cards-dot-grid" />
         <SketchAccents motif="cards" className="cards-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="home-section-heading">
@@ -337,7 +338,7 @@ export default function Home() {
       </section>
 
       <section className="home-specialties">
-        <PatternField variant="grain" className="specialties-pattern" />
+        <DotGridField tone="teal" fade="right" className="specialties-dot-grid" />
         <SketchAccents motif="specialties" className="specialties-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
