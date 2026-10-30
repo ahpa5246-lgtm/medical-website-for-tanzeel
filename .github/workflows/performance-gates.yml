@@ -66,6 +66,15 @@ jobs:
       - name: Test public preview on Chromium, Firefox, and WebKit profiles
         run: pnpm exec playwright test -c playwright.public-preview.config.mjs
 
+      - name: Upload actual public-preview screenshots
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: public-preview-screenshots
+          path: "Build Medical Consultation Platform/visual-evidence/*.png"
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Upload public-preview Playwright report
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
