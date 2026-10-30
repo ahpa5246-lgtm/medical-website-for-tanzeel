@@ -338,7 +338,11 @@ export default function Home() {
       </section>
 
       <section className="home-specialties">
-        <DotGridField tone="teal" fade="right" className="specialties-dot-grid" />
+        <DotGridField
+          tone="teal"
+          fade="right"
+          className="specialties-dot-grid"
+        />
         <SketchAccents motif="specialties" className="specialties-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
