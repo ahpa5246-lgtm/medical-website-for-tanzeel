@@ -9,6 +9,7 @@ import "./styles/editorial-doodles.css"
 import "./styles/editorial-articles.css"
 import "./styles/blue-green-refinement.css"
 import "./styles/subtle-motion.css"
+import "./styles/dot-grids.css"
 
 document.documentElement.setAttribute("dir", "rtl")
 document.documentElement.setAttribute("lang", "ar")
