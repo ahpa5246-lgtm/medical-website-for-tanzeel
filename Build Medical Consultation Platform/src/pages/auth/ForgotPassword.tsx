@@ -4,6 +4,7 @@ import { ArrowLeft, CheckCircle2, KeyRound, Mail } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
 import { requestPasswordReset } from "@/features/auth/authRepository"
+import AuthShell from "@/components/auth/AuthShell"
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("")
@@ -30,11 +31,8 @@ export default function ForgotPassword() {
   }
 
   return (
-    <main
-      dir="rtl"
-      className="grid min-h-screen place-items-center bg-slate-50 px-4 py-12"
-    >
-      <section className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+    <AuthShell story="إذا نسيت كلمة المرور يمكنك العودة بخطوة بسيطة إلى حسابك، دون تعقيد.">
+      <section className="auth-form-panel">
         {done ? (
           <div className="text-center" role="status">
             <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-600" />
@@ -79,6 +77,6 @@ export default function ForgotPassword() {
           <ArrowLeft className="h-4 w-4 rotate-180" /> العودة إلى الدخول
         </Link>
       </section>
-    </main>
+    </AuthShell>
   )
 }

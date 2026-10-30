@@ -4,6 +4,8 @@ import { Eye, EyeOff, Lock, Mail, Stethoscope } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
 import { signIn } from "@/features/auth/authRepository"
+import AuthShell from "@/components/auth/AuthShell"
+import HandUnderline from "@/components/decor/HandUnderline"
 
 function safeReturnPath(value: string | null) {
   return value?.startsWith("/") &&
@@ -41,20 +43,18 @@ export default function Login() {
   }
 
   return (
-    <main
-      dir="rtl"
-      className="grid min-h-screen place-items-center bg-slate-50 px-4 py-12"
-    >
-      <section className="w-full max-w-md rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
+    <AuthShell story="عد إلى عالم المقالات والتدريب والتعلّم، في مساحة تتنفس بالألوان والرسومات.">
+      <section className="auth-form-panel">
         <div className="text-center">
           <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl border border-primary-100 bg-primary-50">
             <Stethoscope className="h-6 w-6 text-primary-700" />
           </span>
           <h1 className="mt-4 text-2xl font-black text-slate-900">
-            تسجيل الدخول
+            <HandUnderline>تسجيل الدخول</HandUnderline>
           </h1>
           <p className="mt-2 text-sm leading-7 text-slate-500">
-            ادخلي إلى حسابك لمتابعة الاستشارات أو إدارة المنصة بحسب صلاحياتك.
+            أهلًا بعودتك. ادخلي إلى مساحتك لمتابعة المحتوى والمهام المتاحة بحسب
+            صلاحيات حسابك.
           </p>
         </div>
 
@@ -118,7 +118,16 @@ export default function Login() {
             تسجيل الدخول
           </Button>
         </form>
+        <p className="mt-6 text-center text-sm text-slate-500">
+          ليس لديك حساب؟{" "}
+          <Link
+            to="/auth/signup"
+            className="font-bold text-primary-700 underline"
+          >
+            أنشئ حسابًا
+          </Link>
+        </p>
       </section>
-    </main>
+    </AuthShell>
   )
 }

@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
+import { LayoutGroup, motion, useReducedMotion } from "motion/react"
 import { Menu, X, Stethoscope, ShieldCheck } from "lucide-react"
 import Button from "@/components/ui/Button"
+import { publicPreview } from "@/lib/releaseFlags"
 
 const NAV_LINKS = [
-  { to: "/consultations", label: "استشاراتي" },
-  { to: "/doctors", label: "الأطباء" },
+  { to: "/consultations", label: "الاستشارات (قريبًا)" },
+  { to: "/doctors", label: publicPreview ? "الأطباء (قريبًا)" : "الأطباء" },
   { to: "/articles", label: "المعرفة الصحية" },
   { to: "/training", label: "تدريب" },
   { to: "/labs", label: "المختبرات" },
@@ -19,8 +21,22 @@ const LATER_LINKS = [
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
+  const reduceMotion = Boolean(useReducedMotion())
+  const menuButton = useRef<HTMLButtonElement>(null)
 
   useEffect(() => setMobileOpen(false), [location.pathname])
+
+  useEffect(() => {
+    if (!mobileOpen) return
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false)
+        menuButton.current?.focus()
+      }
+    }
+    window.addEventListener("keydown", closeOnEscape)
+    return () => window.removeEventListener("keydown", closeOnEscape)
+  }, [mobileOpen])
 
   function isActive(path: string) {
     return location.pathname.startsWith(path)
@@ -51,55 +67,88 @@ export default function Header() {
             </span>
           </Link>
 
-          <nav
-            className="hidden items-center gap-1 lg:flex"
-            aria-label="التنقل الرئيسي"
-          >
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`nav-link ${
-                  isActive(link.to) ? "nav-link-active" : ""
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <span className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />
-            {LATER_LINKS.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="nav-link group gap-1.5 text-slate-400"
-              >
-                {link.label}
-                <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[8px] font-bold text-slate-500 transition group-hover:bg-primary-50 group-hover:text-primary-700">
-                  لاحقًا
-                </span>
-              </Link>
-            ))}
-          </nav>
+          <LayoutGroup id="site-primary-navigation">
+            <nav
+              className="hidden items-center gap-1 lg:flex"
+              aria-label="التنقل الرئيسي"
+            >
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  aria-current={isActive(link.to) ? "page" : undefined}
+                  className={`nav-link nav-link-motion ${
+                    isActive(link.to) ? "nav-link-active" : ""
+                  }`}
+                >
+                  <span className="nav-link-label">{link.label}</span>
+                  {isActive(link.to) && (
+                    <motion.span
+                      data-nav-indicator
+                      layoutId="active-destination"
+                      className="nav-active-indicator"
+                      aria-hidden="true"
+                      transition={
+                        reduceMotion
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 410, damping: 37 }
+                      }
+                    />
+                  )}
+                </Link>
+              ))}
+              <span className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />
+              {LATER_LINKS.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  aria-current={isActive(link.to) ? "page" : undefined}
+                  className="nav-link nav-link-motion group gap-1.5 text-slate-400"
+                >
+                  <span className="nav-link-label">{link.label}</span>
+                  <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[8px] font-bold text-slate-500 transition group-hover:bg-primary-50 group-hover:text-primary-700">
+                    لاحقًا
+                  </span>
+                  {isActive(link.to) && (
+                    <motion.span
+                      data-nav-indicator
+                      layoutId="active-destination"
+                      className="nav-active-indicator"
+                      aria-hidden="true"
+                      transition={
+                        reduceMotion
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 410, damping: 37 }
+                      }
+                    />
+                  )}
+                </Link>
+              ))}
+            </nav>
+          </LayoutGroup>
 
           <div className="hidden items-center gap-2 md:flex">
-            <Link to="/auth/login">
-              <Button variant="ghost" size="sm">
-                دخول
-              </Button>
-            </Link>
-            <Link to="/consultations/new">
+            {!publicPreview && (
+              <Link to="/auth/login">
+                <Button variant="ghost" size="sm">
+                  دخول
+                </Button>
+              </Link>
+            )}
+            <Link to="/consultations">
               <Button
                 size="sm"
                 className="rounded-full px-4 shadow-[0_8px_22px_rgba(8,126,139,.18)]"
               >
-                اسأل طبيبًا
+                قيد التطوير
               </Button>
             </Link>
           </div>
 
           <button
+            ref={menuButton}
             type="button"
-            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 md:hidden"
+            className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 lg:hidden"
             onClick={() => setMobileOpen((value) => !value)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
@@ -115,12 +164,13 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div id="mobile-menu" className="mobile-menu md:hidden">
+        <div id="mobile-menu" className="mobile-menu lg:hidden">
           <div className="mx-auto max-w-6xl space-y-1 px-4 py-4">
             {[...NAV_LINKS, ...LATER_LINKS].map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
+                aria-current={isActive(link.to) ? "page" : undefined}
                 className={`flex min-h-11 items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-bold ${
                   isActive(link.to)
                     ? "bg-primary-50 text-primary-800"
@@ -136,21 +186,25 @@ export default function Header() {
               </Link>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4">
-              <Link to="/auth/login">
-                <Button variant="outline" className="w-full">
-                  دخول
-                </Button>
-              </Link>
-              <Link to="/consultations/new">
-                <Button className="w-full">اسأل طبيبًا</Button>
+              {!publicPreview && (
+                <Link to="/auth/login">
+                  <Button variant="outline" className="w-full">
+                    دخول
+                  </Button>
+                </Link>
+              )}
+              <Link to="/consultations">
+                <Button className="w-full">قيد التطوير</Button>
               </Link>
             </div>
-            <Link
-              to="/verification/apply"
-              className="mt-2 flex items-center justify-center gap-2 py-2 text-xs font-bold text-primary-700"
-            >
-              <ShieldCheck className="h-4 w-4" /> نموذج انضمام خيالي
-            </Link>
+            {!publicPreview && (
+              <Link
+                to="/verification/apply"
+                className="mt-2 flex items-center justify-center gap-2 py-2 text-xs font-bold text-primary-700"
+              >
+                <ShieldCheck className="h-4 w-4" /> نموذج انضمام خيالي
+              </Link>
+            )}
           </div>
         </div>
       )}

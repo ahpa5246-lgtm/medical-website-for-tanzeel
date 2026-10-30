@@ -5,6 +5,12 @@ import AppErrorBoundary from "@/components/system/AppErrorBoundary"
 import ConfigurationGate from "@/components/system/ConfigurationGate"
 import { AuthProvider } from "@/features/auth/AuthProvider"
 import "./index.css"
+import "./styles/editorial-doodles.css"
+import "./styles/editorial-articles.css"
+import "./styles/blue-green-refinement.css"
+import "./styles/subtle-motion.css"
+import "./styles/dot-grids.css"
+import "./styles/mobile-capability-carousel.css"
 
 document.documentElement.setAttribute("dir", "rtl")
 document.documentElement.setAttribute("lang", "ar")

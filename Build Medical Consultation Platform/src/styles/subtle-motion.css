@@ -1,0 +1,72 @@
+/* One deliberately quiet motion language across public routes and catalog tabs.
+   Animation state comes from Motion; this stylesheet only supplies visual affordances. */
+[data-page-transition] {
+  width: 100%;
+  min-width: 0;
+  will-change: auto;
+}
+.nav-link-motion {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-link-motion.nav-link-active,
+.site-header .nav-link-motion.nav-link-active {
+  background: transparent;
+  color: #076772;
+}
+.nav-link-motion .nav-link-label {
+  position: relative;
+  z-index: 1;
+}
+.nav-active-indicator {
+  position: absolute;
+  inset-inline: .7rem;
+  bottom: .17rem;
+  height: 3px;
+  border-radius: 99px;
+  background: #0e858c;
+  pointer-events: none;
+}
+.article-filter-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  overflow: hidden;
+  outline-offset: 3px;
+}
+.article-filter-indicator {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: #0d7983;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.article-filter-label {
+  position: relative;
+  z-index: 1;
+}
+.article-card-entry {
+  min-width: 0;
+  height: 100%;
+}
+.article-card-entry > a {
+  display: block;
+  height: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-link-motion,
+  .nav-active-indicator,
+  .article-filter-button,
+  .article-card-entry,
+  [data-page-transition] {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { supabase } from "@/lib/supabase"
 import { useAuth } from "@/features/auth/AuthProvider"
+import AuthShell from "@/components/auth/AuthShell"
 
 type Result = "pending" | "success" | "error"
 
@@ -37,11 +38,8 @@ export default function AcceptInvitation() {
   }, [session?.user.id, loading, refreshProfile])
 
   return (
-    <main
-      dir="rtl"
-      className="grid min-h-screen place-items-center bg-slate-50 p-4"
-    >
-      <section className="w-full max-w-lg rounded-3xl bg-white p-8 shadow-sm">
+    <AuthShell story="مساحة فريق الإدارة تتطلب دعوة صالحة وتحققًا حقيقيًا من الصلاحيات.">
+      <section className="auth-form-panel">
         <h1 className="text-2xl font-black">قبول دعوة فريق الإدارة</h1>
         {loading ? (
           <p className="mt-5" role="status">
@@ -80,6 +78,6 @@ export default function AcceptInvitation() {
           </div>
         )}
       </section>
-    </main>
+    </AuthShell>
   )
 }

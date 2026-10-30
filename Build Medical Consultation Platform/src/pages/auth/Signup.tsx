@@ -4,6 +4,8 @@ import { GraduationCap, Info, Stethoscope, User } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
 import { signUp } from "@/features/auth/authRepository"
+import AuthShell from "@/components/auth/AuthShell"
+import HandUnderline from "@/components/decor/HandUnderline"
 
 type Role = "patient" | "doctor" | "instructor"
 
@@ -85,9 +87,11 @@ export default function Signup() {
   }
 
   return (
-    <div dir="rtl" className="min-h-screen bg-slate-50 px-4 py-12">
-      <div className="mx-auto max-w-xl rounded-3xl border border-slate-100 bg-white p-7 shadow-sm sm:p-9">
-        <h1 className="text-3xl font-black text-slate-900">إنشاء حساب</h1>
+    <AuthShell story="مساحة جديدة للقراءة والتعلّم، مع طلب صلاحيات متخصصة لا تصبح فعالة إلا بعد المراجعة.">
+      <section className="auth-form-panel">
+        <h1 className="text-3xl font-black text-slate-900">
+          <HandUnderline>إنشاء حساب</HandUnderline>
+        </h1>
         <p className="mt-2 text-sm leading-7 text-slate-500">
           الحساب العادي يُنشأ مباشرة. طلب الطبيب أو المدرّب يبقى طلبًا فقط إلى أن
           تراجعه الإدارة.
@@ -237,7 +241,7 @@ export default function Signup() {
             سجّل الدخول
           </Link>
         </p>
-      </div>
-    </div>
+      </section>
+    </AuthShell>
   )
 }

@@ -9,11 +9,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         الانتقال إلى المحتوى الرئيسي
       </a>
       <Header />
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="flex-1 page-enter outline-none"
-      >
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
         {children}
       </main>
       <Footer />

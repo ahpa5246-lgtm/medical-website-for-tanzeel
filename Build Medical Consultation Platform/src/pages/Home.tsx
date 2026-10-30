@@ -1,7 +1,8 @@
-import { useState, type ReactNode } from "react"
+import { useRef, useState, type ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpenText,
   Brain,
   CheckCircle2,
@@ -12,6 +13,10 @@ import {
   HeartPulse,
   LockKeyhole,
   MessageCircle,
+  ArrowUpLeft,
+  Star,
+  Flower2,
+  PencilLine,
   Microscope,
   Search,
   ShieldCheck,
@@ -20,6 +25,13 @@ import {
 } from "lucide-react"
 import Button from "@/components/ui/Button"
 import { SPECIALTIES } from "@/data/specialties"
+import { consultationsEnabled } from "@/lib/releaseFlags"
+import PatternField from "@/components/decor/PatternField"
+import DotGridField from "@/components/decor/DotGridField"
+import GrainOverlay from "@/components/decor/GrainOverlay"
+import SketchAccents from "@/components/decor/SketchAccents"
+import HandUnderline from "@/components/decor/HandUnderline"
+import CapabilityPhoto from "@/components/home/CapabilityPhoto"
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
 const specialtyIcons: ReactNode[] = [
@@ -35,13 +47,13 @@ const CARE_STEPS = [
   { icon: Search, label: "اختيار التخصص", hint: "وصول أسرع للمسار المناسب" },
   {
     icon: MessageCircle,
-    label: "إرسال الاستشارة",
-    hint: "تفاصيل منظّمة وواضحة",
+    label: "الاستشارات قريبًا",
+    hint: "غير متاحة في نسخة العرض",
   },
   {
     icon: ShieldCheck,
-    label: "مراجعة المختص",
-    hint: "إدارة الاعتماد من المنصة",
+    label: "التحقق الطبي قيد التطوير",
+    hint: "لا توجد خدمة تحقق فعّالة بعد",
   },
   {
     icon: BookOpenText,
@@ -55,16 +67,18 @@ const CAPABILITIES = [
   {
     icon: MessageCircle,
     number: "01",
-    title: "استشارة مرتّبة",
-    text: "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة.",
-    to: "/consultations/new",
+    title: "الاستشارات قيد التطوير",
+    text: "الخدمة مؤجلة إلى حين اعتماد مراجعة الأمان والخصوصية.",
+    to: "/consultations",
+    photo: "/images/medical-consultation.jpg",
   },
   {
     icon: Stethoscope,
     number: "02",
     title: "دليل الأطباء",
-    text: "ملفات يمكن إدارتها ونشرها بعد استكمال بيانات واعتماد كل طبيب.",
+    text: "دليل الأطباء غير متاح في نسخة العرض العامة دون قاعدة بيانات مراجَعة.",
     to: "/doctors",
+    photo: "/images/medical-directory.jpg",
   },
   {
     icon: GraduationCap,
@@ -72,12 +86,47 @@ const CAPABILITIES = [
     title: "أكاديمية تدريب",
     text: "مسارات تعليمية متدرّجة بتجربة بصرية تفاعلية ونتائج قابلة للمتابعة.",
     to: "/training",
+    photo: "/images/medical-training.jpg",
   },
 ]
 
 export default function Home() {
   const [query, setQuery] = useState("")
   const [isMotionPaused, setIsMotionPaused] = useState(false)
+  const [activeCapabilityIndex, setActiveCapabilityIndex] = useState(0)
+  const capabilityTrackRef = useRef<HTMLDivElement>(null)
+
+  function updateCapabilityPosition() {
+    const track = capabilityTrackRef.current
+    if (!track) return
+
+    const rightEdge = track.getBoundingClientRect().right
+    const items = Array.from(track.children) as HTMLElement[]
+    const closestIndex = items.reduce((best, item, index) => {
+      const distance = Math.abs(item.getBoundingClientRect().right - rightEdge)
+      const bestDistance = Math.abs(
+        items[best].getBoundingClientRect().right - rightEdge,
+      )
+      return distance < bestDistance ? index : best
+    }, 0)
+    setActiveCapabilityIndex(closestIndex)
+  }
+
+  function navigateCapability(index: number) {
+    const track = capabilityTrackRef.current
+    if (!track) return
+    const next = Math.max(0, Math.min(CAPABILITIES.length - 1, index))
+    const item = track.children.item(next)
+    if (!(item instanceof HTMLElement)) return
+    item.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "nearest",
+      inline: "start",
+    })
+    setActiveCapabilityIndex(next)
+  }
   const navigate = useNavigate()
 
   function startConsultation(event: React.FormEvent) {
@@ -86,8 +135,11 @@ export default function Home() {
   }
 
   return (
-    <div dir="rtl" className="home-premium overflow-x-hidden">
+    <div dir="rtl" className="home-premium editorial-home overflow-x-hidden">
+      <GrainOverlay />
       <section className="home-hero">
+        <DotGridField tone="teal" fade="left" className="hero-dot-grid" />
+        <SketchAccents motif="hero" className="hero-doodles" />
         <div className="home-orbit home-orbit-one" aria-hidden="true" />
         <div className="home-orbit home-orbit-two" aria-hidden="true" />
 
@@ -97,58 +149,123 @@ export default function Home() {
               <span aria-hidden="true">
                 <HeartPulse />
               </span>
-              منصة رعاية رقمية متكاملة
+              <span className="home-tag-flower" aria-hidden="true">
+                <Flower2 />
+              </span>
+              مساحة معرفية تنبض بالحياة
             </p>
             <h1
               aria-label="الرعاية تبدأ بخطوة أوضح"
               className="home-display mx-auto mt-6 max-w-3xl lg:mx-0"
             >
               الرعاية تبدأ
-              <span>بخطوة أوضح.</span>
+              <span>
+                <HandUnderline color="#66b4b2">بخطوة أوضح.</HandUnderline>
+              </span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0">
-              مكان واحد للاستشارات، إدارة الأطباء، المعرفة الطبية والتدريب
-              التفاعلي؛ صُمّم ليجعل الوصول إلى الخدمة أبسط وأكثر تنظيمًا.
+              رحلة بسيطة بين المقالات الصحية التجريبية والتعلّم التفاعلي، بألوان
+              هادئة وأفكار أوضح. الاستشارات قيد التطوير، والمقالات الحالية
+              خيالية وغير مراجعة طبيًا.
             </p>
 
-            <form
-              onSubmit={startConsultation}
-              className="home-search mx-auto mt-9 lg:mx-0"
-            >
-              <label htmlFor="home-question" className="sr-only">
-                ما الخدمة التي تبحث عنها؟
-              </label>
-              <Search aria-hidden="true" className="home-search-icon" />
-              <input
-                id="home-question"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="اكتب سؤالك أو ابحث عن تخصص"
-              />
-              <Button type="submit" size="lg" className="home-search-button">
-                ابدأ الآن{" "}
-                <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
-              </Button>
-            </form>
+            {consultationsEnabled ? (
+              <form
+                onSubmit={startConsultation}
+                className="home-search mx-auto mt-9 lg:mx-0"
+              >
+                <label htmlFor="home-question" className="sr-only">
+                  ما الخدمة التي تبحث عنها؟
+                </label>
+                <Search aria-hidden="true" className="home-search-icon" />
+                <input
+                  id="home-question"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="اكتب سؤالك أو ابحث عن تخصص"
+                />
+                <Button type="submit" size="lg" className="home-search-button">
+                  ابدأ الآن{" "}
+                  <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
+                </Button>
+              </form>
+            ) : (
+              <div className="mx-auto mt-9 flex flex-wrap justify-center gap-3 lg:mx-0 lg:justify-start">
+                <Link
+                  to="/articles"
+                  className="inline-flex min-h-11 items-center rounded-xl bg-primary-700 px-6 py-3 text-sm font-bold text-white"
+                >
+                  <BookOpenText className="h-5 w-5" aria-hidden="true" />
+                  تصفح المقالات التجريبية
+                  <ArrowUpLeft className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/consultations"
+                  className="inline-flex min-h-11 items-center rounded-xl border border-primary-700 px-5 py-3 text-sm font-bold text-primary-800"
+                >
+                  الاستشارات قيد التطوير
+                </Link>
+              </div>
+            )}
 
+            <div className="home-hero-pencil" aria-hidden="true">
+              <PencilLine />
+              <span>خطوات أجمل نحو المعرفة</span>
+            </div>
             <div className="home-assurances" aria-label="مزايا المنصة">
               <span>
-                <LockKeyhole aria-hidden="true" /> خصوصية البيانات
+                <LockKeyhole aria-hidden="true" /> لا تُرسل معلومات طبية هنا
               </span>
               <span>
-                <ShieldCheck aria-hidden="true" /> إدارة التحقق
+                <ShieldCheck aria-hidden="true" /> المقالات موسومة كتجريبية
               </span>
               <span>
-                <CheckCircle2 aria-hidden="true" /> تجربة عربية متكاملة
+                <CheckCircle2 aria-hidden="true" /> واجهة عربية للتجربة
               </span>
             </div>
           </div>
 
-          <div className="home-visual" aria-label="نظرة على مسارات المنصة">
+          <div className="home-visual" aria-label="نظرة فنية على مسارات المنصة">
+            <PatternField variant="confetti" className="home-visual-pattern" />
+            <div className="hero-illustration" aria-hidden="true">
+              <span className="hero-blob hero-blob-one" />
+              <span className="hero-blob hero-blob-two" />
+              <div className="hero-medical-card">
+                <span className="hero-medical-card-top">
+                  <HeartPulse />
+                  <Star />
+                </span>
+                <span className="hero-medical-card-icon">
+                  <BookOpenText />
+                </span>
+                <span className="hero-medical-card-rule" />
+                <span className="hero-medical-card-rule short" />
+                <span className="hero-medical-card-bottom">
+                  <Stethoscope />
+                  <span>المعرفة أولًا</span>
+                </span>
+              </div>
+              <div className="hero-sticky hero-sticky-one">
+                كل سؤال يستحق
+                <br />
+                شرحًا واضحًا <Sparkles />
+              </div>
+              <div className="hero-sticky hero-sticky-two">
+                <Flower2 /> نتعلّم خطوة
+                <br /> بخطوة
+              </div>
+              <div className="hero-sticker-star">
+                <Sparkles />
+              </div>
+            </div>
             <div className="home-visual-copy">
-              <span>من السؤال إلى المتابعة</span>
-              <strong>مسار واحد، بلا تعقيد.</strong>
-              <p>كل أداة في مكانها، وكل خطوة تقود بوضوح إلى التالية.</p>
+              <span>المعرفة والتدريب</span>
+              <strong>
+                مساحة أقرب إليك،
+                <br />
+                كل يوم.
+              </strong>
+              <p>محتوى تعليمي تجريبي وأدوات للتعلّم ضمن واجهة عربية ذات روح.</p>
             </div>
             <div className="home-vital" aria-hidden="true">
               <svg viewBox="0 0 500 118" fill="none">
@@ -160,8 +277,8 @@ export default function Home() {
                 <Stethoscope aria-hidden="true" />
               </span>
               <div>
-                <small>جاهزة للتخصيص</small>
-                <strong>لوحة إدارة كاملة</strong>
+                <small>نسخة عرض</small>
+                <strong>المزايا قيد التقييم</strong>
               </div>
             </div>
           </div>
@@ -196,7 +313,9 @@ export default function Home() {
                       aria-hidden={index >= CARE_STEPS.length}
                     >
                       <span>
-                        <Icon aria-hidden="true" />
+                        <span className="capability-icon">
+                          <Icon aria-hidden="true" />
+                        </span>
                       </span>
                       <div>
                         <strong>{label}</strong>
@@ -211,41 +330,101 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="home-section bg-white">
+      <section className="home-section home-editorial-cards">
+        <DotGridField tone="sky" fade="edges" className="cards-dot-grid" />
+        <SketchAccents motif="cards" className="cards-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="home-section-heading">
-            <p>بنية خدمة واضحة</p>
+            <p>خدمات المنصة</p>
             <h2>
-              أكثر من واجهة جميلة؛
+              مسارات واضحة؛
               <br />
-              منظومة قابلة للإدارة.
+              <HandUnderline color="#78b8d7">تجربة أكثر قربًا.</HandUnderline>
             </h2>
             <Link to="/articles">
               استكشف المعرفة <ChevronLeft aria-hidden="true" />
             </Link>
           </div>
-          <div className="home-capabilities">
-            {CAPABILITIES.map(({ icon: Icon, number, title, text, to }) => (
-              <Link to={to} className="home-capability" key={title}>
-                <span className="home-capability-number">{number}</span>
-                <Icon aria-hidden="true" />
-                <h3>{title}</h3>
-                <p>{text}</p>
-                <span className="home-capability-link">
-                  الدخول إلى القسم <ArrowLeft aria-hidden="true" />
-                </span>
-              </Link>
-            ))}
+          <div
+            ref={capabilityTrackRef}
+            className="home-capabilities"
+            role="region"
+            aria-label="بطاقات خدمات المنصة، اسحب أفقيًا لاستعراض الخدمات"
+            tabIndex={0}
+            onScroll={updateCapabilityPosition}
+            data-capability-carousel
+          >
+            {CAPABILITIES.map(
+              ({ icon: Icon, number, title, text, to, photo }) => (
+                <Link to={to} className="home-capability" key={title}>
+                  <CapabilityPhoto source={photo} icon={Icon} />
+                  <div className="home-capability-body">
+                    <span className="home-capability-number">{number}</span>
+                    <span className="capability-icon" aria-hidden="true">
+                      <Icon />
+                    </span>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                    <span className="home-capability-link">
+                      استكشف القسم <ArrowLeft aria-hidden="true" />
+                    </span>
+                  </div>
+                </Link>
+              ),
+            )}
           </div>
+          <div
+            className="capability-carousel-controls"
+            aria-label="التحكم ببطاقات الخدمات"
+          >
+            <p className="capability-swipe-hint">
+              اسحب أفقيًا لاستعراض بقية الخدمات
+            </p>
+            <div className="capability-carousel-navigation">
+              <button
+                type="button"
+                className="capability-carousel-arrow"
+                aria-label="البطاقة السابقة"
+                disabled={activeCapabilityIndex === 0}
+                onClick={() => navigateCapability(activeCapabilityIndex - 1)}
+              >
+                <ArrowRight aria-hidden="true" />
+              </button>
+              <span className="capability-carousel-count" aria-live="polite">
+                {activeCapabilityIndex + 1} من {CAPABILITIES.length}
+              </span>
+              <button
+                type="button"
+                className="capability-carousel-arrow"
+                aria-label="البطاقة التالية"
+                disabled={activeCapabilityIndex === CAPABILITIES.length - 1}
+                onClick={() => navigateCapability(activeCapabilityIndex + 1)}
+              >
+                <ArrowLeft aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+          <p className="capability-photos-disclaimer">
+            الصور تمثيلية لأغراض العرض فقط، ولا تمثل أطباء أو أعضاء فريق تابعين
+            للمنصة.
+          </p>
         </div>
       </section>
 
       <section className="home-specialties">
+        <DotGridField
+          tone="teal"
+          fade="right"
+          className="specialties-dot-grid"
+        />
+        <SketchAccents motif="specialties" className="specialties-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
             <div>
               <p className="home-kicker">الوصول السريع</p>
-              <h2>اختر نقطة البداية</h2>
+              <h2>
+                <HandUnderline color="#71b9b6">اختر نقطة البداية</HandUnderline>
+              </h2>
             </div>
             <Link to="/doctors" className="home-inline-link">
               عرض دليل الأطباء <ChevronLeft aria-hidden="true" />
@@ -255,7 +434,7 @@ export default function Home() {
             {FEATURED_SPECIALTIES.map((specialty, index) => (
               <Link
                 key={specialty.id}
-                to={`/consultations/new?specialty=${specialty.id}`}
+                to="/consultations"
                 className="home-specialty"
               >
                 <span>{specialtyIcons[index]}</span>
@@ -269,14 +448,19 @@ export default function Home() {
 
       <section className="home-cta-wrap">
         <div className="home-cta mx-auto max-w-7xl">
+          <PatternField variant="confetti" className="cta-doodle-pattern" />
+          <SketchAccents motif="cta" className="cta-doodles" />
           <div>
             <p>ابدأ من مكان واحد</p>
-            <h2>ابنِ تجربة رعاية تليق بالثقة.</h2>
-            <span>يمكن إدارة المحتوى والأطباء والمستخدمين من لوحة التحكم.</span>
+            <h2>
+              المعرفة تبدأ{" "}
+              <HandUnderline color="#efb84e">بخطوة صغيرة.</HandUnderline>
+            </h2>
+            <span>الاستشارات والوظائف الطبية ستُفتح بعد اجتياز المراجعة.</span>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/consultations/new" className="home-cta-primary">
-              ابدأ استشارة <ArrowLeft aria-hidden="true" />
+            <Link to="/consultations" className="home-cta-primary">
+              الاستشارات قريبًا <ArrowLeft aria-hidden="true" />
             </Link>
             <Link to="/training" className="home-cta-secondary">
               استكشف التدريب

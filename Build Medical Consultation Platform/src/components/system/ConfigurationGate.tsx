@@ -13,6 +13,7 @@ export default function ConfigurationGate({
     VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
     VITE_SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY,
     VITE_ENABLE_PROTOTYPE: import.meta.env.VITE_ENABLE_PROTOTYPE,
+    VITE_PUBLIC_PREVIEW: import.meta.env.VITE_PUBLIC_PREVIEW,
   })
 
   if (config.mode !== "blocked") return children
