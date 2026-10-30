@@ -90,21 +90,56 @@ export default function App() {
         <PreviewNotice />
         <Routes>
           {/* Auth routes — no layout header/footer */}
-          <Route path="/auth/login" element={<PreviewRestricted service="الحسابات"><Login /></PreviewRestricted>} />
-          <Route path="/auth/signup" element={<PreviewRestricted service="الحسابات"><Signup /></PreviewRestricted>} />
-          <Route path="/auth/forgot-password" element={<PreviewRestricted service="الحسابات"><ForgotPassword /></PreviewRestricted>} />
-          <Route path="/auth/update-password" element={<PreviewRestricted service="الحسابات"><UpdatePassword /></PreviewRestricted>} />
-          <Route path="/auth/accept-invite" element={<PreviewRestricted service="الحسابات"><AcceptInvitation /></PreviewRestricted>} />
+          <Route
+            path="/auth/login"
+            element={
+              <PreviewRestricted service="الحسابات">
+                <Login />
+              </PreviewRestricted>
+            }
+          />
+          <Route
+            path="/auth/signup"
+            element={
+              <PreviewRestricted service="الحسابات">
+                <Signup />
+              </PreviewRestricted>
+            }
+          />
+          <Route
+            path="/auth/forgot-password"
+            element={
+              <PreviewRestricted service="الحسابات">
+                <ForgotPassword />
+              </PreviewRestricted>
+            }
+          />
+          <Route
+            path="/auth/update-password"
+            element={
+              <PreviewRestricted service="الحسابات">
+                <UpdatePassword />
+              </PreviewRestricted>
+            }
+          />
+          <Route
+            path="/auth/accept-invite"
+            element={
+              <PreviewRestricted service="الحسابات">
+                <AcceptInvitation />
+              </PreviewRestricted>
+            }
+          />
 
           <Route
             path="/admin/*"
             element={
               <PreviewRestricted service="لوحة الإدارة">
-              <RequireRole allow={["owner", "admin", "editor"]}>
-                <LazyRoute label="جارٍ تحميل مساحة الإدارة…">
-                  <AdminLayout />
-                </LazyRoute>
-              </RequireRole>
+                <RequireRole allow={["owner", "admin", "editor"]}>
+                  <LazyRoute label="جارٍ تحميل مساحة الإدارة…">
+                    <AdminLayout />
+                  </LazyRoute>
+                </RequireRole>
               </PreviewRestricted>
             }
           />
@@ -118,24 +153,56 @@ export default function App() {
                   <Route path="/" element={<Home />} />
 
                   {/* Consultations */}
-                  <Route path="/consultations" element={<ConsultationRoute><ConsultationList /></ConsultationRoute>} />
+                  <Route
+                    path="/consultations"
+                    element={
+                      <ConsultationRoute>
+                        <ConsultationList />
+                      </ConsultationRoute>
+                    }
+                  />
                   <Route
                     path="/consultations/new"
-                    element={<ConsultationRoute><SubmitConsultation /></ConsultationRoute>}
+                    element={
+                      <ConsultationRoute>
+                        <SubmitConsultation />
+                      </ConsultationRoute>
+                    }
                   />
                   <Route
                     path="/consultations/:id"
-                    element={<ConsultationRoute><ConsultationThread /></ConsultationRoute>}
+                    element={
+                      <ConsultationRoute>
+                        <ConsultationThread />
+                      </ConsultationRoute>
+                    }
                   />
 
                   {/* Doctors */}
-                  <Route path="/doctors" element={<PreviewRestricted service="دليل الأطباء"><DoctorDirectory /></PreviewRestricted>} />
-                  <Route path="/doctors/:id" element={<PreviewRestricted service="دليل الأطباء"><DoctorProfile /></PreviewRestricted>} />
+                  <Route
+                    path="/doctors"
+                    element={
+                      <PreviewRestricted service="دليل الأطباء">
+                        <DoctorDirectory />
+                      </PreviewRestricted>
+                    }
+                  />
+                  <Route
+                    path="/doctors/:id"
+                    element={
+                      <PreviewRestricted service="دليل الأطباء">
+                        <DoctorProfile />
+                      </PreviewRestricted>
+                    }
+                  />
 
                   {/* Articles, courses & library */}
                   <Route path="/articles" element={<ArticleList />} />
                   <Route path="/articles/:id" element={<ArticleDetail />} />
-                  <Route path="/articles/new" element={<UnavailableService service="إرسال المقالات" />} />
+                  <Route
+                    path="/articles/new"
+                    element={<UnavailableService service="إرسال المقالات" />}
+                  />
                   <Route path="/courses" element={<CourseList />} />
                   <Route
                     path="/training"
@@ -172,7 +239,11 @@ export default function App() {
                   <Route path="/legal/privacy" element={<Privacy />} />
                   <Route
                     path="/verification/apply"
-                    element={<PreviewRestricted service="التحقق من الأطباء"><VerificationApplication /></PreviewRestricted>}
+                    element={
+                      <PreviewRestricted service="التحقق من الأطباء">
+                        <VerificationApplication />
+                      </PreviewRestricted>
+                    }
                   />
 
                   {/* Catch-all */}
