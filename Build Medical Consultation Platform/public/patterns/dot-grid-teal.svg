@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" aria-hidden="true">
+  <!-- Subtle custom dot grid for Tanzeel, reference: svgbackgrounds.com/tools/dot-grids/ -->
+  <defs>
+    <pattern id="fine-dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1.15" fill="#268e91" opacity=".67"/>
+    </pattern>
+  </defs>
+  <rect width="240" height="240" fill="url(#fine-dots)"/>
+</svg>
