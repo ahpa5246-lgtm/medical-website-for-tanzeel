@@ -45,7 +45,12 @@ test("consultations are closed by default and all three routes use one fail-clos
 test("public preview prevents account and medical-verification UI flows", () => {
   const app = read("src/App.tsx")
   assert.match(app, /function PreviewRestricted/)
-  for (const path of ["/auth/signup", "/auth/login", "/admin/*", "/verification/apply"]) {
+  for (const path of [
+    "/auth/signup",
+    "/auth/login",
+    "/admin/*",
+    "/verification/apply",
+  ]) {
     assert.ok(app.includes(`path="${path}"`))
   }
   assert.match(app, /<PreviewRestricted service="الحسابات">/)
