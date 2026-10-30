@@ -20,6 +20,7 @@ import {
 } from "lucide-react"
 import Button from "@/components/ui/Button"
 import { SPECIALTIES } from "@/data/specialties"
+import { consultationsEnabled } from "@/lib/releaseFlags"
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
 const specialtyIcons: ReactNode[] = [
@@ -55,9 +56,9 @@ const CAPABILITIES = [
   {
     icon: MessageCircle,
     number: "01",
-    title: "استشارة مرتّبة",
-    text: "نموذج واضح يجمع المعلومات الضرورية ويقود المستخدم خطوة بخطوة.",
-    to: "/consultations/new",
+    title: "الاستشارات قيد التطوير",
+    text: "الخدمة مؤجلة إلى حين اعتماد مراجعة الأمان والخصوصية.",
+    to: "/consultations",
   },
   {
     icon: Stethoscope,
@@ -97,7 +98,7 @@ export default function Home() {
               <span aria-hidden="true">
                 <HeartPulse />
               </span>
-              منصة رعاية رقمية متكاملة
+              منصة معرفية تجريبية
             </p>
             <h1
               aria-label="الرعاية تبدأ بخطوة أوضح"
@@ -107,11 +108,12 @@ export default function Home() {
               <span>بخطوة أوضح.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0">
-              مكان واحد للاستشارات، إدارة الأطباء، المعرفة الطبية والتدريب
-              التفاعلي؛ صُمّم ليجعل الوصول إلى الخدمة أبسط وأكثر تنظيمًا.
+              تعرّف على نماذج المعرفة الصحية والتدريب. الاستشارات قيد التطوير،
+              والمقالات الحالية خيالية وغير مراجعة طبيًا.
             </p>
 
-            <form
+            {consultationsEnabled ? (
+              <form
               onSubmit={startConsultation}
               className="home-search mx-auto mt-9 lg:mx-0"
             >
@@ -129,24 +131,37 @@ export default function Home() {
                 ابدأ الآن{" "}
                 <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
               </Button>
-            </form>
+              </form>
+            ) : (
+              <div className="mx-auto mt-9 flex flex-wrap justify-center gap-3 lg:mx-0 lg:justify-start">
+                <Link to="/articles">
+                  <Button size="lg">تصفح المقالات التجريبية</Button>
+                </Link>
+                <Link
+                  to="/consultations"
+                  className="inline-flex min-h-11 items-center rounded-xl border border-primary-700 px-5 py-3 text-sm font-bold text-primary-800"
+                >
+                  الاستشارات قيد التطوير
+                </Link>
+              </div>
+            )}
 
             <div className="home-assurances" aria-label="مزايا المنصة">
               <span>
-                <LockKeyhole aria-hidden="true" /> خصوصية البيانات
+                <LockKeyhole aria-hidden="true" /> لا تُرسل معلومات طبية هنا
               </span>
               <span>
-                <ShieldCheck aria-hidden="true" /> إدارة التحقق
+                <ShieldCheck aria-hidden="true" /> المقالات موسومة كتجريبية
               </span>
               <span>
-                <CheckCircle2 aria-hidden="true" /> تجربة عربية متكاملة
+                <CheckCircle2 aria-hidden="true" /> واجهة عربية للتجربة
               </span>
             </div>
           </div>
 
           <div className="home-visual" aria-label="نظرة على مسارات المنصة">
             <div className="home-visual-copy">
-              <span>من السؤال إلى المتابعة</span>
+              <span>المعرفة والتدريب</span>
               <strong>مسار واحد، بلا تعقيد.</strong>
               <p>كل أداة في مكانها، وكل خطوة تقود بوضوح إلى التالية.</p>
             </div>
@@ -160,8 +175,8 @@ export default function Home() {
                 <Stethoscope aria-hidden="true" />
               </span>
               <div>
-                <small>جاهزة للتخصيص</small>
-                <strong>لوحة إدارة كاملة</strong>
+                <small>نسخة عرض</small>
+                <strong>المزايا قيد التقييم</strong>
               </div>
             </div>
           </div>
@@ -255,7 +270,7 @@ export default function Home() {
             {FEATURED_SPECIALTIES.map((specialty, index) => (
               <Link
                 key={specialty.id}
-                to={`/consultations/new?specialty=${specialty.id}`}
+                to="/consultations"
                 className="home-specialty"
               >
                 <span>{specialtyIcons[index]}</span>
@@ -272,11 +287,11 @@ export default function Home() {
           <div>
             <p>ابدأ من مكان واحد</p>
             <h2>ابنِ تجربة رعاية تليق بالثقة.</h2>
-            <span>يمكن إدارة المحتوى والأطباء والمستخدمين من لوحة التحكم.</span>
+            <span>الاستشارات والوظائف الطبية ستُفتح بعد اجتياز المراجعة.</span>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/consultations/new" className="home-cta-primary">
-              ابدأ استشارة <ArrowLeft aria-hidden="true" />
+            <Link to="/consultations" className="home-cta-primary">
+              الاستشارات قريبًا <ArrowLeft aria-hidden="true" />
             </Link>
             <Link to="/training" className="home-cta-secondary">
               استكشف التدريب
