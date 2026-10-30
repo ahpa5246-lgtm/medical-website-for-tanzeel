@@ -63,7 +63,7 @@ test("the demo content is intentionally retained and visibly described as fictio
   const home = read("src/pages/Home.tsx")
   assert.match(articles, /MOCK_ARTICLES/)
   assert.match(articles, /خيالية غير مراجعة/)
-  assert.match(home, /المقالات الحالية خيالية وغير مراجعة/)
+  assert.match(home, /المقالات الحالية\s+خيالية وغير مراجعة/)
   assert.match(home, /consultationsEnabled \?/)
 })
 
