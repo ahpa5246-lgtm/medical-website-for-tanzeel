@@ -12,6 +12,11 @@ import {
   HeartPulse,
   LockKeyhole,
   MessageCircle,
+  ArrowUpLeft,
+  Star,
+  Flower2,
+  ClipboardList,
+  PencilLine,
   Microscope,
   Search,
   ShieldCheck,
@@ -21,6 +26,10 @@ import {
 import Button from "@/components/ui/Button"
 import { SPECIALTIES } from "@/data/specialties"
 import { consultationsEnabled } from "@/lib/releaseFlags"
+import PatternField from "@/components/decor/PatternField"
+import GrainOverlay from "@/components/decor/GrainOverlay"
+import SketchAccents from "@/components/decor/SketchAccents"
+import HandUnderline from "@/components/decor/HandUnderline"
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
 const specialtyIcons: ReactNode[] = [
@@ -87,8 +96,11 @@ export default function Home() {
   }
 
   return (
-    <div dir="rtl" className="home-premium overflow-x-hidden">
+    <div dir="rtl" className="home-premium editorial-home overflow-x-hidden">
+      <GrainOverlay />
       <section className="home-hero">
+        <PatternField variant="grain" className="hero-pattern" />
+        <SketchAccents motif="hero" className="hero-doodles" />
         <div className="home-orbit home-orbit-one" aria-hidden="true" />
         <div className="home-orbit home-orbit-two" aria-hidden="true" />
 
@@ -98,18 +110,20 @@ export default function Home() {
               <span aria-hidden="true">
                 <HeartPulse />
               </span>
-              منصة معرفية تجريبية
+              <span className="home-tag-flower" aria-hidden="true"><Flower2 /></span>
+              مساحة معرفية تنبض بالحياة
             </p>
             <h1
               aria-label="الرعاية تبدأ بخطوة أوضح"
               className="home-display mx-auto mt-6 max-w-3xl lg:mx-0"
             >
               الرعاية تبدأ
-              <span>بخطوة أوضح.</span>
+              <span><HandUnderline color="#eeb650">بخطوة أوضح.</HandUnderline></span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0">
-              تعرّف على نماذج المعرفة الصحية والتدريب. الاستشارات قيد التطوير،
-              والمقالات الحالية خيالية وغير مراجعة طبيًا.
+              رحلة بسيطة بين المقالات الصحية التجريبية والتعلّم التفاعلي،
+              بألوان دافئة وأفكار أوضح. الاستشارات قيد التطوير، والمقالات
+              الحالية خيالية وغير مراجعة طبيًا.
             </p>
 
             {consultationsEnabled ? (
@@ -138,7 +152,9 @@ export default function Home() {
                   to="/articles"
                   className="inline-flex min-h-11 items-center rounded-xl bg-primary-700 px-6 py-3 text-sm font-bold text-white"
                 >
+                  <BookOpenText className="h-5 w-5" aria-hidden="true" />
                   تصفح المقالات التجريبية
+                  <ArrowUpLeft className="h-4 w-4" aria-hidden="true" />
                 </Link>
                 <Link
                   to="/consultations"
@@ -149,6 +165,10 @@ export default function Home() {
               </div>
             )}
 
+            <div className="home-hero-pencil" aria-hidden="true">
+              <PencilLine />
+              <span>خطوات أجمل نحو المعرفة</span>
+            </div>
             <div className="home-assurances" aria-label="مزايا المنصة">
               <span>
                 <LockKeyhole aria-hidden="true" /> لا تُرسل معلومات طبية هنا
@@ -162,11 +182,29 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="home-visual" aria-label="نظرة على مسارات المنصة">
+          <div className="home-visual" aria-label="نظرة فنية على مسارات المنصة">
+            <PatternField variant="confetti" className="home-visual-pattern" />
+            <div className="hero-illustration" aria-hidden="true">
+              <span className="hero-blob hero-blob-one" />
+              <span className="hero-blob hero-blob-two" />
+              <div className="hero-medical-card">
+                <span className="hero-medical-card-top"><HeartPulse /><Star /></span>
+                <span className="hero-medical-card-icon"><BookOpenText /></span>
+                <span className="hero-medical-card-rule" />
+                <span className="hero-medical-card-rule short" />
+                <span className="hero-medical-card-bottom">
+                  <Stethoscope />
+                  <span>المعرفة أولًا</span>
+                </span>
+              </div>
+              <div className="hero-sticky hero-sticky-one">كل سؤال يستحق<br />شرحًا واضحًا <Sparkles /></div>
+              <div className="hero-sticky hero-sticky-two"><Flower2 /> نتعلّم خطوة<br /> بخطوة</div>
+              <div className="hero-sticker-star"><Sparkles /></div>
+            </div>
             <div className="home-visual-copy">
               <span>المعرفة والتدريب</span>
-              <strong>مسار واحد، بلا تعقيد.</strong>
-              <p>كل أداة في مكانها، وكل خطوة تقود بوضوح إلى التالية.</p>
+              <strong>مساحة أقرب إليك،<br />كل يوم.</strong>
+              <p>محتوى تعليمي تجريبي وأدوات للتعلّم ضمن واجهة عربية ذات روح.</p>
             </div>
             <div className="home-vital" aria-hidden="true">
               <svg viewBox="0 0 500 118" fill="none">
@@ -214,7 +252,7 @@ export default function Home() {
                       aria-hidden={index >= CARE_STEPS.length}
                     >
                       <span>
-                        <Icon aria-hidden="true" />
+                        <span className="capability-icon"><Icon aria-hidden="true" /></span>
                       </span>
                       <div>
                         <strong>{label}</strong>
@@ -229,14 +267,16 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="home-section bg-white">
+      <section className="home-section home-editorial-cards">
+        <PatternField variant="sparkles" className="editorial-cards-pattern" />
+        <SketchAccents motif="cards" className="cards-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="home-section-heading">
             <p>بنية خدمة واضحة</p>
             <h2>
               أكثر من واجهة جميلة؛
               <br />
-              منظومة قابلة للإدارة.
+              <HandUnderline color="#f1a0a0">مساحة تليق بأفكارك.</HandUnderline>
             </h2>
             <Link to="/articles">
               استكشف المعرفة <ChevronLeft aria-hidden="true" />
@@ -245,6 +285,7 @@ export default function Home() {
           <div className="home-capabilities">
             {CAPABILITIES.map(({ icon: Icon, number, title, text, to }) => (
               <Link to={to} className="home-capability" key={title}>
+                <span className="capability-corner-art" aria-hidden="true"><Sparkles /></span>
                 <span className="home-capability-number">{number}</span>
                 <Icon aria-hidden="true" />
                 <h3>{title}</h3>
@@ -259,11 +300,13 @@ export default function Home() {
       </section>
 
       <section className="home-specialties">
+        <PatternField variant="grain" className="specialties-pattern" />
+        <SketchAccents motif="specialties" className="specialties-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
             <div>
               <p className="home-kicker">الوصول السريع</p>
-              <h2>اختر نقطة البداية</h2>
+              <h2><HandUnderline color="#e8aa46">اختر نقطة البداية</HandUnderline></h2>
             </div>
             <Link to="/doctors" className="home-inline-link">
               عرض دليل الأطباء <ChevronLeft aria-hidden="true" />
@@ -287,9 +330,11 @@ export default function Home() {
 
       <section className="home-cta-wrap">
         <div className="home-cta mx-auto max-w-7xl">
+          <PatternField variant="confetti" className="cta-doodle-pattern" />
+          <SketchAccents motif="cta" className="cta-doodles" />
           <div>
             <p>ابدأ من مكان واحد</p>
-            <h2>ابنِ تجربة رعاية تليق بالثقة.</h2>
+            <h2>المعرفة تبدأ <HandUnderline color="#efb84e">بخطوة صغيرة.</HandUnderline></h2>
             <span>الاستشارات والوظائف الطبية ستُفتح بعد اجتياز المراجعة.</span>
           </div>
           <div className="flex flex-wrap gap-3">
