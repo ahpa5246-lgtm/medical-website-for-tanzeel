@@ -1,0 +1,75 @@
+/* Fading SVG dot grids — calm, lightweight and purely decorative.
+   Reference: SVG Dot Grids, https://www.svgbackgrounds.com/tools/dot-grids/
+   Custom original SVG grid tiles stored locally; no JS or network fetch needed. */
+.dot-grid-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: 240px 240px;
+  opacity: .58;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+.dot-grid-field--teal {
+  background-image: url("/patterns/dot-grid-teal.svg");
+}
+.dot-grid-field--sky {
+  background-image: url("/patterns/dot-grid-sky.svg");
+}
+.dot-grid-field--edges {
+  mask-image: linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+}
+.dot-grid-field--left {
+  mask-image: linear-gradient(90deg,#000 0%,rgba(0,0,0,.65) 33%,transparent 76%);
+  -webkit-mask-image: linear-gradient(90deg,#000 0%,rgba(0,0,0,.65) 33%,transparent 76%);
+}
+.dot-grid-field--right {
+  mask-image: linear-gradient(90deg,transparent 19%,rgba(0,0,0,.65) 68%,#000 100%);
+  -webkit-mask-image: linear-gradient(90deg,transparent 19%,rgba(0,0,0,.65) 68%,#000 100%);
+}
+.dot-grid-field--center {
+  mask-image: radial-gradient(ellipse at 50% 50%,#000 0%,rgba(0,0,0,.75) 39%,transparent 81%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%,#000 0%,rgba(0,0,0,.75) 39%,transparent 81%);
+}
+.editorial-home .home-hero > .hero-dot-grid {
+  opacity: .63;
+  background-position: 0 12px;
+}
+.editorial-home .home-editorial-cards > .cards-dot-grid {
+  opacity: .48;
+  background-position: center center;
+}
+.editorial-home .home-specialties > .specialties-dot-grid {
+  opacity: .46;
+}
+.editorial-articles > .articles-dot-grid {
+  opacity: .36;
+}
+.auth-story > .auth-dot-grid {
+  opacity: .38;
+  z-index: 0;
+}
+.auth-story > .auth-brand,
+.auth-story > .auth-story-middle,
+.auth-story > .auth-story-foot {
+  position: relative;
+  z-index: 2;
+}
+@media (max-width:767px) {
+  .editorial-home .home-hero > .hero-dot-grid {
+    opacity: .42;
+    mask-image: linear-gradient(180deg, #000 0%,rgba(0,0,0,.64) 35%,transparent 75%);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%,rgba(0,0,0,.64) 35%,transparent 75%);
+  }
+  .editorial-home .home-editorial-cards > .cards-dot-grid { opacity: .33; }
+  .editorial-home .home-specialties > .specialties-dot-grid { opacity: .32; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot-grid-field { animation: none !important; }
+}
