@@ -47,7 +47,9 @@ test("phone service cards swipe horizontally without stacking or page overflow",
 
   await page.getByRole("button", { name: "البطاقة التالية" }).click()
   await expect(page.locator(".capability-carousel-count")).toHaveText("2 من 3")
-  await expect(page.getByRole("button", { name: "البطاقة السابقة" })).toBeEnabled()
+  await expect(
+    page.getByRole("button", { name: "البطاقة السابقة" }),
+  ).toBeEnabled()
   await expect.poll(() => track.evaluate((el) => el.scrollLeft)).not.toBe(0)
 
   if (testInfo.project.name === "weak-mobile-chromium") {
@@ -59,7 +61,9 @@ test("phone service cards swipe horizontally without stacking or page overflow",
 
   await page.getByRole("button", { name: "البطاقة التالية" }).click()
   await expect(page.locator(".capability-carousel-count")).toHaveText("3 من 3")
-  await expect(page.getByRole("button", { name: "البطاقة التالية" })).toBeDisabled()
+  await expect(
+    page.getByRole("button", { name: "البطاقة التالية" }),
+  ).toBeDisabled()
   await page.getByRole("button", { name: "البطاقة السابقة" }).click()
   await expect(page.locator(".capability-carousel-count")).toHaveText("2 من 3")
 })
@@ -90,5 +94,7 @@ test("reduced motion also supports instant phone card navigation", async ({
   await page.goto("/")
   await page.getByRole("button", { name: "البطاقة التالية" }).click()
   await expect(page.locator(".capability-carousel-count")).toHaveText("2 من 3")
-  await expect(page.getByRole("button", { name: "البطاقة السابقة" })).toBeEnabled()
+  await expect(
+    page.getByRole("button", { name: "البطاقة السابقة" }),
+  ).toBeEnabled()
 })

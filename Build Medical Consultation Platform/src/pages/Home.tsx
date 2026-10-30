@@ -373,8 +373,13 @@ export default function Home() {
               ),
             )}
           </div>
-          <div className="capability-carousel-controls" aria-label="التحكم ببطاقات الخدمات">
-            <p className="capability-swipe-hint">اسحب أفقيًا لاستعراض بقية الخدمات</p>
+          <div
+            className="capability-carousel-controls"
+            aria-label="التحكم ببطاقات الخدمات"
+          >
+            <p className="capability-swipe-hint">
+              اسحب أفقيًا لاستعراض بقية الخدمات
+            </p>
             <div className="capability-carousel-navigation">
               <button
                 type="button"
