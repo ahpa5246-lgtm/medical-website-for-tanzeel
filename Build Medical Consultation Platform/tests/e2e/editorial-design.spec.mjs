@@ -13,6 +13,16 @@ test("editorial home has semantic CTAs and creative layer without blocking conte
   ).toBeVisible()
   await expect(page.locator(".hero-illustration")).toBeVisible()
   await expect(page.locator(".home-capability")).toHaveCount(3)
+  const portraits = page.locator(".home-capability .capability-photo img")
+  await expect(portraits).toHaveCount(3)
+  for (let i = 0; i < 3; i++) {
+    const portrait = portraits.nth(i)
+    await portrait.scrollIntoViewIfNeeded()
+    await expect.poll(
+      () => portrait.evaluate((image) => image.naturalWidth),
+    ).toBeGreaterThan(0)
+  }
+  await expect(page.getByText(/الصور تمثيلية لأغراض العرض فقط/)).toBeVisible()
   await expect(page.locator(".home-editorial-cards")).toBeVisible()
   await expect(
     page.locator(".editorial-home .pattern-doodle").first(),
