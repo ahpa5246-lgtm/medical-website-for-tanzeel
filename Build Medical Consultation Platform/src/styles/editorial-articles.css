@@ -43,7 +43,7 @@
   opacity: .14;
   z-index: 0;
 }
-.editorial-articles > div:not(.pattern-field) {
+.editorial-articles > div:not(.pattern-field):not(.dot-grid-field) {
   position: relative;
   z-index: 1;
 }
