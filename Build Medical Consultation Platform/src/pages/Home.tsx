@@ -120,7 +120,7 @@ export default function Home() {
     if (!(item instanceof HTMLElement)) return
     item.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "instant"
+        ? "auto"
         : "smooth",
       block: "nearest",
       inline: "start",
