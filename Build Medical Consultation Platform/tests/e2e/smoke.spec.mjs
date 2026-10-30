@@ -43,8 +43,14 @@ test("key public routes render without a blank application or horizontal overflo
   }
 })
 
-test("closed consultation routes never accept medical data", async ({ page }) => {
-  for (const route of ["/consultations", "/consultations/new", "/consultations/example"]) {
+test("closed consultation routes never accept medical data", async ({
+  page,
+}) => {
+  for (const route of [
+    "/consultations",
+    "/consultations/new",
+    "/consultations/example",
+  ]) {
     await page.goto(route)
     await expect(
       page.getByRole("heading", { name: "الاستشارات قيد التطوير" }),
@@ -59,9 +65,9 @@ test("closed consultation routes never accept medical data", async ({ page }) =>
 
 test("home does not prompt for private medical questions", async ({ page }) => {
   await page.goto("/")
-  await expect(
-    page.getByPlaceholder("اكتب سؤالك أو ابحث عن تخصص"),
-  ).toHaveCount(0)
+  await expect(page.getByPlaceholder("اكتب سؤالك أو ابحث عن تخصص")).toHaveCount(
+    0,
+  )
   await expect(
     page.getByRole("link", { name: "الاستشارات قيد التطوير" }).first(),
   ).toBeVisible()
