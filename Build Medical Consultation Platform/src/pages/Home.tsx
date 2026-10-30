@@ -114,23 +114,23 @@ export default function Home() {
 
             {consultationsEnabled ? (
               <form
-              onSubmit={startConsultation}
-              className="home-search mx-auto mt-9 lg:mx-0"
-            >
-              <label htmlFor="home-question" className="sr-only">
-                ما الخدمة التي تبحث عنها؟
-              </label>
-              <Search aria-hidden="true" className="home-search-icon" />
-              <input
-                id="home-question"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="اكتب سؤالك أو ابحث عن تخصص"
-              />
-              <Button type="submit" size="lg" className="home-search-button">
-                ابدأ الآن{" "}
-                <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
-              </Button>
+                onSubmit={startConsultation}
+                className="home-search mx-auto mt-9 lg:mx-0"
+              >
+                <label htmlFor="home-question" className="sr-only">
+                  ما الخدمة التي تبحث عنها؟
+                </label>
+                <Search aria-hidden="true" className="home-search-icon" />
+                <input
+                  id="home-question"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="اكتب سؤالك أو ابحث عن تخصص"
+                />
+                <Button type="submit" size="lg" className="home-search-button">
+                  ابدأ الآن{" "}
+                  <ArrowLeft aria-hidden="true" className="h-4 w-4 rtl-flip" />
+                </Button>
               </form>
             ) : (
               <div className="mx-auto mt-9 flex flex-wrap justify-center gap-3 lg:mx-0 lg:justify-start">
