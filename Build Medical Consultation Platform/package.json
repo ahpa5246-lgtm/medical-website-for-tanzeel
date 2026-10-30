@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "format": "oxfmt",
     "typecheck": "tsc --noEmit",
-    "format:check": "oxfmt --check . || (oxfmt . && git diff -- src tests && exit 1)",
+    "format:check": "oxfmt --check .",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
