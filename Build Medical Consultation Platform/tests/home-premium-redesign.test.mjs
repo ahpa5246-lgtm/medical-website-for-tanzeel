@@ -46,6 +46,9 @@ test("the home page routes users to real platform capabilities", () => {
 
 test("preview status appears only when the live backend is not configured", () => {
   assert.match(previewNotice, /isSupabaseConfigured/)
-  assert.match(previewNotice, /if \(isSupabaseConfigured\(\) && !publicPreview\) return null/)
+  assert.match(
+    previewNotice,
+    /if \(isSupabaseConfigured\(\) && !publicPreview\) return null/,
+  )
   assert.doesNotMatch(previewNotice, /كل الأسماء والمحتوى.*خيالية/)
 })
