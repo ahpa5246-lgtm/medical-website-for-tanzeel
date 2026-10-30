@@ -15,7 +15,6 @@ import {
   ArrowUpLeft,
   Star,
   Flower2,
-  ClipboardList,
   PencilLine,
   Microscope,
   Search,
@@ -30,6 +29,7 @@ import PatternField from "@/components/decor/PatternField"
 import GrainOverlay from "@/components/decor/GrainOverlay"
 import SketchAccents from "@/components/decor/SketchAccents"
 import HandUnderline from "@/components/decor/HandUnderline"
+import CapabilityPhoto from "@/components/home/CapabilityPhoto"
 
 const FEATURED_SPECIALTIES = SPECIALTIES.slice(0, 6)
 const specialtyIcons: ReactNode[] = [
@@ -68,6 +68,7 @@ const CAPABILITIES = [
     title: "الاستشارات قيد التطوير",
     text: "الخدمة مؤجلة إلى حين اعتماد مراجعة الأمان والخصوصية.",
     to: "/consultations",
+    photo: "https://images.pexels.com/photos/8376309/pexels-photo-8376309.jpeg?auto=compress&cs=tinysrgb&w=900",
   },
   {
     icon: Stethoscope,
@@ -75,6 +76,7 @@ const CAPABILITIES = [
     title: "دليل الأطباء",
     text: "دليل الأطباء غير متاح في نسخة العرض العامة دون قاعدة بيانات مراجَعة.",
     to: "/doctors",
+    photo: "https://images.pexels.com/photos/19438562/pexels-photo-19438562.jpeg?auto=compress&cs=tinysrgb&w=900",
   },
   {
     icon: GraduationCap,
@@ -82,6 +84,7 @@ const CAPABILITIES = [
     title: "أكاديمية تدريب",
     text: "مسارات تعليمية متدرّجة بتجربة بصرية تفاعلية ونتائج قابلة للمتابعة.",
     to: "/training",
+    photo: "https://images.pexels.com/photos/19131214/pexels-photo-19131214.jpeg?auto=compress&cs=tinysrgb&w=900",
   },
 ]
 
@@ -121,12 +124,12 @@ export default function Home() {
             >
               الرعاية تبدأ
               <span>
-                <HandUnderline color="#eeb650">بخطوة أوضح.</HandUnderline>
+                <HandUnderline color="#66b4b2">بخطوة أوضح.</HandUnderline>
               </span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0">
               رحلة بسيطة بين المقالات الصحية التجريبية والتعلّم التفاعلي، بألوان
-              دافئة وأفكار أوضح. الاستشارات قيد التطوير، والمقالات الحالية
+              هادئة وأفكار أوضح. الاستشارات قيد التطوير، والمقالات الحالية
               خيالية وغير مراجعة طبيًا.
             </p>
 
@@ -296,32 +299,35 @@ export default function Home() {
         <SketchAccents motif="cards" className="cards-doodles" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="home-section-heading">
-            <p>بنية خدمة واضحة</p>
+            <p>خدمات المنصة</p>
             <h2>
-              أكثر من واجهة جميلة؛
+              مسارات واضحة؛
               <br />
-              <HandUnderline color="#f1a0a0">مساحة تليق بأفكارك.</HandUnderline>
+              <HandUnderline color="#78b8d7">تجربة أكثر قربًا.</HandUnderline>
             </h2>
             <Link to="/articles">
               استكشف المعرفة <ChevronLeft aria-hidden="true" />
             </Link>
           </div>
           <div className="home-capabilities">
-            {CAPABILITIES.map(({ icon: Icon, number, title, text, to }) => (
+            {CAPABILITIES.map(({ icon: Icon, number, title, text, to, photo }) => (
               <Link to={to} className="home-capability" key={title}>
-                <span className="capability-corner-art" aria-hidden="true">
-                  <Sparkles />
-                </span>
-                <span className="home-capability-number">{number}</span>
-                <Icon aria-hidden="true" />
-                <h3>{title}</h3>
-                <p>{text}</p>
-                <span className="home-capability-link">
-                  الدخول إلى القسم <ArrowLeft aria-hidden="true" />
-                </span>
+                <CapabilityPhoto source={photo} icon={Icon} />
+                <div className="home-capability-body">
+                  <span className="home-capability-number">{number}</span>
+                  <span className="capability-icon" aria-hidden="true">
+                    <Icon />
+                  </span>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <span className="home-capability-link">
+                    استكشف القسم <ArrowLeft aria-hidden="true" />
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
+          <p className="capability-photos-disclaimer">الصور تمثيلية لأغراض العرض فقط، ولا تمثل أطباء أو أعضاء فريق تابعين للمنصة.</p>
         </div>
       </section>
 
@@ -333,7 +339,7 @@ export default function Home() {
             <div>
               <p className="home-kicker">الوصول السريع</p>
               <h2>
-                <HandUnderline color="#e8aa46">اختر نقطة البداية</HandUnderline>
+                <HandUnderline color="#71b9b6">اختر نقطة البداية</HandUnderline>
               </h2>
             </div>
             <Link to="/doctors" className="home-inline-link">
