@@ -1,0 +1,131 @@
+/* A compact RTL snap carousel replaces the vertically stacked service cards on phones.
+   Desktop retains the three-column photo grid. No new runtime dependency. */
+.capability-carousel-controls {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .editorial-home .home-capabilities {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, min(78vw, 18.5rem));
+    grid-template-columns: none;
+    gap: .85rem;
+    align-items: stretch;
+    width: 100%;
+    padding: .45rem .35rem 1rem;
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: .35rem;
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .editorial-home .home-capabilities::-webkit-scrollbar {
+    display: none;
+  }
+
+  .editorial-home .home-capabilities > .home-capability {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    border-radius: 1.3rem;
+  }
+
+  .editorial-home .home-capability .capability-photo {
+    height: 10.5rem;
+    flex: 0 0 auto;
+  }
+
+  .editorial-home .home-capability .home-capability-body {
+    padding: 1rem 1.05rem 1.2rem;
+    min-height: 12.5rem;
+  }
+
+  .editorial-home .home-capability h3 {
+    font-size: 1rem;
+    margin-top: .75rem;
+  }
+
+  .editorial-home .home-capability p {
+    font-size: .79rem;
+    margin-bottom: .7rem;
+  }
+
+  .capability-carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .65rem;
+    margin-top: .35rem;
+  }
+
+  .capability-swipe-hint {
+    margin: 0;
+    color: #54767d;
+    font-size: .75rem;
+    line-height: 1.8;
+  }
+
+  .capability-carousel-navigation {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+
+  .capability-carousel-count {
+    min-width: 3.4rem;
+    color: #245d66;
+    font-size: .75rem;
+    font-weight: 800;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .capability-carousel-arrow {
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    place-items: center;
+    border: 1px solid #bedbd8;
+    border-radius: .8rem;
+    background: #fff;
+    color: #116d77;
+    cursor: pointer;
+  }
+
+  .capability-carousel-arrow svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .capability-carousel-arrow:focus-visible {
+    outline: 3px solid #63aeb9;
+    outline-offset: 2px;
+  }
+
+  .capability-carousel-arrow:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+  }
+
+  .editorial-home .home-capability:hover,
+  .editorial-home .home-capability:focus-visible {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editorial-home .home-capabilities {
+    scroll-behavior: auto;
+  }
+}
