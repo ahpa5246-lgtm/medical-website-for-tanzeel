@@ -7,6 +7,9 @@ import { MOCK_ARTICLES, ARTICLE_CATEGORIES } from "@/data/mockData"
 import WaveDivider from "@/components/decorative/WaveDivider"
 import FingerprintRidges from "@/components/decorative/FingerprintRidges"
 import DemoLabel from "@/components/DemoLabel"
+import PatternField from "@/components/decor/PatternField"
+import HandUnderline from "@/components/decor/HandUnderline"
+import SketchAccents from "@/components/decor/SketchAccents"
 
 export default function ArticleList() {
   const [search, setSearch] = useState("")
@@ -23,14 +26,16 @@ export default function ArticleList() {
   })
 
   return (
-    <div dir="rtl" className="bg-white min-h-screen">
+    <div dir="rtl" className="editorial-articles min-h-screen">
+      <PatternField variant="grain" className="articles-paper-pattern" />
       {/* Page hero strip */}
       <div className="relative isolate overflow-hidden border-b border-slate-100 bg-gradient-to-l from-primary-50/50 to-white py-10 pb-16">
         <FingerprintRidges className="-right-10 -top-12 z-0 h-[26rem] w-[26rem] opacity-70" />
+        <SketchAccents motif="cards" className="articles-hero-sketch" />
         <div className="relative z-[1] mx-auto max-w-6xl px-4 sm:px-6">
           <p className="section-kicker mb-2">مقالات عرض خيالية غير مراجعة</p>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
-            نماذج شكلية للمحتوى فقط
+            <HandUnderline color="#e9b75c">نماذج شكلية للمحتوى فقط</HandUnderline>
           </h1>
           <p className="text-slate-500 text-sm max-w-2xl leading-7">
             المقالات والمؤلفون والمراجعات أمثلة خيالية، ولم يراجعها مختصون. لا
@@ -168,13 +173,13 @@ export default function ArticleList() {
                 طبيب أو اختصاصي؟ شارك معرفتك
               </h3>
               <p className="text-primary-100 text-sm leading-7">
-                اكتب مقالة طبية وساهم في تثقيف المجتمع — كل مقالة تمر بمراجعة
-                طبية قبل النشر.
+                محرر المقالات قيد التطوير. عند إطلاق النشر الحقيقي، ستخضع
+                المقالات لمراجعة طبية قبل إتاحتها للجمهور.
               </p>
             </div>
             <Link to="/articles/new" className="shrink-0">
               <button className="flex items-center gap-1.5 bg-white text-primary-700 text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-primary-50 transition-colors shadow-md">
-                ابدأ الكتابة <ChevronLeft className="w-4 h-4 rtl-flip" />
+                المحرر قيد التطوير <ChevronLeft className="w-4 h-4 rtl-flip" />
               </button>
             </Link>
           </div>
