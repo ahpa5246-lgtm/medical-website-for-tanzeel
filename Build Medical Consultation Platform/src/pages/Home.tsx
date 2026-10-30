@@ -68,7 +68,7 @@ const CAPABILITIES = [
     title: "الاستشارات قيد التطوير",
     text: "الخدمة مؤجلة إلى حين اعتماد مراجعة الأمان والخصوصية.",
     to: "/consultations",
-    photo: "https://images.pexels.com/photos/8376309/pexels-photo-8376309.jpeg?auto=compress&cs=tinysrgb&w=900",
+    photo: "/images/medical-consultation.jpg",
   },
   {
     icon: Stethoscope,
@@ -76,7 +76,7 @@ const CAPABILITIES = [
     title: "دليل الأطباء",
     text: "دليل الأطباء غير متاح في نسخة العرض العامة دون قاعدة بيانات مراجَعة.",
     to: "/doctors",
-    photo: "https://images.pexels.com/photos/19438562/pexels-photo-19438562.jpeg?auto=compress&cs=tinysrgb&w=900",
+    photo: "/images/medical-directory.jpg",
   },
   {
     icon: GraduationCap,
@@ -84,7 +84,7 @@ const CAPABILITIES = [
     title: "أكاديمية تدريب",
     text: "مسارات تعليمية متدرّجة بتجربة بصرية تفاعلية ونتائج قابلة للمتابعة.",
     to: "/training",
-    photo: "https://images.pexels.com/photos/19131214/pexels-photo-19131214.jpeg?auto=compress&cs=tinysrgb&w=900",
+    photo: "/images/medical-training.jpg",
   },
 ]
 
